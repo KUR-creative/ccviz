@@ -29,7 +29,7 @@ def human_sorted(iterable):
     alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
     return sorted(iterable, key = alphanum_key)
 
-def write_text(path, text, mode=0o777, exist_ok=False):
+def write_text(path, text, mode=0o777, exist_ok=True):
     path = Path(PurePosixPath(path))
     os.makedirs(path.parent, mode, exist_ok)
     path.write_text(text)
