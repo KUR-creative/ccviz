@@ -1,0 +1,7 @@
+*.zip
+*.vim
+.*
+!.gitignore
+__pycache__/
+*.taghl
+tags
