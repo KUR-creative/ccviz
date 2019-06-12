@@ -7,11 +7,77 @@ import funcy as F
 from pygments import highlight
 from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
+from bs4 import BeautifulSoup
 
 src1str = Path('./test/fixture/src1.cpp').read_text()
 src2str = Path('./test/fixture/src2.cpp').read_text()
 src1 = highlight(src1str, CppLexer(), HtmlFormatter(linenos='table'))
 src2 = highlight(src2str, CppLexer(), HtmlFormatter(linenos='table'))
+'''
+print('---------')
+#fu.write_text('tmp',src1)
+print(*BeautifulSoup(src1).find_all('pre')[1].text.split('\n'),sep='\n')
+print(*src1.split('\n'),sep='\n')
+print(len(src1.split('\n')))
+print('---------')
+#for i in range(2):
+print('---------')
+print(src1.split('</pre>')[0])
+print('---------')
+print(len(src1.split('<pre>')))
+print('---------')
+print(len(src1.split('<pre>',maxsplit=1)))
+#fu.write_text('tmp.html', src1.split('<pre>', maxsplit=1)[1] .split('</pre>',maxsplit=1)[1])
+#print(len(BeautifulSoup(src1).find_all('pre')[1].text.split('\n')))
+#print(src2)
+
+print('---------')
+fu.write_text('tmp.html',str(BeautifulSoup(src2).find_all('pre')[1]))
+#NOTE: You can use below to split span codes into line by line!
+print(*str(BeautifulSoup(src2).find_all('pre')[1]).split('\n'), sep='\n\n')
+print('---------')
+print(len(str(BeautifulSoup(src2).find_all('pre')[1]).split('\n')))
+
+print(
+    div(class_='modal')[
+        h('label', class_='modal_bg', for_=match_id),
+        div(class_='modal_inner')[
+            [h('label', class_='modal_close', for_=match_id)]
+            +[a('ppap')]
+        ]
+    ].pretty()
+)
+'''
+# popup button
+def popup_btn(match_id, content):
+    return h('label', class_='btn', for_=match_id)[content]
+print(
+    popup_btn('open-pop', 'open')
+)
+# popup window(input after div - order is important!)
+def popup_window(match_id, content):
+    return [
+        h('input', class_='modal-state', id=match_id, type='checkbox'),
+        div(class_='modal')[
+            h('label', class_='modal_bg', for_=match_id),
+            div(class_='modal_inner')[
+                content,
+                h('label', class_='modal_close', for_=match_id)
+            ],
+        ]
+    ]
+
+print( popup_window('ppap', [p('content')]*2)[1].pretty() ) 
+print( popup_window('ppap', [p('content')]*2)[1] ) 
+'''
+
+print(
+h('input', class_='modal-state', id=match_id, type='checkbox')
+)
+print('-----')
+print( popup_window('open-popup', ['pen',a('pineapple'),p('apple'),'pen']) )
+print( div(popup_window('open-popup', ['pen',a('pineapple'),p('apple'),'pen'])).pretty() )
+'''
 
 highlight_css = 'css/highlight.css'
 fu.write_text(
@@ -19,14 +85,18 @@ fu.write_text(
     HtmlFormatter().get_style_defs('.highlight'),
 )
 
-table = h('table', children=[
-    h('tr')[ h('th')['table'], h('th')['tab'], h('th')['score'],],
-    h('tr')[ h('td')['src1'], h('td')['src2'], h('td')[3],],
-    h('tr')[ h('td')['src1'], h('td')['src3'], h('td')[3],],
-    h('tr')[ h('td')['src1'], h('td')['src4'], h('td')[3],],
-    [ h('tr')[ h('td')[1], h('td')[2], h('td')[312],] ] * 100,
-])
-print(table)
+match_id = 'open-popup'
+table = [
+    h('table', children=[
+        h('tr')[ h('th')['table'], h('th')['tab'], h('th')['score'],],
+        h('tr')[ h('td')['src1'], h('td')['src2'], h('td')[3],],
+        h('tr')[ h('td')['src1'], h('td')['src3'], h('td')[3],],
+        h('tr')[ h('td')['src1'], h('td')['src4'], h('td')[3],],
+        #[ h('tr')[ h('td')[1], h('td')[2], h('td')[312],] ] * 100,
+    ]),
+    popup_btn(match_id, 'view matching'),
+    popup_window(match_id, [h2('what?')]+[p('content long ling ling liong long')]*20)
+]
 
 #-----------------------------------------------------------------
 def document_str(head_tags,body_tags,is_pretty=True):
@@ -56,6 +126,7 @@ fu.write_text('compare1.html',
     [
         meta(name="viewport", content="width=device-width, initial-scale=1"),
         link(rel="stylesheet", href="css/viz1.css"),
+        link(rel="stylesheet", href="css/popup.css"),
         link(rel="stylesheet", href=highlight_css)
     ], 
     [
