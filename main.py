@@ -1,6 +1,6 @@
 from pathlib import Path
 import futils as fu
-from hyperpython import h, h1, h2, p, a, meta, link, div, br
+from hyperpython import h, h1, h2, p, a, meta, link, div, br, span
 import funcy as F
 
 #-----------------------------------------------------------------
@@ -95,7 +95,9 @@ table = [
         #[ h('tr')[ h('td')[1], h('td')[2], h('td')[312],] ] * 100,
     ]),
     popup_btn(match_id, 'view matching'),
-    popup_window(match_id, [h2('what?')]+[p('content long ling ling liong long')]*20)
+    popup_window(match_id, '{match}')
+        #h('pre',class_='highlight')[span('123',class_='cp'),span('214231',class_='cp')])
+        # 2 column table in 2 <pre>,
 ]
 
 #-----------------------------------------------------------------
@@ -143,7 +145,9 @@ fu.write_text('compare1.html',
             #p(children=['right', br()]*100)
         ],
     ]
-    ).format_map(dict(source1=src1, source2=src2))
+    ).format_map(dict(
+        source1=src1, source2=src2,
+        match=src1)) # {match} in table
 )
 
 #-----------------------------------------------------------------
