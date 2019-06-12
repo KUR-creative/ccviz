@@ -27,6 +27,7 @@ table = h('table', children=[
     [ h('tr')[ h('td')[1], h('td')[2], h('td')[312],] ] * 100,
 ])
 print(table)
+
 #-----------------------------------------------------------------
 def document_str(head_tags,body_tags,is_pretty=True):
     doc = h('html')[
@@ -42,12 +43,14 @@ fu.write_text('index.html', document_str([], [
     a(href='overview.html')['goto overview'],
 ]))
 
+#-----------------------------------------------------------------
 fu.write_text('overview.html', document_str([], [
     h1('overview page'),
     a(href='compare1.html')['goto compare1'],
     a(href='compare2bi.html')['goto compare2bi'],
 ]))
 
+#-----------------------------------------------------------------
 fu.write_text('compare1.html', 
     document_str(
     [
@@ -72,11 +75,13 @@ fu.write_text('compare1.html',
     ).format_map(dict(source1=src1, source2=src2))
 )
 
+#-----------------------------------------------------------------
 fu.write_text('compare2bi.html', document_str([], [
     h1('compare2bi page'),
     a(href='matching.html')['goto matching'],
 ]))
 
+#-----------------------------------------------------------------
 fu.write_text('matching.html', document_str([], [
     h1('matching'),
 ]))
