@@ -13,6 +13,9 @@ src1str = Path('./test/fixture/src1.cpp').read_text()
 src2str = Path('./test/fixture/src2.cpp').read_text()
 src1 = highlight(src1str, CppLexer(), HtmlFormatter(linenos='table'))
 src2 = highlight(src2str, CppLexer(), HtmlFormatter(linenos='table'))
+
+print(*str(BeautifulSoup(src2).find_all('pre')[1]).split('\n'), sep='\n\n')
+print(':',len(BeautifulSoup(src1).find_all('pre')[1].text.split('\n')))
 '''
 print('---------')
 #fu.write_text('tmp',src1)
@@ -34,7 +37,6 @@ print(len(src1.split('<pre>',maxsplit=1)))
 print('---------')
 fu.write_text('tmp.html',str(BeautifulSoup(src2).find_all('pre')[1]))
 #NOTE: You can use below to split span codes into line by line!
-print(*str(BeautifulSoup(src2).find_all('pre')[1]).split('\n'), sep='\n\n')
 print('---------')
 print(len(str(BeautifulSoup(src2).find_all('pre')[1]).split('\n')))
 
@@ -116,11 +118,26 @@ fu.write_text('index.html', document_str([], [
 ]))
 
 #-----------------------------------------------------------------
-fu.write_text('overview.html', document_str([], [
-    h1('overview page'),
-    a(href='compare1.html')['goto compare1'],
-    a(href='compare2bi.html')['goto compare2bi'],
-]))
+fu.write_text('overview.html', document_str(
+    [
+        link(rel="stylesheet", href="css/overview.css"),
+    ], 
+    [
+        h1('overview page'),
+        div(class_='row')[
+            div(class_='column left', style='background-color:#aaa;')[
+                h2('Column 1'),
+                p('Some txt..'),
+                a(href='compare1.html')['goto compare1'],
+            ],
+            div(class_='column right', style='background-color:#bbb;')[
+                h2('Column 2'),
+                p('Some txt..'),
+                a(href='compare2bi.html')['goto compare2bi'],
+            ],
+        ],
+    ]
+))
 
 #-----------------------------------------------------------------
 fu.write_text('compare1.html', 
