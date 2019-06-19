@@ -14,7 +14,7 @@ from pygments.formatters import HtmlFormatter
 from bs4 import BeautifulSoup
 
 
-#-----------------------------------------------------------------
+#=================================================================
 def document_str(head_tags,body_tags,is_pretty=True):
     doc = h('html')[
         h('head')[head_tags], 
@@ -50,7 +50,7 @@ def popup_window(match_id, content):
 #print( popup_window('open-popup', ['pen',a('pineapple'),p('apple'),'pen']) )
 #print( div(popup_window('open-popup', ['pen',a('pineapple'),p('apple'),'pen'])).pretty() )
 
-#-----------------------------------------------------------------
+#=================================================================
 root_dir = Path(sys.argv[1])
 fpaths = fp.pipe(fu.descendants, fu.human_sorted)
 car_paths  = fpaths(root_dir / 'ALIGNMENT')
@@ -106,29 +106,7 @@ print(
 )
 '''
 
-#-----------------------------------------------------------------
-fu.write_text('overview.html', document_str(
-    [
-        link(rel="stylesheet", href="css/overview.css"),
-    ], 
-    [
-        h1('overview page'),
-        div(class_='row')[
-            div(class_='column left', style='background-color:#aaa;')[
-                h2('Column 1'),
-                p('Some txt..'),
-                a(href='compare1.html')['goto compare1'],
-            ],
-            div(class_='column right', style='background-color:#bbb;')[
-                h2('Column 2'),
-                p('Some txt..'),
-                a(href='compare2bi.html')['goto compare2bi'],
-            ],
-        ],
-    ]
-))
-
-#-----------------------------------------------------------------
+#=================================================================
 highlight_css = 'css/highlight.css'
 fu.write_text(
     highlight_css,
@@ -155,6 +133,7 @@ table = [
         # 2 column table in 2 <pre>,
 ]
 
+#-----------------------------------------------------------------
 def gen_comp_html(str1, str2):
     ''' combine str1, str2 into one html string '''
     return document_str(
@@ -182,18 +161,8 @@ def gen_comp_html(str1, str2):
         source1=str1, source2=str2, match=str1  #{match} in table
     )) 
 
-src1path = srcA_paths[1] # './test/fixture/src1.cpp'
-src2path = srcB_paths[0] # './test/fixture/src2.cpp'
-
-src1str = Path(src1path).read_text()
-src2str = Path(src2path).read_text()
-src1 = pygments.highlight(src1str, CppLexer(), HtmlFormatter(linenos='table'))
-src2 = pygments.highlight(src2str, CppLexer(), HtmlFormatter(linenos='table'))
-
-fu.write_text('compare1.html', gen_comp_html(src1,src2))
 srcA = fp.lmap(fp.pipe(fu.read_text,highlight), srcA_paths)
 srcB = fp.lmap(fp.pipe(fu.read_text,highlight), srcB_paths)
-#print(*srcA, sep='\n------------------------\n')
 
 idx_pairs = list(product( 
     range(len(srcA_paths)), range(len(srcB_paths)) 
@@ -204,21 +173,42 @@ comp_htmls = fp.go(
     fp.starmap( lambda a,b: gen_comp_html(a,b) ),
 )
 html_paths = fp.lstarmap(
-    lambda ia,ib: 'comps/%d_%d.html' % (ia,ib), 
+    lambda ia,ib: 'comps/%d_%d.html' % (ia,ib), #NOTE: may change css path..
     idx_pairs
 )
 
 for path, html in zip(html_paths, comp_htmls):
     fu.write_text(path, html)
 
+#=================================================================
+fu.write_text('overview.html', document_str(
+    [
+        link(rel="stylesheet", href="css/overview.css"),
+    ], 
+    [
+        h1('overview page'),
+        div(class_='row')[
+            div(class_='column left', style='background-color:#aaa;')[
+                h2('Column 1'),
+                p('Some txt..'),
+                a(href='compare1.html')['goto compare1'],
+            ],
+            div(class_='column right', style='background-color:#bbb;')[
+                h2('Column 2'),
+                p('Some txt..'),
+                a(href='compare2bi.html')['goto compare2bi'],
+            ],
+        ],
+    ]
+))
 
-#-----------------------------------------------------------------
+#=================================================================
 fu.write_text('compare2bi.html', document_str([], [
     h1('compare2bi page'),
     a(href='matching.html')['goto matching'],
 ]))
 
-#-----------------------------------------------------------------
+#=================================================================
 fu.write_text('matching.html', document_str([], [
     h1('matching'),
 ]))
