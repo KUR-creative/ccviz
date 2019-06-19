@@ -1,7 +1,8 @@
 from pathlib import Path
 import futils as fu
 from hyperpython import h, h1, h2, p, a, meta, link, div, br, span
-import funcy as F
+import fp
+import sys
 
 #-----------------------------------------------------------------
 from pygments import highlight
@@ -9,13 +10,68 @@ from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
 from bs4 import BeautifulSoup
 
-src1str = Path('./test/fixture/src1.cpp').read_text()
-src2str = Path('./test/fixture/src2.cpp').read_text()
+
+#-----------------------------------------------------------------
+def document_str(head_tags,body_tags,is_pretty=True):
+    doc = h('html')[
+        h('head')[head_tags], 
+        h('body')[body_tags]
+    ]
+    retstr = str(doc.pretty() if is_pretty else doc)
+    return '<!DOCTYPE html>\n' + retstr
+
+fu.write_text('index.html', document_str([], [
+    h1('index (start) page'),
+    a(href='overview.html')['goto overview'],
+]))
+
+def popup_btn(match_id, content):
+    return h('label', class_='btn', for_=match_id)[content]
+#print( popup_btn('open-pop', 'open'))
+def popup_window(match_id, content):
+    ''' input after div - order is important! '''
+    return [
+        h('input', class_='modal-state', id=match_id, type='checkbox'),
+        div(class_='modal')[
+            h('label', class_='modal_bg', for_=match_id),
+            div(class_='modal_inner')[
+                content,
+                h('label', class_='modal_close', for_=match_id)
+            ],
+        ]
+    ]
+#print( popup_window('ppap', [p('content')]*2)[1].pretty() ) 
+#print( popup_window('ppap', [p('content')]*2)[1] ) 
+#print( h('input', class_='modal-state', id=match_id, type='checkbox'))
+#print('-----')
+#print( popup_window('open-popup', ['pen',a('pineapple'),p('apple'),'pen']) )
+#print( div(popup_window('open-popup', ['pen',a('pineapple'),p('apple'),'pen'])).pretty() )
+
+#-----------------------------------------------------------------
+root_dir = Path(sys.argv[1])
+fpaths = fp.pipe(fu.descendants, fu.human_sorted)
+car_paths  = fpaths(root_dir / 'ALIGNMENT')
+srcA_paths = fpaths(root_dir / 'Formatted_A')
+srcB_paths = fpaths(root_dir / 'Formatted_B')
+tokA_paths = fpaths(root_dir / 'Token_A')
+tokB_paths = fpaths(root_dir / 'Token_B')
+print(car_paths)
+print(srcA_paths)
+print(srcB_paths)
+print(tokA_paths)
+print(tokB_paths)
+    #exit()
+
+src1path = srcA_paths[1] # './test/fixture/src1.cpp'
+src2path = srcB_paths[0] # './test/fixture/src2.cpp'
+
+src1str = Path(src1path).read_text()
+src2str = Path(src2path).read_text()
 src1 = highlight(src1str, CppLexer(), HtmlFormatter(linenos='table'))
 src2 = highlight(src2str, CppLexer(), HtmlFormatter(linenos='table'))
 
-print(*str(BeautifulSoup(src2).find_all('pre')[1]).split('\n'), sep='\n\n')
-print(':',len(BeautifulSoup(src1).find_all('pre')[1].text.split('\n')))
+#print(*str(BeautifulSoup(src2).find_all('pre')[1]).split('\n'), sep='\n\n')
+#print(':',len(BeautifulSoup(src1).find_all('pre')[1].text.split('\n')))
 '''
 print('---------')
 #fu.write_text('tmp',src1)
@@ -50,36 +106,6 @@ print(
     ].pretty()
 )
 '''
-# popup button
-def popup_btn(match_id, content):
-    return h('label', class_='btn', for_=match_id)[content]
-print(
-    popup_btn('open-pop', 'open')
-)
-# popup window(input after div - order is important!)
-def popup_window(match_id, content):
-    return [
-        h('input', class_='modal-state', id=match_id, type='checkbox'),
-        div(class_='modal')[
-            h('label', class_='modal_bg', for_=match_id),
-            div(class_='modal_inner')[
-                content,
-                h('label', class_='modal_close', for_=match_id)
-            ],
-        ]
-    ]
-
-print( popup_window('ppap', [p('content')]*2)[1].pretty() ) 
-print( popup_window('ppap', [p('content')]*2)[1] ) 
-'''
-
-print(
-h('input', class_='modal-state', id=match_id, type='checkbox')
-)
-print('-----')
-print( popup_window('open-popup', ['pen',a('pineapple'),p('apple'),'pen']) )
-print( div(popup_window('open-popup', ['pen',a('pineapple'),p('apple'),'pen'])).pretty() )
-'''
 
 highlight_css = 'css/highlight.css'
 fu.write_text(
@@ -101,21 +127,6 @@ table = [
         #h('pre',class_='highlight')[span('123',class_='cp'),span('214231',class_='cp')])
         # 2 column table in 2 <pre>,
 ]
-
-#-----------------------------------------------------------------
-def document_str(head_tags,body_tags,is_pretty=True):
-    doc = h('html')[
-        h('head')[head_tags], 
-        h('body')[body_tags]
-    ]
-    retstr = str(doc.pretty() if is_pretty else doc)
-    return '<!DOCTYPE html>\n' + retstr
-    #return F.tap('<!DOCTYPE html>\n' + retstr)
-
-fu.write_text('index.html', document_str([], [
-    h1('index (start) page'),
-    a(href='overview.html')['goto overview'],
-]))
 
 #-----------------------------------------------------------------
 fu.write_text('overview.html', document_str(
