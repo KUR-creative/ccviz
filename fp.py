@@ -19,6 +19,10 @@ def lstarmap(f,seq=None):
     return list(I.starmap(f,seq)) if seq \
     else lambda xs: list(I.starmap(f,xs))
 
+def foreach(f,seq):
+    F.lmap(f,seq)
+    return None
+
 if __name__ == '__main__':
     print( lmap(tup(pow))( [(2,5),(3,2),(10,3)] ) )
     print( list(starmap(pow)([(2,5),(3,2),(10,3)] ) ))
