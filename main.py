@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from pathlib import Path
 import futils as fu
 from hyperpython import h, h1, h2, p, a, meta, link, div, br, span
@@ -55,11 +56,14 @@ srcA_paths = fpaths(root_dir / 'Formatted_A')
 srcB_paths = fpaths(root_dir / 'Formatted_B')
 tokA_paths = fpaths(root_dir / 'Token_A')
 tokB_paths = fpaths(root_dir / 'Token_B')
-print(car_paths)
-print(srcA_paths)
-print(srcB_paths)
-print(tokA_paths)
-print(tokB_paths)
+# 이걸 맵핑(idx:value)으로 써도 되는가? src와 tok의 길이는 동일한게 확실한가?
+# * 길이가 다르면 뭔가 심각한 오류가 발생한 것인가?
+assert len(srcA_paths) == len(srcB_paths) == len(tokA_paths) == len(tokB_paths)
+print(*car_paths, sep='\n',end='\n--------\n')
+print(*srcA_paths,sep='\n',end='\n--------\n')
+print(*tokA_paths,sep='\n',end='\n--------\n')
+print(*srcB_paths,sep='\n',end='\n--------\n')
+print(*tokB_paths,sep='\n',end='\n--------\n')
     #exit()
 
 src1path = srcA_paths[1] # './test/fixture/src1.cpp'
