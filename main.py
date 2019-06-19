@@ -181,6 +181,15 @@ for path, html in zip(html_paths, comp_htmls):
     fu.write_text(path, html)
 
 #=================================================================
+def match_link(href, content):
+    return a(href=href)[content]
+def link_row(idx_pair, href, content):
+    a_name,b_name = idx_pair
+    return h('tr')[ 
+        h('td')[a_name], h('td')[b_name], 
+        h('td')[match_link(href,content)],
+    ]
+
 fu.write_text('overview.html', document_str(
     [
         link(rel="stylesheet", href="css/overview.css"),
@@ -190,13 +199,21 @@ fu.write_text('overview.html', document_str(
         div(class_='row')[
             div(class_='column left', style='background-color:#aaa;')[
                 h2('Column 1'),
-                p('Some txt..'),
-                a(href='compare1.html')['goto compare1'],
+                p('Matrix will be included'),
+                #a(href='compare1.html')['goto compare1'],
+                a(href='compare2bi.html')['goto compare2bi'],
             ],
             div(class_='column right', style='background-color:#bbb;')[
                 h2('Column 2'),
                 p('Some txt..'),
-                a(href='compare2bi.html')['goto compare2bi'],
+
+                h('table')[
+                    h('tr')[ h('th')['A'], h('th')['B'], h('th')['link'], ],
+                    fp.lmap(
+                        link_row, 
+                        idx_pairs, html_paths, html_paths
+                    ),
+                ],
             ],
         ],
     ]
