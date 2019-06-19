@@ -34,6 +34,8 @@ def write_text(path, text, mode=0o777, exist_ok=True):
     os.makedirs(path.parent, mode, exist_ok)
     path.write_text(text)
 
+def read_text(path, encoding=None, errors=None):
+    return Path(path).read_text(encoding=None, errors=None)
 
 if __name__ == '__main__':
     for x in Path('.').iterdir():

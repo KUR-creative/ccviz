@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from itertools import product
 from pathlib import Path
 import futils as fu
 from hyperpython import h, h1, h2, p, a, meta, link, div, br, span
@@ -105,12 +106,6 @@ print(
 )
 '''
 
-highlight_css = 'css/highlight.css'
-fu.write_text(
-    highlight_css,
-    HtmlFormatter().get_style_defs('.highlight'),
-)
-
 #-----------------------------------------------------------------
 fu.write_text('overview.html', document_str(
     [
@@ -134,6 +129,17 @@ fu.write_text('overview.html', document_str(
 ))
 
 #-----------------------------------------------------------------
+highlight_css = 'css/highlight.css'
+fu.write_text(
+    highlight_css,
+    HtmlFormatter().get_style_defs('.highlight'),
+)
+
+def highlight(src, linenos='table'):
+    return pygments.highlight(
+        src, CppLexer(), HtmlFormatter(linenos=linenos)
+    )
+
 match_id = 'open-popup'
 table = [
     h('table', children=[
@@ -150,13 +156,13 @@ table = [
 ]
 
 def gen_comp_html(str1, str2):
-    ''' combine str1, str2 intto one html string '''
+    ''' combine str1, str2 into one html string '''
     return document_str(
     [
         meta(name="viewport", content="width=device-width, initial-scale=1"),
-        link(rel="stylesheet", href="css/viz1.css"),
-        link(rel="stylesheet", href="css/popup.css"),
-        link(rel="stylesheet", href=highlight_css)
+        link(rel="stylesheet", href='../css/viz1.css'), # comps/x.html
+        link(rel="stylesheet", href='../css/popup.css'),
+        link(rel="stylesheet", href='../' + highlight_css)
     ], 
     [
         div(class_='split left')[
@@ -185,6 +191,26 @@ src1 = pygments.highlight(src1str, CppLexer(), HtmlFormatter(linenos='table'))
 src2 = pygments.highlight(src2str, CppLexer(), HtmlFormatter(linenos='table'))
 
 fu.write_text('compare1.html', gen_comp_html(src1,src2))
+srcA = fp.lmap(fp.pipe(fu.read_text,highlight), srcA_paths)
+srcB = fp.lmap(fp.pipe(fu.read_text,highlight), srcB_paths)
+#print(*srcA, sep='\n------------------------\n')
+
+idx_pairs = list(product( 
+    range(len(srcA_paths)), range(len(srcB_paths)) 
+))
+comp_htmls = fp.go(
+    idx_pairs,
+    fp.starmap( lambda ia,ib: (srcA[ia], srcB[ib]) ),
+    fp.starmap( lambda a,b: gen_comp_html(a,b) ),
+)
+html_paths = fp.lstarmap(
+    lambda ia,ib: 'comps/%d_%d.html' % (ia,ib), 
+    idx_pairs
+)
+
+for path, html in zip(html_paths, comp_htmls):
+    fu.write_text(path, html)
+
 
 #-----------------------------------------------------------------
 fu.write_text('compare2bi.html', document_str([], [
