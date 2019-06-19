@@ -6,7 +6,8 @@ import fp
 import sys
 
 #-----------------------------------------------------------------
-from pygments import highlight
+#from pygments import highlight
+import pygments #import highlight
 from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
 from bs4 import BeautifulSoup
@@ -58,21 +59,14 @@ tokA_paths = fpaths(root_dir / 'Token_A')
 tokB_paths = fpaths(root_dir / 'Token_B')
 # 이걸 맵핑(idx:value)으로 써도 되는가? src와 tok의 길이는 동일한게 확실한가?
 # * 길이가 다르면 뭔가 심각한 오류가 발생한 것인가?
-assert len(srcA_paths) == len(srcB_paths) == len(tokA_paths) == len(tokB_paths)
+assert len(srcA_paths) == len(tokA_paths) 
+assert len(srcB_paths) == len(tokB_paths)
 print(*car_paths, sep='\n',end='\n--------\n')
 print(*srcA_paths,sep='\n',end='\n--------\n')
 print(*tokA_paths,sep='\n',end='\n--------\n')
 print(*srcB_paths,sep='\n',end='\n--------\n')
 print(*tokB_paths,sep='\n',end='\n--------\n')
     #exit()
-
-src1path = srcA_paths[1] # './test/fixture/src1.cpp'
-src2path = srcB_paths[0] # './test/fixture/src2.cpp'
-
-src1str = Path(src1path).read_text()
-src2str = Path(src2path).read_text()
-src1 = highlight(src1str, CppLexer(), HtmlFormatter(linenos='table'))
-src2 = highlight(src2str, CppLexer(), HtmlFormatter(linenos='table'))
 
 #print(*str(BeautifulSoup(src2).find_all('pre')[1]).split('\n'), sep='\n\n')
 #print(':',len(BeautifulSoup(src1).find_all('pre')[1].text.split('\n')))
@@ -117,21 +111,6 @@ fu.write_text(
     HtmlFormatter().get_style_defs('.highlight'),
 )
 
-match_id = 'open-popup'
-table = [
-    h('table', children=[
-        h('tr')[ h('th')['table'], h('th')['tab'], h('th')['score'],],
-        h('tr')[ h('td')['src1'], h('td')['src2'], h('td')[3],],
-        h('tr')[ h('td')['src1'], h('td')['src3'], h('td')[3],],
-        h('tr')[ h('td')['src1'], h('td')['src4'], h('td')[3],],
-        #[ h('tr')[ h('td')[1], h('td')[2], h('td')[312],] ] * 100,
-    ]),
-    popup_btn(match_id, 'view matching'),
-    popup_window(match_id, '{match}')
-        #h('pre',class_='highlight')[span('123',class_='cp'),span('214231',class_='cp')])
-        # 2 column table in 2 <pre>,
-]
-
 #-----------------------------------------------------------------
 fu.write_text('overview.html', document_str(
     [
@@ -155,8 +134,24 @@ fu.write_text('overview.html', document_str(
 ))
 
 #-----------------------------------------------------------------
-fu.write_text('compare1.html', 
-    document_str(
+match_id = 'open-popup'
+table = [
+    h('table', children=[
+        h('tr')[ h('th')['table'], h('th')['tab'], h('th')['score'],],
+        h('tr')[ h('td')['src1'], h('td')['src2'], h('td')[3],],
+        h('tr')[ h('td')['src1'], h('td')['src3'], h('td')[3],],
+        h('tr')[ h('td')['src1'], h('td')['src4'], h('td')[3],],
+        #[ h('tr')[ h('td')[1], h('td')[2], h('td')[312],] ] * 100,
+    ]),
+    popup_btn(match_id, 'view matching'),
+    popup_window(match_id, '{match}')
+        #h('pre',class_='highlight')[span('123',class_='cp'),span('214231',class_='cp')])
+        # 2 column table in 2 <pre>,
+]
+
+def gen_comp_html(str1, str2):
+    ''' combine str1, str2 intto one html string '''
+    return document_str(
     [
         meta(name="viewport", content="width=device-width, initial-scale=1"),
         link(rel="stylesheet", href="css/viz1.css"),
@@ -178,9 +173,18 @@ fu.write_text('compare1.html',
         ],
     ]
     ).format_map(dict(
-        source1=src1, source2=src2,
-        match=src1)) # {match} in table
-)
+        source1=str1, source2=str2, match=str1  #{match} in table
+    )) 
+
+src1path = srcA_paths[1] # './test/fixture/src1.cpp'
+src2path = srcB_paths[0] # './test/fixture/src2.cpp'
+
+src1str = Path(src1path).read_text()
+src2str = Path(src2path).read_text()
+src1 = pygments.highlight(src1str, CppLexer(), HtmlFormatter(linenos='table'))
+src2 = pygments.highlight(src2str, CppLexer(), HtmlFormatter(linenos='table'))
+
+fu.write_text('compare1.html', gen_comp_html(src1,src2))
 
 #-----------------------------------------------------------------
 fu.write_text('compare2bi.html', document_str([], [
