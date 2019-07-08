@@ -113,11 +113,18 @@ srcB = fp.lmap(fp.pipe(fu.read_text,highlight), srcB_paths)
 idx_pairs = list(product( 
     range(len(srcA_paths)), range(len(srcB_paths)) 
 ))
+'''
 comp_htmls = fp.go(
     idx_pairs,
     fp.starmap( lambda ia,ib: (srcA[ia], srcB[ib]) ),
     fp.starmap( lambda a,b: gen_comp_html(a,b) ),
 )
+'''
+comp_htmls = []
+for ia,ib in idx_pairs:
+    comp_htmls.append( gen_comp_html(srcA[ia], srcB[ib]) ) 
+    # TODO: highlight matched lines
+
 html_paths = fp.lstarmap(
     lambda ia,ib: 'comps/%d_%d.html' % (ia,ib), #NOTE: may change css path..
     idx_pairs
