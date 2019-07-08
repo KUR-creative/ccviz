@@ -107,10 +107,32 @@ def gen_comp_html(str1, str2):
         source1=str1, source2=str2, match=str1  #{match} in table
     )) 
 
+def tag_regex(tag_name):
+    '''
+    TODO: Returned_re.findall(s) makes tuple of list.. This is too bad!!
+    '''
+    return re.compile(
+        '<\s*'+tag_name+'[^>]*>((.|\n|\r|\r\n)*?)<\s*/\s*'+tag_name+'>'
+    )
+
+def all_pres(html_str):
+    return fp.lmap(first, tag_regex('pre').findall(html_str))
+
+# TODO: 
+# 1. set dummy matched pairs
+# 2. filter matched files only
+# 3. highlight code strings
+# 4. get code <pre> A,B from highlighted
+# 5. split into lines
+# 6. set background style css of matched line(use dummy)
+# 7. join line-highlighted strings into one highlighted string
+# 8. gen_comp_html(lhs1, lhs2)
+
 srcA = fp.lmap(fp.pipe(fu.read_text,highlight), srcA_paths)
 srcB = fp.lmap(fp.pipe(fu.read_text,highlight), srcB_paths)
 
-idx_pairs = list(product( 
+# TODO: filter matched files only. (from car file)
+idx_pairs = list(product(  
     range(len(srcA_paths)), range(len(srcB_paths)) 
 ))
 '''
