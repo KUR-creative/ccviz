@@ -3,6 +3,8 @@ from itertools import product
 from pathlib import Path
 import futils as fu
 from hyperpython import h, h1, h2, p, a, meta, link, div, br, span
+import funcy as F
+import re
 import fp
 import sys
 
@@ -116,7 +118,31 @@ def tag_regex(tag_name):
     )
 
 def all_pres(html_str):
-    return fp.lmap(first, tag_regex('pre').findall(html_str))
+    return fp.lmap(F.first, tag_regex('pre').findall(html_str))
+
+def emphasize(line, color):
+    return '<span style="background-color:{}; width:100%; float:left;">{}</span>'.format(
+        color, line
+    )
+
+print(emphasize(
+    '<span class="cm">* WTF  This file is part of Luma3DS</span>',
+    '#FF0000'
+))
+
+def line_emphasize(src, beg_end_dict):
+    lineno_in_pre, src_in_pre = all_pres(src)
+    lines = src_in_pre.split('\n') #----- TODO: append '\n' then join to str.
+
+    for color, (beg,end) in beg_end_dict.items(): # color is temporary setting!!
+        for i in range(beg,end):
+            if 0 <= i < len(lines):
+                lines[i] = emphasize(lines[i],color)
+
+    return src.replace(
+        src_in_pre, 
+        ''.join(map(lambda s: s+'\n', lines))
+    )
 
 # TODO: 
 # 1. set dummy matched pairs
@@ -142,11 +168,21 @@ comp_htmls = fp.go(
     fp.starmap( lambda a,b: gen_comp_html(a,b) ),
 )
 '''
+
+srcB[0] = line_emphasize(
+    srcB[0], {
+        '#FF0000':(10,13), 
+        '#00EE00':(12,16), 
+        '#00DD00':(25,30),
+        '#00CC00':(13,20),
+        '#00CC00':(153,158),
+        }) # TODO:check range
 comp_htmls = []
 for ia,ib in idx_pairs:
     comp_htmls.append( gen_comp_html(srcA[ia], srcB[ib]) ) 
     # TODO: highlight matched lines
 
+comp_htmls[0] 
 html_paths = fp.lstarmap(
     lambda ia,ib: 'comps/%d_%d.html' % (ia,ib), #NOTE: may change css path..
     idx_pairs
