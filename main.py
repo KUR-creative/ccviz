@@ -125,11 +125,6 @@ def emphasize(line, color):
         color, line
     )
 
-print(emphasize(
-    '<span class="cm">* WTF  This file is part of Luma3DS</span>',
-    '#FF0000'
-))
-
 def line_emphasize(src, beg_end_dict):
     lineno_in_pre, src_in_pre = all_pres(src)
     lines = src_in_pre.split('\n') #----- TODO: append '\n' then join to str.
@@ -144,16 +139,6 @@ def line_emphasize(src, beg_end_dict):
         ''.join(map(lambda s: s+'\n', lines))
     )
 
-# TODO: 
-# 1. set dummy matched pairs
-# 2. filter matched files only
-# 3. highlight code strings
-# 4. get code <pre> A,B from highlighted
-# 5. split into lines
-# 6. set background style css of matched line(use dummy)
-# 7. join line-highlighted strings into one highlighted string
-# 8. gen_comp_html(lhs1, lhs2)
-
 srcA = fp.lmap(fp.pipe(fu.read_text,highlight), srcA_paths)
 srcB = fp.lmap(fp.pipe(fu.read_text,highlight), srcB_paths)
 
@@ -161,6 +146,7 @@ srcB = fp.lmap(fp.pipe(fu.read_text,highlight), srcB_paths)
 idx_pairs = list(product(  
     range(len(srcA_paths)), range(len(srcB_paths)) 
 ))
+
 '''
 comp_htmls = fp.go(
     idx_pairs,
@@ -177,6 +163,7 @@ srcB[0] = line_emphasize(
         '#00CC00':(13,20),
         '#00CC00':(153,158),
         }) # TODO:check range
+
 comp_htmls = []
 for ia,ib in idx_pairs:
     comp_htmls.append( gen_comp_html(srcA[ia], srcB[ib]) ) 
