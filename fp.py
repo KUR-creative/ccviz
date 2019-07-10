@@ -5,6 +5,9 @@ tup = lambda f: lambda argtup: f(*argtup)
 go = lambda x,*fs: F.rcompose(*fs)(x)
 pipe = F.rcompose
 
+def unzip(seq):
+    return zip(*seq)
+
 def map(f,*seq):
     return F.map(f,*seq) if seq \
     else lambda *xs: F.map(f,*xs)
