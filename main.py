@@ -107,34 +107,24 @@ def tag_regex(tag_name):
         '<\s*'+tag_name+'[^>]*>((.|\n|\r|\r\n)*?)<\s*/\s*'+tag_name+'>'
     )
 
-def all_pres(html_str):
+def all_pre(html_str):
     return fp.lmap(F.first, tag_regex('pre').findall(html_str))
 
-def emphasize(line, color):
-    return '<span style="background-color:{}; width:100%; float:left;">{}</span>'.format(
+def emphasized(line, color):
+    return '<span style="background-color:{}; width:100%; float:left;">{} </span>'.format(
         color, line
     )
 
-def line_emphasize(src, beg_end_dict):
-    lineno_in_pre, src_in_pre = all_pres(src)
-    lines = src_in_pre.split('\n') #----- TODO: append '\n' then join to str.
-
-    for color, (beg,end) in beg_end_dict.items(): # color is temporary setting!!
-        for i in range(beg,end):
-            if 0 <= i < len(lines):
-                lines[i] = emphasize(lines[i],color)
-
-    return src.replace(
-        src_in_pre, 
-        ''.join(map(lambda s: s+'\n', lines))
-    )
+def rand_html_color():
+    import random
+    r = lambda: random.randint(0,255)
+    return 'rgba(%d,%d,%d,0.5)' % (r(),r(),r())
 
 import json
 read_json = fp.pipe(fu.read_text, json.loads)
 root_dir = Path(sys.argv[1])
 car_dict = read_json(root_dir / 'Alignment' / 'file.car')
 
-#print(car_dict)
 @F.autocurry
 def raw2real(root, descendant):
     upper_path = Path(root).parts[:-1]
@@ -144,34 +134,79 @@ B_srcpaths = fp.lmap(raw2real(root_dir), car_dict['DST_FILE_LIST'])
 
 A_highlighteds = fp.lmap( fp.pipe(fu.read_text,highlight), A_srcpaths )
 B_highlighteds = fp.lmap( fp.pipe(fu.read_text,highlight), B_srcpaths )
-#srcA = fp.lmap(fp.pipe(
 
 from collections import namedtuple
-Match = namedtuple('Match', 'file_idx func_name start end')
+Match = namedtuple('Match', 'file_idx func_name beg end')
 clones = car_dict['CLONE_LIST']
-print(len(clones))
-#clones.sort() #NOTE: no need? or not?
 
-#TODO: use in-memory db??
+#clones.sort() #NOTE: no need? or not?
+# use in-memory db??
 raw_A_matches, raw_B_matches, scores = list(fp.unzip(clones))[:3]
 
 def raw2match(raw_match):
-    file_idx, func_name, raw_start, end = raw_match
-    return Match(file_idx - 1, func_name, raw_start - 1, end)
+    file_idx, func_name, raw_beg, end = raw_match
+    return Match(file_idx - 1, func_name, raw_beg - 1, end)
 A_matches = fp.lmap(raw2match, raw_A_matches)
 B_matches = fp.lmap(raw2match, raw_B_matches)
+matches = list(zip(A_matches,B_matches))
 
-matched_idxs = F.ldistinct(fp.map(
+from pprint import pprint
+for match in matches:
+    print(match)
+#TODO: remove..
+matched_idxs = F.ldistinct(fp.map( # matched source indexes!
     lambda a,b: (a.file_idx,b.file_idx), 
     A_matches, B_matches
 ))
 
-srcA = fp.lmap(fp.pipe(fu.read_text,highlight), A_srcpaths)
-srcB = fp.lmap(fp.pipe(fu.read_text,highlight), B_srcpaths)
+srcsA = fp.lmap(fp.pipe(fu.read_text,highlight), A_srcpaths)
+srcsB = fp.lmap(fp.pipe(fu.read_text,highlight), B_srcpaths)
+
+matched_srcs = fp.lstarmap( 
+    lambda ia,ib: (srcsA[ia],srcsB[ib]), matched_idxs
+)
+
+def emphasize_AB(idxA, idxB, matches):
+    def emphasize_lines(lines, beg,end, color):
+        ''' side effect! '''
+        for i in range(beg,end):
+            if 0 <= i < len(lines):
+                lines[i] = emphasized(lines[i],color)
+    def replace(src, pre, lines):
+        return src.replace(
+            pre, ''.join(map(lambda s: s+'\n', lines))
+        )
+
+    matchesAB = fp.lfilter(
+        fp.tup(
+            lambda mA,mB: 
+            mA.file_idx == idxA and mB.file_idx == idxB), 
+        matches
+    )
+    colors = F.repeatedly(rand_html_color, len(matchesAB))
+
+    srcA = srcsA[idxA]
+    srcB = srcsB[idxB]
+    preA = all_pre(srcA)[1]
+    preB = all_pre(srcB)[1]
+    linesA = preA.split('\n') 
+    linesB = preB.split('\n')
+
+    for color, (mA,mB) in zip(colors, matchesAB):
+        emphasize_lines(linesA, mA.beg,mA.end, color)
+        emphasize_lines(linesB, mB.beg,mB.end, color)
+
+    return (replace(srcA, preA, linesA),
+            replace(srcB, preB, linesB))
+
+emphasized_AB = fp.lstarmap(
+    lambda ia,ib: emphasize_AB(ia,ib,matches),
+    matched_idxs
+)
 
 comp_htmls = []
-for ia,ib in matched_idxs:
-    comp_htmls.append( gen_comp_html(srcA[ia], srcB[ib]) ) 
+for a,b in emphasized_AB:
+    comp_htmls.append( gen_comp_html(a,b) ) 
     # TODO: highlight matched lines
 
 html_paths = fp.lstarmap(
@@ -184,7 +219,7 @@ for path, html in zip(html_paths, comp_htmls):
 
 #=================================================================
 def match_link(href, content):
-    return a(href=href)[content]
+    return h('a',href=href)[content]
 def link_row(idx_pair, href, content):
     a_name,b_name = idx_pair
     return h('tr')[ 
@@ -202,8 +237,8 @@ fu.write_text('overview.html', document_str(
             div(class_='column left', style='background-color:#aaa;')[
                 h2('Column 1'),
                 p('Matrix will be included'),
-                #a(href='compare1.html')['goto compare1'],
-                a(href='compare2bi.html')['goto compare2bi'],
+                h('a',href='compare1.html')['goto compare1'],
+                h('a',href='compare2bi.html')['goto compare2bi'],
             ],
             div(class_='column right', style='background-color:#bbb;')[
                 h2('Column 2'),
@@ -224,7 +259,7 @@ fu.write_text('overview.html', document_str(
 #=================================================================
 fu.write_text('compare2bi.html', document_str([], [
     h1('compare2bi page'),
-    a(href='matching.html')['goto matching'],
+    h('a',href='matching.html')['goto matching'],
 ]))
 
 #=================================================================
