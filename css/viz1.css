@@ -21,19 +21,12 @@ body {
   width: 34%;
   background-color: white;
   direction:rtl;
+  overflow-x: scroll;
 }
 
 .left div {
   direction:ltr;
-}
-
-.right {
-  right: 0;
-  width: 33%;
-  /*
-  background-color: white;
-  background-color: #111;
-  */
+  /*overflow: auto;*/
 }
 
 .center {
@@ -45,6 +38,11 @@ body {
   /*overflow: hidden;*/
   overflow: auto;
 
+  width: 33%;
+}
+
+.right {
+  right: 0;
   width: 33%;
 }
 
