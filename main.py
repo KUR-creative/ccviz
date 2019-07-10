@@ -207,7 +207,6 @@ emphasized_AB = fp.lstarmap(
 comp_htmls = []
 for a,b in emphasized_AB:
     comp_htmls.append( gen_comp_html(a,b) ) 
-    # TODO: highlight matched lines
 
 html_paths = fp.lstarmap(
     lambda ia,ib: 'comps/%d_%d.html' % (ia,ib), #NOTE: may change css path..
@@ -267,101 +266,3 @@ fu.write_text('matching.html', document_str([], [
     h1('matching'),
 ]))
 
-# make name cut in /A/ or /B/
-'''
-root_dir = Path(sys.argv[1])
-fpaths = fp.pipe(fu.descendants, fu.human_sorted)
-car_paths  = fpaths(root_dir / 'ALIGNMENT')
-srcA_paths = fpaths(root_dir / 'Formatted_A')
-srcB_paths = fpaths(root_dir / 'Formatted_B')
-#tokA_paths = fpaths(root_dir / 'Token_A')
-#tokB_paths = fpaths(root_dir / 'Token_B')
-assert len(srcA_paths) == len(tokA_paths) 
-assert len(srcB_paths) == len(tokB_paths)
-#srcA = fp.lmap(fp.pipe(fu.read_text,highlight), srcA_paths)
-#srcB = fp.lmap(fp.pipe(fu.read_text,highlight), srcB_paths)
-
-# TODO: filter matched files only. (from car file)
-idx_pairs = list(product(  
-    range(len(srcA_paths)), range(len(srcB_paths)) 
-))
-
-comp_htmls = fp.go(
-    idx_pairs,
-    fp.starmap( lambda ia,ib: (srcA[ia], srcB[ib]) ),
-    fp.starmap( lambda a,b: gen_comp_html(a,b) ),
-)
-
-srcB[0] = line_emphasize(
-    srcB[0], {
-        '#FF0000':(10,13), 
-        '#00EE00':(12,16), 
-        '#00DD00':(25,30),
-        '#00CC00':(13,20),
-        '#00CC00':(153,158),
-        }) # TODO:check range
-
-comp_htmls = []
-for ia,ib in idx_pairs:
-    comp_htmls.append( gen_comp_html(srcA[ia], srcB[ib]) ) 
-    # TODO: highlight matched lines
-
-comp_htmls[0] 
-html_paths = fp.lstarmap(
-    lambda ia,ib: 'comps/%d_%d.html' % (ia,ib), #NOTE: may change css path..
-    idx_pairs
-)
-
-for path, html in zip(html_paths, comp_htmls):
-    fu.write_text(path, html)
-
-#=================================================================
-def match_link(href, content):
-    return a(href=href)[content]
-def link_row(idx_pair, href, content):
-    a_name,b_name = idx_pair
-    return h('tr')[ 
-        h('td')[a_name], h('td')[b_name], 
-        h('td')[match_link(href,content)],
-    ]
-
-fu.write_text('overview.html', document_str(
-    [
-        link(rel="stylesheet", href="css/overview.css"),
-    ], 
-    [
-        h1('overview page'),
-        div(class_='row')[
-            div(class_='column left', style='background-color:#aaa;')[
-                h2('Column 1'),
-                p('Matrix will be included'),
-                #a(href='compare1.html')['goto compare1'],
-                a(href='compare2bi.html')['goto compare2bi'],
-            ],
-            div(class_='column right', style='background-color:#bbb;')[
-                h2('Column 2'),
-                p('Some txt..'),
-
-                h('table')[
-                    h('tr')[ h('th')['A'], h('th')['B'], h('th')['link'], ],
-                    fp.lmap(
-                        link_row, 
-                        idx_pairs, html_paths, html_paths
-                    ),
-                ],
-            ],
-        ],
-    ]
-))
-
-#=================================================================
-fu.write_text('compare2bi.html', document_str([], [
-    h1('compare2bi page'),
-    a(href='matching.html')['goto matching'],
-]))
-
-#=================================================================
-fu.write_text('matching.html', document_str([], [
-    h1('matching'),
-]))
-'''
