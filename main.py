@@ -172,10 +172,6 @@ def emphasize_AB(idxA, idxB, matches):
         for i in range(beg,end):
             if 0 <= i < len(lines):
                 lines[i] = emphasized(lines[i],color)
-    def replace(src, pre, lines):
-        return src.replace(
-            pre, ''.join(map(lambda s: s+'\n', lines))
-        )
 
     matchesAB = fp.lfilter(
         fp.tup(
@@ -185,19 +181,16 @@ def emphasize_AB(idxA, idxB, matches):
     )
     colors = F.repeatedly(rand_html_color, len(matchesAB))
 
-    srcA = srcsA[idxA]
-    srcB = srcsB[idxB]
-    preA = all_pre(srcA)[1]
-    preB = all_pre(srcB)[1]
-    linesA = preA.split('\n') 
-    linesB = preB.split('\n')
+    srcA   = srcsA[idxA];      srcB   = srcsB[idxB]
+    preA   = all_pre(srcA)[1]; preB   = all_pre(srcB)[1]
+    linesA = preA.split('\n'); linesB = preB.split('\n')
 
     for color, (mA,mB) in zip(colors, matchesAB):
         emphasize_lines(linesA, mA.beg,mA.end, color)
         emphasize_lines(linesB, mB.beg,mB.end, color)
 
-    return (replace(srcA, preA, linesA),
-            replace(srcB, preB, linesB))
+    return (srcA.replace(preA, '\n'.join(linesA)),
+            srcB.replace(preB, '\n'.join(linesB)))
 
 emphasized_AB = fp.lstarmap(
     lambda ia,ib: emphasize_AB(ia,ib,matches),
