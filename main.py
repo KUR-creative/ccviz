@@ -148,11 +148,18 @@ codes = ( fp.lstarmap(code('A'), enumerate(A_srcpaths))
 
 raw_A_ms, raw_B_ms, scores = F.take(
     3, fp.unzip(car_dict['CLONE_LIST']))
-matches = ( fp.lmap(match('A'), raw_A_ms, scores)
-          + fp.lmap(match('B'), raw_B_ms, scores))
+matches = list(zip(
+    fp.lmap(match('A'), raw_A_ms, scores), 
+    fp.lmap(match('B'), raw_B_ms, scores)
+))
 
+html_paths = fp.lstarmap(
+    lambda a,b: 'comps/{}_{}.html'.format(a.fidx, b.fidx),
+    F.distinct(matches, fp.tup(lambda a,b: (a.fidx, b.fidx)))
+)
 #for code in codes: print(*code[:-1])
 #for match in matches: print(*match)
+for html_path in html_paths: print(html_path)
 
 exit() 
 
