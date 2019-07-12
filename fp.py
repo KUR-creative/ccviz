@@ -5,7 +5,7 @@ tup = lambda f: lambda argtup: f(*argtup)
 go = lambda x,*fs: F.rcompose(*fs)(x)
 pipe = F.rcompose
 
-from collections import namedtuple
+def identity(x): return x
 def prop(p, obj=None):
     return(getattr(obj, p) if (isinstance(obj,tuple) and 
                                isinstance(p,str))
@@ -70,6 +70,7 @@ if __name__ == '__main__':
     assert 'a' == prop(0,'abcd')
     assert 'a' == prop(0,['a','bcd'])
 
+    from collections import namedtuple
     #namedtuple special rule
     X = namedtuple('X', 'a b c d')
     x = X(1,'b',d='123',c=56.2)
