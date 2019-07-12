@@ -154,7 +154,7 @@ from pprint import pprint
 for match in matches:
     print(match)
 #TODO: remove..
-matched_idxs = F.ldistinct(fp.map( # matched source indexes!
+match_idxs = F.ldistinct(fp.map( # matched source indexes!
     lambda a,b: (a.file_idx,b.file_idx), 
     A_matches, B_matches
 ))
@@ -163,8 +163,10 @@ srcsA = fp.lmap(fp.pipe(fu.read_text,highlight), A_srcpaths)
 srcsB = fp.lmap(fp.pipe(fu.read_text,highlight), B_srcpaths)
 
 matched_srcs = fp.lstarmap( 
-    lambda ia,ib: (srcsA[ia],srcsB[ib]), matched_idxs
+    lambda ia,ib: (srcsA[ia],srcsB[ib]), match_idxs
 )
+match_name_pairs = fp.go(
+    match_idxs
 
 def emphasize_AB(idxA, idxB, matches):
     def emphasize_lines(lines, beg,end, color):
@@ -194,7 +196,7 @@ def emphasize_AB(idxA, idxB, matches):
 
 emphasized_AB = fp.lstarmap(
     lambda ia,ib: emphasize_AB(ia,ib,matches),
-    matched_idxs
+    match_idxs
 )
 
 comp_htmls = []
@@ -203,7 +205,7 @@ for a,b in emphasized_AB:
 
 html_paths = fp.lstarmap(
     lambda ia,ib: 'comps/%d_%d.html' % (ia,ib), #NOTE: may change css path..
-    matched_idxs
+    match_idxs
 )
 
 for path, html in zip(html_paths, comp_htmls):
@@ -212,8 +214,8 @@ for path, html in zip(html_paths, comp_htmls):
 #=================================================================
 def match_link(href, content):
     return h('a',href=href)[content]
-def link_row(idx_pair, href, content):
-    a_name,b_name = idx_pair
+def link_row(name_pair, href, content):
+    a_name,b_name = name_pair
     return h('tr')[ 
         h('td')[a_name], h('td')[b_name], 
         h('td')[match_link(href,content)],
@@ -240,7 +242,7 @@ fu.write_text('overview.html', document_str(
                     h('tr')[ h('th')['A'], h('th')['B'], h('th')['link'], ],
                     fp.lmap(
                         link_row, 
-                        matched_idxs, html_paths, html_paths
+                        match_idxs, html_paths, html_paths
                     ),
                 ],
             ],
