@@ -142,79 +142,57 @@ def code(proj, fidx, fpath):
 def match(proj, raw_match, score):
     file_idx, func_name, beg, end = raw_match
     return Match(proj, file_idx - 1, func_name, beg - 1, end, score)
+def x_id(match_or_code):
+    return (match_or_code.proj, match_or_code.fidx)
 
+# use codes only here!
 codes = ( fp.lstarmap(code('A'), enumerate(A_srcpaths))
         + fp.lstarmap(code('B'), enumerate(B_srcpaths)))
+code_dic = F.zipdict(
+    fp.map(lambda c: x_id(c), codes), codes)
 
 raw_A_ms, raw_B_ms, scores = F.take(
     3, fp.unzip(car_dict['CLONE_LIST']))
-matches = list(zip(
+match_pairs = sorted(zip(
     fp.lmap(match('A'), raw_A_ms, scores), 
-    fp.lmap(match('B'), raw_B_ms, scores)
-))
+    fp.lmap(match('B'), raw_B_ms, scores)))
+match_pair_dic = F.group_by(
+    fp.tup(lambda a,b: (a.fidx,b.fidx)),
+    match_pairs)
+unique_match_pairs = sorted(
+    F.distinct(
+        match_pairs, 
+        fp.tup(lambda a,b: (a.fidx, b.fidx))
+    ),
+    key = fp.tup(lambda a,b: (a.fidx, b.fidx))
+)
 
 html_paths = fp.lstarmap(
     lambda a,b: 'comps/{}_{}.html'.format(a.fidx, b.fidx),
-    F.distinct(matches, fp.tup(lambda a,b: (a.fidx, b.fidx)))
-)
-#for code in codes: print(*code[:-1])
-#for match in matches: print(*match)
-for html_path in html_paths: print(html_path)
-
-exit() 
-
-
-A_matches = fp.lmap(raw2match, raw_A_matches)
-B_matches = fp.lmap(raw2match, raw_B_matches)
-matches = list(zip(A_matches,B_matches))
-
-from pprint import pprint
-for match in matches:
-    print(match)
-#TODO: remove..
-match_idxs = F.ldistinct(fp.map( # matched source indexes!
-    lambda a,b: (a.fidx,b.fidx), 
-    A_matches, B_matches
-))
-
-srcsA = fp.lmap(fp.pipe(fu.read_text,highlight), A_srcpaths)
-srcsB = fp.lmap(fp.pipe(fu.read_text,highlight), B_srcpaths)
-
-matched_srcs = fp.lstarmap( 
-    lambda ia,ib: (srcsA[ia],srcsB[ib]), match_idxs
-)
-
-srcpath2name = lambda p: Path(p).name
+    unique_match_pairs)
 match_name_pairs = fp.lstarmap(
-    lambda iA,iB: (
-        Path(A_srcpaths[A_matches[iA].fidx]).name,
-        Path(B_srcpaths[B_matches[iB].fidx]).name
-    ),
-    match_idxs,
-)
+    lambda a,b: (
+        Path(code_dic[a.proj,a.fidx].fpath).name, 
+        Path(code_dic[b.proj,b.fidx].fpath).name),
+    unique_match_pairs)
 
-print(match_name_pairs)
-
-def emphasize_AB(idxA, idxB, matches):
-    def emphasize_lines(lines, beg,end, color):
+@F.autocurry
+def emphasize(code_dic,match_pair_dic, a,b):
+    def emphasize_lines(lines, beg, end, color):
         ''' side effect! '''
         for i in range(beg,end):
             if 0 <= i < len(lines):
                 lines[i] = emphasized(lines[i],color)
+    match_pairs = match_pair_dic[a.fidx, b.fidx]
+    colors = F.repeatedly(rand_html_color, len(match_pairs))
 
-    matchesAB = fp.lfilter(
-        fp.tup(
-            lambda mA,mB: 
-            mA.fidx == idxA and mB.fidx == idxB), 
-        matches
-    )
-    colors = F.repeatedly(rand_html_color, len(matchesAB))
-    # TODO: len(matchesAB) can remove in lazy-way 
-    srcA   = srcsA[idxA];      srcB   = srcsB[idxB]
-    preA   = all_pre(srcA)[1]; preB   = all_pre(srcB)[1]
-    linesA = preA.split('\n'); linesB = preB.split('\n')
-
-    for color, (mA,mB) in zip(colors, matchesAB):
+    srcA   = code_dic[a.proj,a.fidx].text     
+    srcB   = code_dic[b.proj,b.fidx].text      
+    preA   = all_pre(srcA)[1]; 
+    preB   = all_pre(srcB)[1]
+    linesA = preA.split('\n'); 
+    linesB = preB.split('\n')
+    for color, (mA,mB) in zip(colors, match_pairs):
         emphasize_lines(linesA, mA.beg,mA.end, color)
         emphasize_lines(linesB, mB.beg,mB.end, color)
 
@@ -222,20 +200,21 @@ def emphasize_AB(idxA, idxB, matches):
             srcB.replace(preB, '\n'.join(linesB)))
 
 emphasized_AB = fp.lstarmap(
-    lambda ia,ib: emphasize_AB(ia,ib,matches),
-    match_idxs
-)
+    emphasize(code_dic,match_pair_dic), unique_match_pairs)
+
+#for html_path in html_paths: print(html_path)
+#for key,code in code_dic.items(): print(key, code[:-1])
+#for match_name_pair in match_name_pairs: print(match_name_pair)
+from pprint import pprint
+for ma,mb in unique_match_pairs:
+    print(ma,mb)
+#for key,match in match_pairs: print(key);pprint(match)
+#for key,match in match_pair_dic.items(): print(key);pprint(match)
 
 comp_htmls = []
 for a,b in emphasized_AB:
     comp_htmls.append( gen_comp_html(a,b) ) 
-
-html_paths = fp.lstarmap(
-    lambda ia,ib: 'comps/%d_%d.html' % (ia,ib), #NOTE: may change css path..
-    match_idxs
-)
-
-for path, html in zip(html_paths, comp_htmls):
+for path,html in zip(html_paths, comp_htmls):
     fu.write_text(path, html)
 
 #=================================================================
