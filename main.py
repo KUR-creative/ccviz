@@ -72,7 +72,7 @@ table = [
 ]
 
 #-----------------------------------------------------------------
-def gen_comp_html(str1, str2):
+def gen_comp_html(str1, str2, table=table):
     ''' combine str1, str2 into one html string '''
     return document_str(
     [
@@ -92,11 +92,10 @@ def gen_comp_html(str1, str2):
         ],
         div(class_='split right')[
             table
-            #p(children=['right', br()]*100)
         ],
     ]
     ).format_map(dict(
-        source1=str1, source2=str2, match=str1  #{match} in table
+        source1=str1, source2=str2, match=str1  #{match} in table TODO:(remove it)
     )) 
 
 def tag_regex(tag_name):
@@ -132,9 +131,6 @@ def raw2real(root, descendant):
 A_srcpaths = fp.lmap(raw2real(root_dir), car_dict['SRC_FILE_LIST'])
 B_srcpaths = fp.lmap(raw2real(root_dir), car_dict['DST_FILE_LIST'])
 
-A_highlighteds = fp.lmap( fp.pipe(fu.read_text,highlight), A_srcpaths )
-B_highlighteds = fp.lmap( fp.pipe(fu.read_text,highlight), B_srcpaths )
-
 from collections import namedtuple
 Match = namedtuple('Match', 'file_idx func_name beg end')
 clones = car_dict['CLONE_LIST']
@@ -162,10 +158,6 @@ match_idxs = F.ldistinct(fp.map( # matched source indexes!
 srcsA = fp.lmap(fp.pipe(fu.read_text,highlight), A_srcpaths)
 srcsB = fp.lmap(fp.pipe(fu.read_text,highlight), B_srcpaths)
 
-matched_srcs = fp.lstarmap( 
-    lambda ia,ib: (srcsA[ia],srcsB[ib]), match_idxs
-)
-
 srcpath2name = lambda p: Path(p).name
 match_name_pairs = fp.lstarmap(
     lambda iA,iB: (
@@ -191,7 +183,7 @@ def emphasize_AB(idxA, idxB, matches):
         matches
     )
     colors = F.repeatedly(rand_html_color, len(matchesAB))
-
+    # TODO: len(matchesAB) can remove in lazy-way 
     srcA   = srcsA[idxA];      srcB   = srcsB[idxB]
     preA   = all_pre(srcA)[1]; preB   = all_pre(srcB)[1]
     linesA = preA.split('\n'); linesB = preB.split('\n')
