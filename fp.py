@@ -4,6 +4,9 @@ import itertools as I
 tup = lambda f: lambda argtup: f(*argtup)
 go = lambda x,*fs: F.rcompose(*fs)(x)
 pipe = F.rcompose
+def take(n, seq):
+    return F.take(n,seq) if seq \
+    else lambda xs: F.take(n,xs)
 
 def identity(x): return x
 def prop(p, obj=None):

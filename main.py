@@ -144,27 +144,24 @@ def match(proj, raw_match, score):
     return Match(proj, file_idx - 1, func_name, beg - 1, end, score)
 def x_id(match_or_code):
     return (match_or_code.proj, match_or_code.fidx)
+def ab_fidx(ab): 
+    a,b = ab
+    return (a.fidx, b.fidx)
 
 # use codes only here!
 codes = ( fp.lstarmap(code('A'), enumerate(A_srcpaths))
         + fp.lstarmap(code('B'), enumerate(B_srcpaths)))
 code_dic = F.zipdict(
-    fp.map(lambda c: x_id(c), codes), codes)
+    fp.map(x_id, codes), codes)
 
 raw_A_ms, raw_B_ms, scores = F.take(
     3, fp.unzip(car_dict['CLONE_LIST']))
 match_pairs = sorted(zip(
     fp.lmap(match('A'), raw_A_ms, scores), 
     fp.lmap(match('B'), raw_B_ms, scores)))
-match_pair_dic = F.group_by(
-    fp.tup(lambda a,b: (a.fidx,b.fidx)),
-    match_pairs)
+match_pair_dic = F.group_by(ab_fidx, match_pairs)
 unique_match_pairs = sorted(
-    F.distinct(
-        match_pairs, 
-        fp.tup(lambda a,b: (a.fidx, b.fidx))
-    ),
-    key = fp.tup(lambda a,b: (a.fidx, b.fidx))
+    F.distinct(match_pairs, ab_fidx), key = ab_fidx
 )
 
 html_paths = fp.lstarmap(
