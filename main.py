@@ -165,8 +165,17 @@ srcsB = fp.lmap(fp.pipe(fu.read_text,highlight), B_srcpaths)
 matched_srcs = fp.lstarmap( 
     lambda ia,ib: (srcsA[ia],srcsB[ib]), match_idxs
 )
-match_name_pairs = fp.go(
-    match_idxs
+
+srcpath2name = lambda p: Path(p).name
+match_name_pairs = fp.lstarmap(
+    lambda iA,iB: (
+        Path(A_srcpaths[A_matches[iA].file_idx]).name,
+        Path(B_srcpaths[B_matches[iB].file_idx]).name
+    ),
+    match_idxs,
+)
+
+print(match_name_pairs)
 
 def emphasize_AB(idxA, idxB, matches):
     def emphasize_lines(lines, beg,end, color):
@@ -242,7 +251,7 @@ fu.write_text('overview.html', document_str(
                     h('tr')[ h('th')['A'], h('th')['B'], h('th')['link'], ],
                     fp.lmap(
                         link_row, 
-                        match_idxs, html_paths, html_paths
+                        match_name_pairs, html_paths, html_paths
                     ),
                 ],
             ],
