@@ -124,7 +124,7 @@ read_json = fp.pipe(fu.read_text, json.loads)
 root_dir = Path(sys.argv[1])
 car_dict = read_json(root_dir / 'Alignment' / 'file.car')
 
-@F.autocurry
+@F.curry
 def raw2real(root, descendant):
     upper_path = Path(root).parts[:-1]
     return str(Path(*upper_path, descendant))
@@ -132,16 +132,31 @@ A_srcpaths = fp.lmap(raw2real(root_dir), car_dict['SRC_FILE_LIST'])
 B_srcpaths = fp.lmap(raw2real(root_dir), car_dict['DST_FILE_LIST'])
 
 from collections import namedtuple
-Match = namedtuple('Match', 'file_idx func_name beg end')
-clones = car_dict['CLONE_LIST']
+Code = namedtuple('Code', 'proj fidx fpath text')
+Match = namedtuple('Match', 'proj fidx func_name beg end score')
 
-#clones.sort() #NOTE: no need? or not?
-# use in-memory db??
-raw_A_matches, raw_B_matches, scores = list(fp.unzip(clones))[:3]
+@F.autocurry
+def code(proj, fidx, fpath):
+    return Code(proj, fidx, fpath, highlight(fu.read_text(fpath)))
+@F.autocurry
+def match(proj, raw_match, score):
+    file_idx, func_name, beg, end = raw_match
+    return Match(proj, file_idx - 1, func_name, beg - 1, end, score)
 
-def raw2match(raw_match):
-    file_idx, func_name, raw_beg, end = raw_match
-    return Match(file_idx - 1, func_name, raw_beg - 1, end)
+codes = ( fp.lstarmap(code('A'), enumerate(A_srcpaths))
+        + fp.lstarmap(code('B'), enumerate(B_srcpaths)))
+
+raw_A_ms, raw_B_ms, scores = F.take(
+    3, fp.unzip(car_dict['CLONE_LIST']))
+matches = ( fp.lmap(match('A'), raw_A_ms, scores)
+          + fp.lmap(match('B'), raw_B_ms, scores))
+
+#for code in codes: print(*code[:-1])
+#for match in matches: print(*match)
+
+exit() 
+
+
 A_matches = fp.lmap(raw2match, raw_A_matches)
 B_matches = fp.lmap(raw2match, raw_B_matches)
 matches = list(zip(A_matches,B_matches))
@@ -151,18 +166,22 @@ for match in matches:
     print(match)
 #TODO: remove..
 match_idxs = F.ldistinct(fp.map( # matched source indexes!
-    lambda a,b: (a.file_idx,b.file_idx), 
+    lambda a,b: (a.fidx,b.fidx), 
     A_matches, B_matches
 ))
 
 srcsA = fp.lmap(fp.pipe(fu.read_text,highlight), A_srcpaths)
 srcsB = fp.lmap(fp.pipe(fu.read_text,highlight), B_srcpaths)
 
+matched_srcs = fp.lstarmap( 
+    lambda ia,ib: (srcsA[ia],srcsB[ib]), match_idxs
+)
+
 srcpath2name = lambda p: Path(p).name
 match_name_pairs = fp.lstarmap(
     lambda iA,iB: (
-        Path(A_srcpaths[A_matches[iA].file_idx]).name,
-        Path(B_srcpaths[B_matches[iB].file_idx]).name
+        Path(A_srcpaths[A_matches[iA].fidx]).name,
+        Path(B_srcpaths[B_matches[iB].fidx]).name
     ),
     match_idxs,
 )
@@ -179,7 +198,7 @@ def emphasize_AB(idxA, idxB, matches):
     matchesAB = fp.lfilter(
         fp.tup(
             lambda mA,mB: 
-            mA.file_idx == idxA and mB.file_idx == idxB), 
+            mA.fidx == idxA and mB.fidx == idxB), 
         matches
     )
     colors = F.repeatedly(rand_html_color, len(matchesAB))
