@@ -144,8 +144,8 @@ def match(proj, raw_match, score):
     return Match(proj, file_idx - 1, func_name, beg - 1, end, score)
 def x_id(match_or_code):
     return (match_or_code.proj, match_or_code.fidx)
-def ab_fidx(ab): 
-    a,b = ab
+def ab_fidx(codeA_codeB): 
+    a,b = codeA_codeB
     return (a.fidx, b.fidx)
 
 # use codes only here!
@@ -174,12 +174,13 @@ match_name_pairs = fp.lstarmap(
     unique_match_pairs)
 
 @F.autocurry
-def emphasize(code_dic,match_pair_dic, a,b):
+def emphasize(code_dic,match_pair_dic, codeA,codeB):
     def emphasize_lines(lines, beg, end, color):
         ''' side effect! '''
         for i in range(beg,end):
             if 0 <= i < len(lines):
                 lines[i] = emphasized(lines[i],color)
+    a,b = codeA,codeB
     match_pairs = match_pair_dic[a.fidx, b.fidx]
     colors = F.repeatedly(rand_html_color, len(match_pairs))
 
