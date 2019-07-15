@@ -242,10 +242,16 @@ for path,html in zip(html_paths, comp_htmls):
 #=================================================================
 def match_link(href, content):
     return h('a',href=href)[content]
-def link_row(name_pair, href, content):
+def link_row(name_pair, match_pair, href, content):
+    a,b = match_pair
+    match_pairs = match_pair_dic[a.fidx, b.fidx]
+    score_sum = 0
+    for m,_ in match_pairs:
+        score_sum += m.score
     a_name,b_name = name_pair
     return h('tr')[ 
         h('td')[a_name], h('td')[b_name], 
+        h('td')[score_sum],
         h('td')[match_link(href,content)],
     ]
 
@@ -267,10 +273,11 @@ fu.write_text('overview.html', document_str(
                 p('Some txt..'),
 
                 h('table')[
-                    h('tr')[ h('th')['A'], h('th')['B'], h('th')['link'], ],
+                    h('tr')[ h('th')['A'], h('th')['B'], h('th')['score'], h('th')['link'], ],
                     fp.lmap(
                         link_row, 
-                        match_name_pairs, html_paths, html_paths
+                        match_name_pairs, unique_match_pairs,
+                        html_paths, html_paths
                     ),
                 ],
             ],
