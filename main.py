@@ -20,6 +20,16 @@ OUTPUT_DIR =(sys.argv[2] if len(sys.argv) > 2
              else 'viz_' + str(Path(INPUT_DIR).name)) # default
 print(INPUT_DIR)
 print(OUTPUT_DIR)
+
+import os
+import shutil
+os.makedirs(Path(OUTPUT_DIR,'css'),exist_ok=True)
+css_fnames = os.listdir('fixed_css')
+css_srcs = fp.lmap(lambda c: Path('fixed_css',c), css_fnames)
+css_dsts = fp.lmap(lambda c: Path(OUTPUT_DIR,'css',c), css_fnames)
+print(css_fnames,css_srcs,css_dsts, sep='\n')
+for src,dst in zip(css_srcs,css_dsts):
+    shutil.copyfile(src,dst)
 #=================================================================
 def document_str(head_tags,body_tags,is_pretty=True):
     doc = h('html')[
