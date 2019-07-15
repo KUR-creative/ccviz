@@ -18,6 +18,8 @@ from bs4 import BeautifulSoup
 INPUT_DIR  = sys.argv[1]
 OUTPUT_DIR =(sys.argv[2] if len(sys.argv) > 2 
              else 'viz_' + str(Path(INPUT_DIR).name)) # default
+TARGET_CAR = 'function.car' if len(sys.argv) > 3 else 'file.car'
+# TODO: TARGET_CAR is temporary
 print(INPUT_DIR)
 print(OUTPUT_DIR)
 
@@ -156,7 +158,7 @@ def rand_html_color():
 import json
 read_json = fp.pipe(fu.read_text, json.loads)
 root_dir = Path(INPUT_DIR)
-car_dict = read_json(root_dir / 'Alignment' / 'file.car')
+car_dict = read_json(root_dir / 'Alignment' / TARGET_CAR)
 
 @F.curry
 def raw2real(root, descendant):
