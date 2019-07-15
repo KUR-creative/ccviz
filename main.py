@@ -72,6 +72,26 @@ table = [
 ]
 
 #-----------------------------------------------------------------
+def comp_table(match_pair_dic, codeA,codeB):
+    row = lambda tag, strings: h('tr')[[h(tag)[s] for s in strings]] # *strings ..
+    header = row('th', ['score','A.beg','A.end','B.beg','B,end'])
+    datom = F.curry(row)('td')
+    data = fp.go(
+        match_pair_dic[codeA.fidx, codeB.fidx],
+        fp.map(fp.map(match2raw)), # list of tuple
+        fp.lstarmap(
+            lambda mA,mB: 
+            datom([mA.score, mA.beg,mA.end, mB.beg,mB.end])
+        ),
+    )
+    print(data)
+
+    return [
+        h('table', children=[ h('tr')[header] ] + data),
+        popup_btn(match_id, 'view matching'),
+        popup_window(match_id, '{match}')
+    ]
+
 def gen_comp_html(str1, str2, table=table):
     ''' combine str1, str2 into one html string '''
     return document_str(
@@ -142,6 +162,9 @@ def code(proj, fidx, fpath):
 def match(proj, raw_match, score):
     file_idx, func_name, beg, end = raw_match
     return Match(proj, file_idx - 1, func_name, beg - 1, end, score)
+def match2raw(match):
+    m = match
+    return Match(m.proj, m.fidx + 1, m.func_name, m.beg + 1, m.end, m.score)
 def x_id(match_or_code):
     return (match_or_code.proj, match_or_code.fidx)
 def ab_fidx(codeA_codeB): 
@@ -210,8 +233,9 @@ for ma,mb in unique_match_pairs:
 #for key,match in match_pair_dic.items(): print(key);pprint(match)
 
 comp_htmls = []
-for a,b in emphasized_AB:
-    comp_htmls.append( gen_comp_html(a,b) ) 
+for (eA,eB),(mA,mB) in zip(emphasized_AB, unique_match_pairs):
+    comp_htmls.append( 
+        gen_comp_html(eA,eB, comp_table(match_pair_dic, mA,mB))) 
 for path,html in zip(html_paths, comp_htmls):
     fu.write_text(path, html)
 
