@@ -35,7 +35,10 @@ def write_text(path, text, mode=0o777, exist_ok=True):
     path.write_text(text)
 
 def read_text(path, encoding=None, errors=None):
-    return Path(path).read_text(encoding=None, errors=None)
+    try:
+        return Path(path).read_text(encoding='UTF8', errors=errors)
+    except:
+        return Path(path).read_text(encoding='cp949', errors=errors)
 
 if __name__ == '__main__':
     for x in Path('.').iterdir():
