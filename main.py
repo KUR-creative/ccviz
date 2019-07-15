@@ -15,6 +15,18 @@ from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
 from bs4 import BeautifulSoup
 
+if '-h' in sys.argv:
+    print(
+'''
+usage: 
+python main.py <input-dir> <output-dir-name>        target: file.car
+python main.py <input-dir> <output-dir-name> func   target: function.car
+
+input-dir:  Uncompressed directory from result zip file from CloneCop
+output-dir: New directory name is allowed
+If there is 3rd cmd arg, viz target: function.car. Otherwise, target: file.car
+''')
+    exit()
 INPUT_DIR  = sys.argv[1]
 OUTPUT_DIR =(sys.argv[2] if len(sys.argv) > 2 
              else 'viz_' + str(Path(INPUT_DIR).name)) # default
