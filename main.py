@@ -2,7 +2,7 @@
 from itertools import product
 from pathlib import Path
 import futils as fu
-from hyperpython import h, h1, h2, p, a, meta, link, div, br, span
+from hyperpython import h, h1, h2, p, meta, link, div, br, span
 import funcy as F
 import re
 import fp
@@ -27,7 +27,7 @@ def document_str(head_tags,body_tags,is_pretty=True):
 
 fu.write_text('index.html', document_str([], [
     h1('index (start) page'),
-    a(href='overview.html')['goto overview'],
+    h('a', href='overview.html')['goto overview'],
 ]))
 
 def popup_btn(match_id, content):
