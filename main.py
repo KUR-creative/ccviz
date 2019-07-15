@@ -204,7 +204,6 @@ codes = ( fp.lstarmap(code('A'), enumerate(A_srcpaths))
         + fp.lstarmap(code('B'), enumerate(B_srcpaths)))
 code_dic = F.zipdict(
     fp.map(x_id, codes), codes)
-
 raw_A_ms, raw_B_ms, scores = F.take(
     3, fp.unzip(car_dict['CLONE_LIST']))
 match_pairs = sorted(zip(
@@ -248,8 +247,11 @@ def emphasize(code_dic,match_pair_dic, codeA,codeB):
     return (srcA.replace(preA, '\n'.join(linesA)),
             srcB.replace(preB, '\n'.join(linesB)))
 
-emphasized_AB = fp.lstarmap(
-    emphasize(code_dic,match_pair_dic), unique_match_pairs)
+from tqdm import tqdm
+emphasized_AB = fp.starmap(
+    emphasize(code_dic,match_pair_dic), 
+    unique_match_pairs
+)
 
 #for html_path in html_paths: print(html_path)
 #for key,code in code_dic.items(): print(key, code[:-1])
@@ -260,10 +262,14 @@ emphasized_AB = fp.lstarmap(
 #for key,match in match_pair_dic.items(): print(key);pprint(match)
 
 comp_htmls = []
-for (eA,eB),(mA,mB) in zip(emphasized_AB, unique_match_pairs):
+for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs), 
+                            total=len(unique_match_pairs),
+                            desc='   generate htmls'):
     comp_htmls.append( 
         gen_comp_html(eA,eB, comp_table(match_pair_dic, mA,mB))) 
-for path,html in zip(html_paths, comp_htmls):
+for path,html in tqdm(zip(html_paths, comp_htmls),
+                      total=len(html_paths),
+                      desc='wrte html to disk'):
     fu.write_text(Path(OUTPUT_DIR,path), html)
 
 #=================================================================
