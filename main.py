@@ -15,7 +15,11 @@ from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
 from bs4 import BeautifulSoup
 
-
+INPUT_DIR  = sys.argv[1]
+OUTPUT_DIR =(sys.argv[2] if len(sys.argv) > 2 
+             else 'viz_' + str(Path(INPUT_DIR).name)) # default
+print(INPUT_DIR)
+print(OUTPUT_DIR)
 #=================================================================
 def document_str(head_tags,body_tags,is_pretty=True):
     doc = h('html')[
@@ -25,7 +29,7 @@ def document_str(head_tags,body_tags,is_pretty=True):
     retstr = str(doc.pretty() if is_pretty else doc)
     return '<!DOCTYPE html>\n' + retstr
 
-fu.write_text('index.html', document_str([], [
+fu.write_text(Path(OUTPUT_DIR,'index.html'), document_str([], [
     h1('index (start) page'),
     h('a', href='overview.html')['goto overview'],
 ]))
@@ -50,7 +54,7 @@ def popup_window(match_id, content):
 #=================================================================
 highlight_css = 'css/highlight.css'
 fu.write_text(
-    highlight_css,
+    Path(OUTPUT_DIR, highlight_css),
     HtmlFormatter().get_style_defs('.highlight'),
 )
 
@@ -141,7 +145,7 @@ def rand_html_color():
 
 import json
 read_json = fp.pipe(fu.read_text, json.loads)
-root_dir = Path(sys.argv[1])
+root_dir = Path(INPUT_DIR)
 car_dict = read_json(root_dir / 'Alignment' / 'file.car')
 
 @F.curry
@@ -237,7 +241,7 @@ for (eA,eB),(mA,mB) in zip(emphasized_AB, unique_match_pairs):
     comp_htmls.append( 
         gen_comp_html(eA,eB, comp_table(match_pair_dic, mA,mB))) 
 for path,html in zip(html_paths, comp_htmls):
-    fu.write_text(path, html)
+    fu.write_text(Path(OUTPUT_DIR,path), html)
 
 #=================================================================
 def match_link(href, content):
@@ -255,7 +259,7 @@ def link_row(name_pair, match_pair, href, content):
         h('td')[match_link(href,content)],
     ]
 
-fu.write_text('overview.html', document_str(
+fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
     [
         link(rel="stylesheet", href="css/overview.css"),
     ], 
@@ -286,13 +290,12 @@ fu.write_text('overview.html', document_str(
 ))
 
 #=================================================================
-fu.write_text('compare2bi.html', document_str([], [
+fu.write_text(Path(OUTPUT_DIR,'compare2bi.html'), document_str([], [
     h1('compare2bi page'),
     h('a',href='matching.html')['goto matching'],
 ]))
 
 #=================================================================
-fu.write_text('matching.html', document_str([], [
+fu.write_text(Path(OUTPUT_DIR,'matching.html'), document_str([], [
     h1('matching'),
 ]))
-
