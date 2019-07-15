@@ -13,7 +13,6 @@ import sys
 import pygments #import highlight
 from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
-from bs4 import BeautifulSoup
 
 if '-h' in sys.argv:
     print(
@@ -112,7 +111,7 @@ def comp_table(match_pair_dic, codeA,codeB):
             datom([mA.score, mA.beg,mA.end, mB.beg,mB.end])
         ),
     )
-    print(data)
+    #print(data)
 
     return [
         h('table', children=[ h('tr')[header] ] + data),
@@ -185,6 +184,7 @@ Match = namedtuple('Match', 'proj fidx func_name beg end score')
 
 @F.autocurry
 def code(proj, fidx, fpath):
+    print(fpath)
     return Code(proj, fidx, fpath, highlight(fu.read_text(fpath)))
 @F.autocurry
 def match(proj, raw_match, score):
@@ -254,9 +254,8 @@ emphasized_AB = fp.lstarmap(
 #for html_path in html_paths: print(html_path)
 #for key,code in code_dic.items(): print(key, code[:-1])
 #for match_name_pair in match_name_pairs: print(match_name_pair)
-from pprint import pprint
-for ma,mb in unique_match_pairs:
-    print(ma,mb)
+#from pprint import pprint
+#for ma,mb in unique_match_pairs: print(ma,mb)
 #for key,match in match_pairs: print(key);pprint(match)
 #for key,match in match_pair_dic.items(): print(key);pprint(match)
 
