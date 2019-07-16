@@ -86,18 +86,6 @@ def highlight(src, linenos='table'):
         src, CppLexer(), HtmlFormatter(linenos=linenos)
     )
 
-match_id = 'open-popup'
-table = [
-    h('table', children=[
-        h('tr')[ h('th')['table'], h('th')['tab'], h('th')['score'],],
-        h('tr')[ h('td')['src1'], h('td')['src2'], h('td')[3],],
-        h('tr')[ h('td')['src1'], h('td')['src3'], h('td')[3],],
-        h('tr')[ h('td')['src1'], h('td')['src4'], h('td')[3],],
-    ]),
-    popup_btn(match_id, 'view matching'),
-    popup_window(match_id, '{match}')
-]
-
 #-----------------------------------------------------------------
 def comp_table(match_pair_dic, codeA,codeB):
     row = lambda tag, strings: h('tr')[[h(tag)[s] for s in strings]] # *strings ..
@@ -113,13 +101,14 @@ def comp_table(match_pair_dic, codeA,codeB):
     )
     #print(data)
 
+    match_id = 'open-popup'
     return [
         h('table', children=[ h('tr')[header] ] + data),
         popup_btn(match_id, 'view matching'),
         popup_window(match_id, '{match}')
     ]
 
-def gen_comp_html(str1, str2, table=table):
+def gen_comp_html(str1, str2, table):
     ''' combine str1, str2 into one html string '''
     return document_str(
     [
