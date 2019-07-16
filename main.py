@@ -158,7 +158,7 @@ def emphasized(line, color):
 def rand_html_color():
     import random
     r = lambda: random.randint(0,255)
-    return 'rgba(%d,%d,%d,0.5)' % (r(),r(),r())
+    return 'rgba(%d,%d,%d,0.25)' % (r(),r(),r())
 
 import json
 read_json = fp.pipe(fu.read_text, json.loads)
