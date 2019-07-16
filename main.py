@@ -93,7 +93,7 @@ def highlight(src, linenos='table'):
 #-----------------------------------------------------------------
 def comp_table(match_pair_dic, codeA,codeB):
     row = lambda tag, strings: h('tr')[[h(tag)[s] for s in strings]] # *strings ..
-    header = row('th', ['score','A.beg','A.end','B.beg','B,end'])
+    header = row('th', ['score','A.beg','A.end','B.beg','B.end'])
     datom = F.curry(row)('td')
     data = fp.go(
         match_pair_dic[codeA.fidx, codeB.fidx],
@@ -107,9 +107,9 @@ def comp_table(match_pair_dic, codeA,codeB):
 
     match_id = 'open-popup'
     return [
-        h('table', children=[ h('tr')[header] ] + data),
+        h('table', children=[header] + data),
         popup_btn(match_id, 'view matching'),
-        popup_window(match_id, '{match}')
+        popup_window(match_id, '{match}'),
     ]
 
 def gen_comp_html(str1, str2, table):
@@ -128,10 +128,11 @@ def gen_comp_html(str1, str2, table):
             ]
         ],
         div(class_='center')[
-            div('{source2}')
+            div('{source2}'),
         ],
         div(class_='split right')[
-            table
+            table,
+            h('script', src='../js/overview.js')[' '],
         ],
     ]
     ).format_map(dict(
