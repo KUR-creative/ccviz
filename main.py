@@ -132,7 +132,7 @@ def gen_comp_html(str1, str2, table):
         ],
         div(class_='split right')[
             table,
-            h('script', src='../js/overview.js')[' '],
+            h('script', src='../js/sort_table.js')[' '],
         ],
     ]
     ).format_map(dict(
@@ -309,7 +309,7 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
                 ],
             ],
         ],
-        h('script', src='js/overview.js')[' '],
+        h('script', src='js/sort_table.js')[' '],
     ]
 ))
 
