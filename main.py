@@ -122,6 +122,8 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
     range_info = fp.go(
         match_pairs,
         fp.map(fp.map(match2raw)), 
+        fp.map(fp.map(lambda m: Match(
+        ))),
         fp.starmap(lambda rA,rB: (rA.beg,rA.end, rB.beg,rB.end)),
     )
 
@@ -154,8 +156,8 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
         popup_window(match_id, '{match}'),
     ]
 
-def gen_comp_html(str1, str2, table):
-    ''' combine str1, str2 into one html string '''
+def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table):
+    ''' combine srcA, srcB into one html string '''
     return document_str(
     [
         meta(name="viewport", content="width=device-width, initial-scale=1"),
@@ -167,9 +169,9 @@ def gen_comp_html(str1, str2, table):
     [
         div(class_='all')[
             div(class_='header_row')[
-                div(class_='column')[ h('p')['ppap'],],
-                div(class_='column')[ h('p')['bbab'],],
-                div(class_='column')[ h('p')['PPAP'],],
+                div(class_='column')[ Ainfo ],
+                div(class_='column')[ Binfo ],
+                div(class_='column')[ table_info ],
             ],
             div(class_='row')[
                 div(class_='column')[
@@ -188,7 +190,7 @@ def gen_comp_html(str1, str2, table):
         ]
     ]
     ).format_map(dict(
-        source1=str1, source2=str2, match=str1  #{match} in table TODO:(remove it)
+        source1=srcA, source2=srcB, match=srcA  #{match} in table TODO:(remove it)
     )) 
 
 def tag_regex(tag_name):
@@ -316,8 +318,12 @@ comp_htmls = []
 for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs), 
                             total=len(unique_match_pairs),
                             desc='   generate htmls'):
+    Ainfo = h('h2')[ 'A: ' + Path(A_srcpaths[mA.fidx]).name ]
+    Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
+    table_info = h('h2')[ 'Result Table' ]
     comp_htmls.append(gen_comp_html(
-        eA,eB, comp_table(match_pair_dic, match_stat_dic, mA,mB)
+        Ainfo,Binfo,table_info, eA,eB, 
+        comp_table(match_pair_dic, match_stat_dic, mA,mB)
     )) 
 for path,html in tqdm(zip(html_paths, comp_htmls),
                       total=len(html_paths),
