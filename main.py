@@ -154,7 +154,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
         popup_window(match_id, '{match}'),
     ]
 
-def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table):
+def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
     ''' combine srcA, srcB into one html string '''
     return document_str(
     [
@@ -188,7 +188,7 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table):
         ]
     ]
     ).format_map(dict(
-        source1=srcA, source2=srcB, match=srcA  #{match} in table TODO:(remove it)
+        source1=srcA, source2=srcB, match=temp_match  #{match} in table TODO:(remove it)
     )) 
 
 def tag_regex(tag_name):
@@ -312,6 +312,23 @@ emphasized_AB = fp.starmap(
 #for key,match in match_pairs: print(key);pprint(match)
 #for key,match in match_pair_dic.items(): print(key);pprint(match)
 
+def temp_match_view(eA,eB):
+    preA   = all_pre(eA)[1]; 
+    preB   = all_pre(eB)[1]
+    linesA = preA.split('\n'); 
+    linesB = preB.split('\n')
+    return fp.go(
+        zip(linesA,linesB),
+        F.flatten,
+        enumerate,
+        fp.starmap(
+            lambda i,line: 
+            emphasized(line,'rgba(0,0,0,0.07)') if i % 2 else line
+        ),
+        lambda lines: '\n'.join(lines),
+        lambda s: '<div class="highlight"><pre>' + s + '</pre></div>'
+    )
+
 comp_htmls = []
 for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs), 
                             total=len(unique_match_pairs),
@@ -319,9 +336,11 @@ for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs),
     Ainfo = h('h2')[ 'A: ' + Path(A_srcpaths[mA.fidx]).name ]
     Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
     table_info = h('h2')[ 'Result Table' ]
+    temp_match = temp_match_view(eA,eB)
     comp_htmls.append(gen_comp_html(
         Ainfo,Binfo,table_info, eA,eB, 
-        comp_table(match_pair_dic, match_stat_dic, mA,mB)
+        comp_table(match_pair_dic, match_stat_dic, mA,mB), 
+        temp_match
     )) 
 for path,html in tqdm(zip(html_paths, comp_htmls),
                       total=len(html_paths),
