@@ -335,6 +335,7 @@ def link_row(name_pair, match_pair, href, content):
 fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
     [
         link(rel="stylesheet", href="css/overview.css"),
+        link(rel="stylesheet", href='css/comp_table.css'),
     ], 
     [
         h1('overview page'),
@@ -347,9 +348,9 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
             ],
             div(class_='column right')[
                 h2('Column 2'),
-                p('Some txt..'),
+                p('테이블의 헤더를 클릭하여 정렬할 수 있습니다.'),
 
-                h('table')[
+                h('table',class_='comp_table')[
                     h('tr')[ h('th')['A 파일'], h('th')['B 파일'], h('th')['절대점수'], h('th')['비교 화면 보기'], ],
                     fp.lmap(
                         link_row, 
