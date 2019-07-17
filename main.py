@@ -28,7 +28,6 @@ input-dir:  Uncompressed directory from result zip file from CloneCop
 output-dir: New directory name is allowed
 If there is 3rd cmd arg, viz target: function.car. Otherwise, target: file.car
 ''')
-    exit()
 TARGET_CAR = sys.argv[1]#'function-1.car' if len(sys.argv) > 3 else 'file-1.car'
 INPUT_DIR  = sys.argv[2]
 OUTPUT_DIR =(sys.argv[3] if len(sys.argv) > 3 
