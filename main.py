@@ -93,20 +93,27 @@ def highlight(src, linenos='table'):
     )
 
 #-----------------------------------------------------------------
-def comp_table(match_pair_dic, A_fidx,B_fidx):
+def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
     row = lambda tag, strings: h('tr')[[h(tag)[s] for s in strings]] # *strings ..
     header = row(
         'th', ['A beg','A end','B beg','B end',
                'abs', 'rel', '#M1','#M2','#M3','#M4','#gap','#miss']) #TODO: unicode issue? korean malfunctioning..
-    datom = F.curry(row)('td')
-    match_pairs = match_pair_dic[A_fidx, B_fidx]
+    datum = F.curry(row)('td')
+    match_pairs = match_pair_dic[matchA.fidx, matchB.fidx]
     range_info = fp.go(
         match_pairs,
         fp.map(fp.map(match2raw)), 
-        fp.lstarmap(lambda mA,mB: datom([mA.beg,mA.end, mB.beg,mB.end])),
+        fp.starmap(lambda rA,rB: (rA.beg,rA.end, rB.beg,rB.end)),
     )
-    #print(data)
-    data = range_info
+    match_stats = fp.starmap(
+        lambda mA,mB: match_stat_dic[mA,mB],
+        match_pairs
+    )
+    data = fp.go(
+        zip(range_info,match_stats),
+        fp.starmap(lambda i,s: i + s),
+        fp.lmap(datum)
+    )
 
     match_id = 'open-popup'
     return [
@@ -215,9 +222,6 @@ unique_match_pairs = sorted(
     F.distinct(match_pairs, ab_fidx), key = ab_fidx
 )
 match_stat_dic = F.zipdict(match_pairs, match_stats)
-print(match_stats)
-print(match_stat_dic)
-#exit()
 
 html_paths = fp.lstarmap(
     lambda a,b: 'comps/{}_{}.html'.format(a.fidx, b.fidx),
@@ -270,8 +274,9 @@ comp_htmls = []
 for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs), 
                             total=len(unique_match_pairs),
                             desc='   generate htmls'):
-    comp_htmls.append( 
-        gen_comp_html(eA,eB, comp_table(match_pair_dic, mA.fidx,mB.fidx))) 
+    comp_htmls.append(gen_comp_html(
+        eA,eB, comp_table(match_pair_dic, match_stat_dic, mA,mB)
+    )) 
 for path,html in tqdm(zip(html_paths, comp_htmls),
                       total=len(html_paths),
                       desc='wrte html to disk'):
