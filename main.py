@@ -150,7 +150,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
     return [
         #h('table', class_='comp_table', children=[top,header] + data),
         h('table', class_='comp_table', children=[header] + data),
-        popup_btn(match_id, 'view matching'),
+        popup_btn(match_id, 'go'),
         popup_window(match_id, '{match}'),
     ]
 
