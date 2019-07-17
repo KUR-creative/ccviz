@@ -93,19 +93,18 @@ def highlight(src, linenos='table'):
     )
 
 #-----------------------------------------------------------------
-def comp_table(match_pair_dic, codeA,codeB):
+def comp_table(match_pair_dic, A_fidx,B_fidx):
     row = lambda tag, strings: h('tr')[[h(tag)[s] for s in strings]] # *strings ..
-    header = row('th', ['점수','A.beg','A.end','B.beg','B.end'])
+    header = row('th', ['A.beg','A.end','B.beg','B.end'])#'점수',
     datom = F.curry(row)('td')
-    data = fp.go(
-        match_pair_dic[codeA.fidx, codeB.fidx],
-        fp.map(fp.map(match2raw)), # list of tuple
-        fp.lstarmap(
-            lambda mA,mB: 
-            datom([mA.abs_score, mA.beg,mA.end, mB.beg,mB.end])
-        ),
+    match_pairs = match_pair_dic[A_fidx, B_fidx]
+    range_info = fp.go(
+        match_pairs,
+        fp.map(fp.map(match2raw)), 
+        fp.lstarmap(lambda mA,mB: datom([mA.beg,mA.end, mB.beg,mB.end])),
     )
     #print(data)
+    data = range_info
 
     match_id = 'open-popup'
     return [
@@ -270,7 +269,7 @@ for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs),
                             total=len(unique_match_pairs),
                             desc='   generate htmls'):
     comp_htmls.append( 
-        gen_comp_html(eA,eB, comp_table(match_pair_dic, mA,mB))) 
+        gen_comp_html(eA,eB, comp_table(match_pair_dic, mA.fidx,mB.fidx))) 
 for path,html in tqdm(zip(html_paths, comp_htmls),
                       total=len(html_paths),
                       desc='wrte html to disk'):
