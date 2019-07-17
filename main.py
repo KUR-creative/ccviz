@@ -95,7 +95,9 @@ def highlight(src, linenos='table'):
 #-----------------------------------------------------------------
 def comp_table(match_pair_dic, A_fidx,B_fidx):
     row = lambda tag, strings: h('tr')[[h(tag)[s] for s in strings]] # *strings ..
-    header = row('th', ['A 시작','A 끝','B 시작','B 끝'])#'점수',
+    header = row(
+        'th', ['A beg','A end','B beg','B end',
+               'abs', 'rel', '#M1','#M2','#M3','#M4','#gap','#miss']) #TODO: unicode issue? korean malfunctioning..
     datom = F.curry(row)('td')
     match_pairs = match_pair_dic[A_fidx, B_fidx]
     range_info = fp.go(
