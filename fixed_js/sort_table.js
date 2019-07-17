@@ -1,5 +1,6 @@
 // https://stackoverflow.com/a/49041392
-const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+const getCellValue = (tr, idx) => 
+    tr.children[idx].innerText || tr.children[idx].textContent;
 
 const comparer = (idx, asc) => (a, b) => (
     (v1, v2) => 
