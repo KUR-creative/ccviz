@@ -341,13 +341,13 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
         h1('overview page'),
         div(class_='row')[
             div(class_='column left')[
-                h2('Column 1'),
+                h2('Result Matrix'),
                 p('Matrix will be included'),
                 h('a',href='compare1.html')['goto compare1'],
                 h('a',href='compare2bi.html')['goto compare2bi'],
             ],
             div(class_='column right')[
-                h2('Column 2'),
+                h2('Result Overview'),
                 p('테이블의 헤더를 클릭하여 정렬할 수 있습니다.'),
 
                 h('table',class_='comp_table')[
