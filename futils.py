@@ -10,7 +10,7 @@ def children(dirpath):
     ''' Return children file path list of `dirpath` '''
     parent = Path(dirpath)
     return list(map(
-        lambda child: str(parent / child),
+        lambda child_path: str(parent / child_path.name),
         parent.iterdir()
     ))
 
