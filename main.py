@@ -343,8 +343,8 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
             div(class_='column left')[
                 h2('Result Matrix'),
                 p('Matrix will be included'),
-                h('a',href='compare1.html')['goto compare1'],
-                h('a',href='compare2bi.html')['goto compare2bi'],
+                #h('a',href='compare1.html')['goto compare1'],
+                #h('a',href='compare2bi.html')['goto compare2bi'],
             ],
             div(class_='column right')[
                 h2('Result Overview'),
@@ -364,6 +364,7 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
     ]
 ))
 
+'''
 #=================================================================
 fu.write_text(Path(OUTPUT_DIR,'compare2bi.html'), document_str([], [
     h1('compare2bi page'),
@@ -374,3 +375,4 @@ fu.write_text(Path(OUTPUT_DIR,'compare2bi.html'), document_str([], [
 fu.write_text(Path(OUTPUT_DIR,'matching.html'), document_str([], [
     h1('matching'),
 ]))
+'''
