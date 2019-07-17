@@ -8,6 +8,9 @@ def take(n, seq):
     return F.take(n,seq) if seq \
     else lambda xs: F.take(n,xs)
 
+def plus(*xs):
+    return sum(xs)
+
 def identity(x): return x
 def prop(p, obj=None):
     return(getattr(obj, p) if (isinstance(obj,tuple) and 
