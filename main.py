@@ -106,8 +106,8 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
     header = h('tr')[
         h('th')['A.s'  ],
         h('th')['A.t'  ],
-        h('th')['A.s'  ],
-        h('th')['A.t'  ],
+        h('th')['B.s'  ],
+        h('th')['B.t'  ],
         h('th')['abs'  ],
         h('th')['rel'  ],
         h('th')['1'  ],
