@@ -110,10 +110,10 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
         h('th')['B.t'  ],
         h('th')['abs'  ],
         h('th')['rel'  ],
-        h('th')['1'  ],
-        h('th')['2'  ],
-        h('th')['3'  ],
-        h('th')['4'  ],
+        h('th')['M1'  ],
+        h('th')['M2'  ],
+        h('th')['M3'  ],
+        h('th')['M4'  ],
         h('th')['gap' ],
         h('th')['miss']
     ]
@@ -327,13 +327,13 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
     [
         h1('overview page'),
         div(class_='row')[
-            div(class_='column left', style='background-color:#aaa;')[
+            div(class_='column left')[
                 h2('Column 1'),
                 p('Matrix will be included'),
                 h('a',href='compare1.html')['goto compare1'],
                 h('a',href='compare2bi.html')['goto compare2bi'],
             ],
-            div(class_='column right', style='background-color:#bbb;')[
+            div(class_='column right')[
                 h2('Column 2'),
                 p('Some txt..'),
 
