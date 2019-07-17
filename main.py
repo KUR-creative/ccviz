@@ -9,10 +9,14 @@ import fp
 import sys
 
 #-----------------------------------------------------------------
+import os
+import shutil
 #from pygments import highlight
 import pygments #import highlight
 from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
+
+import argparse
 
 if '-h' in sys.argv:
     print(
@@ -29,13 +33,11 @@ If there is 3rd cmd arg, viz target: function.car. Otherwise, target: file.car
 INPUT_DIR  = sys.argv[1]
 OUTPUT_DIR =(sys.argv[2] if len(sys.argv) > 2 
              else 'viz_' + str(Path(INPUT_DIR).name)) # default
-TARGET_CAR = 'function.car' if len(sys.argv) > 3 else 'file.car'
-# TODO: TARGET_CAR is temporary
+TARGET_CAR = 'function-1.car' if len(sys.argv) > 3 else 'file-1.car'
+
 print(INPUT_DIR)
 print(OUTPUT_DIR)
 
-import os
-import shutil
 @F.autocurry
 def copy_fixed(output_dir, ftype):
     os.makedirs(Path(output_dir,ftype),exist_ok=True)
