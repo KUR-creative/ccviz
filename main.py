@@ -95,14 +95,14 @@ def highlight(src, linenos='table'):
 #-----------------------------------------------------------------
 def comp_table(match_pair_dic, codeA,codeB):
     row = lambda tag, strings: h('tr')[[h(tag)[s] for s in strings]] # *strings ..
-    header = row('th', ['score','A.beg','A.end','B.beg','B.end'])
+    header = row('th', ['점수','A.beg','A.end','B.beg','B.end'])
     datom = F.curry(row)('td')
     data = fp.go(
         match_pair_dic[codeA.fidx, codeB.fidx],
         fp.map(fp.map(match2raw)), # list of tuple
         fp.lstarmap(
             lambda mA,mB: 
-            datom([mA.score, mA.beg,mA.end, mB.beg,mB.end])
+            datom([mA.abs_score, mA.beg,mA.end, mB.beg,mB.end])
         ),
     )
     #print(data)
@@ -176,19 +176,21 @@ B_srcpaths = fp.lmap(raw2real(root_dir), car_dict['DST_FILE_LIST'])
 
 from collections import namedtuple
 Code = namedtuple('Code', 'proj fidx fpath text')
-Match = namedtuple('Match', 'proj fidx func_name beg end score')
+Match = namedtuple('Match', 'proj fidx func_name beg end abs_score') # TODO: rm score
+# idxAs idxBs
+MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
 @F.autocurry
 def code(proj, fidx, fpath):
     print(fpath)
     return Code(proj, fidx, fpath, highlight(fu.read_text(fpath)))
 @F.autocurry
-def match(proj, raw_match, score):
+def match(proj, raw_match, abs_score):
     file_idx, func_name, beg, end = raw_match
-    return Match(proj, file_idx - 1, func_name, beg - 1, end, score)
+    return Match(proj, file_idx - 1, func_name, beg - 1, end, abs_score)
 def match2raw(match):
     m = match
-    return Match(m.proj, m.fidx + 1, m.func_name, m.beg + 1, m.end, m.score)
+    return Match(m.proj, m.fidx + 1, m.func_name, m.beg + 1, m.end, m.abs_score)
 def x_id(match_or_code):
     return (match_or_code.proj, match_or_code.fidx)
 def ab_fidx(codeA_codeB): 
@@ -198,17 +200,23 @@ def ab_fidx(codeA_codeB):
 # use codes only here!
 codes = ( fp.lstarmap(code('A'), enumerate(A_srcpaths))
         + fp.lstarmap(code('B'), enumerate(B_srcpaths)))
-code_dic = F.zipdict(
-    fp.map(x_id, codes), codes)
-raw_A_ms, raw_B_ms, scores = F.take(
-    3, fp.unzip(car_dict['CLONE_LIST']))
+code_dic = F.zipdict(fp.map(x_id, codes), codes)
+raw_A_ms, raw_B_ms = F.take(2, fp.unzip(car_dict['CLONE_LIST']))
+match_stats = fp.lstarmap(
+    MatchStat, F.last(fp.unzip(car_dict['CLONE_LIST'])))
+
+abs_scores = fp.lmap(F.first, match_stats)
 match_pairs = sorted(zip(
-    fp.lmap(match('A'), raw_A_ms, scores), 
-    fp.lmap(match('B'), raw_B_ms, scores)))
+    fp.lmap(match('A'), raw_A_ms, abs_scores), 
+    fp.lmap(match('B'), raw_B_ms, abs_scores)))
 match_pair_dic = F.group_by(ab_fidx, match_pairs)
 unique_match_pairs = sorted(
     F.distinct(match_pairs, ab_fidx), key = ab_fidx
 )
+match_stat_dic = F.zipdict(match_pairs, match_stats)
+print(match_stats)
+print(match_stat_dic)
+#exit()
 
 html_paths = fp.lstarmap(
     lambda a,b: 'comps/{}_{}.html'.format(a.fidx, b.fidx),
@@ -276,7 +284,7 @@ def link_row(name_pair, match_pair, href, content):
     match_pairs = match_pair_dic[a.fidx, b.fidx]
     score_sum = 0
     for m,_ in match_pairs:
-        score_sum += m.score
+        score_sum += m.abs_score
     a_name,b_name = name_pair
     return h('tr')[ 
         h('td')[a_name], h('td')[b_name], 
@@ -302,7 +310,7 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
                 p('Some txt..'),
 
                 h('table')[
-                    h('tr')[ h('th')['A'], h('th')['B'], h('th')['score'], h('th')['link'], ],
+                    h('tr')[ h('th')['A'], h('th')['B'], h('th')['절대점수'], h('th')['link'], ],
                     fp.lmap(
                         link_row, 
                         match_name_pairs, unique_match_pairs,
