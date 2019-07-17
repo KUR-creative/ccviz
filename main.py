@@ -165,18 +165,27 @@ def gen_comp_html(str1, str2, table):
         link(rel="stylesheet", href='../' + highlight_css)
     ], 
     [
-        div(class_='split left')[
-            div(class_='centered')[
-                '{source1}',
+        div(class_='all')[
+            div(class_='header_row')[
+                div(class_='column')[ h('p')['ppap'],],
+                div(class_='column')[ h('p')['bbab'],],
+                div(class_='column')[ h('p')['PPAP'],],
+            ],
+            div(class_='row')[
+                div(class_='column')[
+                    div(class_='centered')[
+                        '{source1}',
+                    ]
+                ],
+                div(class_='column')[
+                    div('{source2}'),
+                ],
+                div(class_='column')[
+                    table,
+                    h('script', src='../js/sort_table.js')[' '],
+                ],
             ]
-        ],
-        div(class_='center')[
-            div('{source2}'),
-        ],
-        div(class_='split right')[
-            table,
-            h('script', src='../js/sort_table.js')[' '],
-        ],
+        ]
     ]
     ).format_map(dict(
         source1=str1, source2=str2, match=str1  #{match} in table TODO:(remove it)

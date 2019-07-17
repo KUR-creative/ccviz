@@ -6,59 +6,28 @@ body {
   */
 }
 
-.split {
-  height: 100%;
-  width: 50%;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  overflow-x: hidden;
-  padding-top: 20px;
+.all {
+    position: fixed;
+    height: 93%;
+    width: 100%;
+    margin-left: 0.5%;
 }
-
-.left {
-  left: 0;
-  width: 34%;
-  background-color: white;
-  direction:rtl;
-  overflow-x: scroll;
+.row {
+    /*position: fixed;*/
+    vertical-align: top;
+    height: 97%;
+    width: 100%;
 }
-
-.left div {
-  direction:ltr;
-  /*overflow: auto;*/
+.column {
+    float: left;
+    width: 32.4%;
+    height: 100%;
+    overflow: auto;
+    white-space: nowrap;
 }
-
-.center {
-  left: 34%;
-  height: 100%;
-  position: fixed;
-  z-index: 0;
-  top: 0;
-  /*overflow: hidden;*/
-  overflow: auto;
-
-  width: 33%;
-}
-
-.right {
-  right: 0;
-  width: 33%;
-}
-
-/* NOTE: hide scrollbar (but still work)
-.center::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-}
-*/
-
-.centered {
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  /*transform: translate(-50%, -50%);
-  text-align: center;*/
+.header_row {
+    vertical-align: top;
+    text-align: center;
 }
 
 /*-------------------------------------*/
