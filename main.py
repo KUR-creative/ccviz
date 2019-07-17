@@ -22,18 +22,18 @@ if '-h' in sys.argv:
     print(
 '''
 usage: 
-python main.py <input-dir> <output-dir-name>        target: file.car
-python main.py <input-dir> <output-dir-name> func   target: function.car
+python main.py <car-file-name> <input-dir> <output-dir-name> 
 
 input-dir:  Uncompressed directory from result zip file from CloneCop
 output-dir: New directory name is allowed
 If there is 3rd cmd arg, viz target: function.car. Otherwise, target: file.car
 ''')
     exit()
-INPUT_DIR  = sys.argv[1]
-OUTPUT_DIR =(sys.argv[2] if len(sys.argv) > 2 
+TARGET_CAR = sys.argv[1]#'function-1.car' if len(sys.argv) > 3 else 'file-1.car'
+INPUT_DIR  = sys.argv[2]
+OUTPUT_DIR =(sys.argv[3] if len(sys.argv) > 3 
              else 'viz_' + str(Path(INPUT_DIR).name)) # default
-TARGET_CAR = 'function-1.car' if len(sys.argv) > 3 else 'file-1.car'
+#TARGET_CAR = 'function-1.car' if len(sys.argv) > 3 else 'file-1.car'
 
 print(INPUT_DIR)
 print(OUTPUT_DIR)
@@ -94,10 +94,30 @@ def highlight(src, linenos='table'):
 
 #-----------------------------------------------------------------
 def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
+    '''
+    top = h('tr', class_='center_th')[
+        h('th', class_='center_th', colspan='2')['A'], 
+        h('th', class_='center_th', colspan='2')['B'],
+        h('th', class_='center_th', colspan='2')['score'],
+        h('th', class_='center_th', colspan='4')['#matchings'],
+        h('th', class_='center_th', colspan='2')['#others'],
+    ]
+    '''
+    header = h('tr')[
+        h('th')['A.s'  ],
+        h('th')['A.t'  ],
+        h('th')['A.s'  ],
+        h('th')['A.t'  ],
+        h('th')['abs'  ],
+        h('th')['rel'  ],
+        h('th')['1'  ],
+        h('th')['2'  ],
+        h('th')['3'  ],
+        h('th')['4'  ],
+        h('th')['gap' ],
+        h('th')['miss']
+    ]
     row = lambda tag, strings: h('tr')[[h(tag)[s] for s in strings]] # *strings ..
-    header = row(
-        'th', ['A beg','A end','B beg','B end',
-               'abs', 'rel', '#M1','#M2','#M3','#M4','#gap','#miss']) #TODO: unicode issue? korean malfunctioning..
     datum = F.curry(row)('td')
     match_pairs = match_pair_dic[matchA.fidx, matchB.fidx]
     range_info = fp.go(
@@ -117,7 +137,8 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
 
     match_id = 'open-popup'
     return [
-        h('table', children=[header] + data),
+        #h('table', class_='comp_table', children=[top,header] + data),
+        h('table', class_='comp_table', children=[header] + data),
         popup_btn(match_id, 'view matching'),
         popup_window(match_id, '{match}'),
     ]
