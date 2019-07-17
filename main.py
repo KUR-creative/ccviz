@@ -128,6 +128,7 @@ def gen_comp_html(str1, str2, table):
     [
         meta(name="viewport", content="width=device-width, initial-scale=1"),
         link(rel="stylesheet", href='../css/viz1.css'), # comps/x.html
+        link(rel="stylesheet", href='../css/comp_table.css'),
         link(rel="stylesheet", href='../css/popup.css'),
         link(rel="stylesheet", href='../' + highlight_css)
     ], 

@@ -1,0 +1,14 @@
+.comp_table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.comp_table th.center_th {
+  text-align: center;
+}
+
+.comp_table th, .comp_table td {
+  padding: 2px;
+  text-align: right;
+  border-bottom: 1px solid #ddd;
+}
