@@ -95,7 +95,7 @@ def highlight(src, linenos='table'):
 #-----------------------------------------------------------------
 def comp_table(match_pair_dic, A_fidx,B_fidx):
     row = lambda tag, strings: h('tr')[[h(tag)[s] for s in strings]] # *strings ..
-    header = row('th', ['A.beg','A.end','B.beg','B.end'])#'점수',
+    header = row('th', ['A 시작','A 끝','B 시작','B 끝'])#'점수',
     datom = F.curry(row)('td')
     match_pairs = match_pair_dic[A_fidx, B_fidx]
     range_info = fp.go(
@@ -309,7 +309,7 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
                 p('Some txt..'),
 
                 h('table')[
-                    h('tr')[ h('th')['A'], h('th')['B'], h('th')['절대점수'], h('th')['link'], ],
+                    h('tr')[ h('th')['A 파일'], h('th')['B 파일'], h('th')['절대점수'], h('th')['비교 화면 보기'], ],
                     fp.lmap(
                         link_row, 
                         match_name_pairs, unique_match_pairs,
