@@ -122,15 +122,13 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
     range_info = fp.go(
         match_pairs,
         fp.map(fp.map(match2raw)), 
-        fp.map(fp.map(lambda m: Match(
-        ))),
         fp.starmap(lambda rA,rB: (rA.beg,rA.end, rB.beg,rB.end)),
     )
 
     def truncate_rel(stat):
         return MatchStat(
             abs_score = stat.abs_score, 
-            rel_score = round(stat.rel_score,2),
+            rel_score = '%1.2f' % stat.rel_score,
             c1 = stat.c1, 
             c2 = stat.c2, 
             c3 = stat.c3, 
