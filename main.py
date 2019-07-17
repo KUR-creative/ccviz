@@ -125,8 +125,20 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
         fp.map(fp.map(match2raw)), 
         fp.starmap(lambda rA,rB: (rA.beg,rA.end, rB.beg,rB.end)),
     )
+
+    def truncate_rel(stat):
+        return MatchStat(
+            abs_score = stat.abs_score, 
+            rel_score = round(stat.rel_score,2),
+            c1 = stat.c1, 
+            c2 = stat.c2, 
+            c3 = stat.c3, 
+            c4 = stat.c4, 
+            gap = stat.gap, 
+            mismatch = stat.mismatch
+        )
     match_stats = fp.starmap(
-        lambda mA,mB: match_stat_dic[mA,mB],
+        lambda mA,mB: truncate_rel(match_stat_dic[mA,mB]),
         match_pairs
     )
     data = fp.go(
