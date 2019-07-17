@@ -11,7 +11,6 @@ import sys
 #-----------------------------------------------------------------
 import os
 import shutil
-#from pygments import highlight
 import pygments #import highlight
 from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
@@ -103,12 +102,12 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
     ]
     '''
     header = h('tr')[
-        h('th')['A.s'  ],
-        h('th')['A.t'  ],
-        h('th')['B.s'  ],
-        h('th')['B.t'  ],
-        h('th')['abs'  ],
-        h('th')['rel'  ],
+        h('th')['A.s' ],
+        h('th')['A.t' ],
+        h('th')['B.s' ],
+        h('th')['B.t' ],
+        h('th')['abs' ],
+        h('th')['rel' ],
         h('th')['M1'  ],
         h('th')['M2'  ],
         h('th')['M3'  ],
@@ -116,7 +115,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
         h('th')['gap' ],
         h('th')['miss']
     ]
-    row = lambda tag, strings: h('tr')[[h(tag)[s] for s in strings]] # *strings ..
+    row = lambda tag, strings: h('tr')[[h(tag)[s] for s in strings]] 
     datum = F.curry(row)('td')
     match_pairs = match_pair_dic[matchA.fidx, matchB.fidx]
     range_info = fp.go(
@@ -148,7 +147,6 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
 
     match_id = 'open-popup'
     return [
-        #h('table', class_='comp_table', children=[top,header] + data),
         h('table', class_='comp_table', children=[header] + data),
         popup_btn(match_id, 'go'),
         popup_window(match_id, '{match}'),
@@ -188,8 +186,8 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
         ]
     ]
     ).format_map(dict(
-        source1=srcA, source2=srcB, match=temp_match  #{match} in table TODO:(remove it)
-    )) 
+        source1=srcA, source2=srcB, match=temp_match  
+    )) #{match} in table TODO:(remove it)
 
 def tag_regex(tag_name):
     '''
@@ -227,7 +225,6 @@ B_srcpaths = fp.lmap(raw2real(root_dir), car_dict['DST_FILE_LIST'])
 from collections import namedtuple
 Code = namedtuple('Code', 'proj fidx fpath text')
 Match = namedtuple('Match', 'proj fidx func_name beg end abs_score') # TODO: rm score
-# idxAs idxBs
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
 @F.autocurry
@@ -304,14 +301,6 @@ emphasized_AB = fp.starmap(
     unique_match_pairs
 )
 
-#for html_path in html_paths: print(html_path)
-#for key,code in code_dic.items(): print(key, code[:-1])
-#for match_name_pair in match_name_pairs: print(match_name_pair)
-#from pprint import pprint
-#for ma,mb in unique_match_pairs: print(ma,mb)
-#for key,match in match_pairs: print(key);pprint(match)
-#for key,match in match_pair_dic.items(): print(key);pprint(match)
-
 def temp_match_view(eA,eB):
     preA   = all_pre(eA)[1]; 
     preB   = all_pre(eB)[1]
@@ -374,8 +363,6 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
             div(class_='column left')[
                 h2('Result Matrix'),
                 p('Matrix will be included'),
-                #h('a',href='compare1.html')['goto compare1'],
-                #h('a',href='compare2bi.html')['goto compare2bi'],
             ],
             div(class_='column right')[
                 h2('Result Overview'),
@@ -400,10 +387,5 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
 fu.write_text(Path(OUTPUT_DIR,'compare2bi.html'), document_str([], [
     h1('compare2bi page'),
     h('a',href='matching.html')['goto matching'],
-]))
-
-#=================================================================
-fu.write_text(Path(OUTPUT_DIR,'matching.html'), document_str([], [
-    h1('matching'),
 ]))
 '''
