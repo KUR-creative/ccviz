@@ -283,7 +283,12 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
     match_pairs = sorted(zip(
         fp.lmap(match('A'), raw_A_ms, abs_scores), 
         fp.lmap(match('B'), raw_B_ms, abs_scores)))
-    match_pair_dic = F.group_by(ab_fidx, match_pairs)
+    match_pair_dic = F.walk_values(
+        lambda pairs: sorted(pairs, key=fp.tup(
+            lambda mA,mB: (mA.beg, mB.beg)
+        )),
+        F.group_by(ab_fidx, match_pairs)
+    )
     unique_match_pairs = sorted(
         F.distinct(match_pairs, ab_fidx), key = ab_fidx
     )
