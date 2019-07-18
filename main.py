@@ -377,8 +377,8 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
             h('td',class_='center_cell')[b_name], 
             h('td')[num_matches],
             h('td')[score_sum],
-            h('td')['{:.3f}'.format(score_sum / num_matches)],
-            h('td')[match_link(href,content)],
+            h('td')['{:.1f}'.format(score_sum / num_matches)],
+            h('td',class_='center_cell')[match_link(href,content)],
         ]
 
     fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
@@ -403,6 +403,7 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
                                 'A 파일','B 파일'
                             ]] + [h('th',s) for s in [
                                 '매치수','점수총합','평균점수',
+                            ]] + [h('th',class_='center_cell')[
                                 '비교 화면 보기'
                             ]]
                         ),
