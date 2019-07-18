@@ -49,7 +49,8 @@ print(Path(TARGET_ZIP).stem)
 TARGET_CARS = fp.go(
     INPUT_DIR / 'Alignment',
     fu.children,
-    fp.lmap(lambda p: Path(p).name)
+    fp.lmap(lambda p: Path(p).name),
+    sorted
 )
 OUTPUT_ROOT = (Path(args.output_directory) if args.output_directory
                else Path('OUT', str(Path(INPUT_DIR).name)))
