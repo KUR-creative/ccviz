@@ -7,6 +7,8 @@ import funcy as F
 import re
 import fp
 import sys
+import zipfile
+
 
 #-----------------------------------------------------------------
 import os
@@ -27,18 +29,31 @@ input-dir:  Uncompressed directory from result zip file from CloneCop
 output-dir: New directory name is allowed
 If there is 3rd cmd arg, viz target: function.car. Otherwise, target: file.car
 ''')
-TARGET_CAR = sys.argv[1]#'function-1.car' if len(sys.argv) > 3 else 'file-1.car'
-print(TARGET_CAR)
-INPUT_DIR  = sys.argv[2]
-OUTPUT_DIR =(sys.argv[3] if len(sys.argv) > 3 
-             else 'viz_' + str(Path(INPUT_DIR).name)) # default
+TARGET_ZIP = sys.argv[1]
+INPUT_DIR  = Path('UNZIPPED') / Path(TARGET_ZIP).stem
+with zipfile.ZipFile(TARGET_ZIP) as zf:
+    zf.extractall(INPUT_DIR)
+
+print(TARGET_ZIP)
+print(Path(TARGET_ZIP).stem)
+TARGET_CARS = fp.go(
+    INPUT_DIR / 'Alignment',
+    fu.children,
+    fp.lmap(lambda p: Path(p).name)
+)
+OUTPUT_ROOT = (Path(sys.argv[3]) if len(sys.argv) > 3 
+               else Path('OUT', str(Path(INPUT_DIR).name)))
+OUTPUT_DIRS = fp.lmap(
+    lambda p: OUTPUT_ROOT / Path(p).stem,
+    TARGET_CARS
+)
 #TARGET_CAR = 'function-1.car' if len(sys.argv) > 3 else 'file-1.car'
 
 print(INPUT_DIR)
-print(OUTPUT_DIR)
+print(TARGET_CARS)
+print(OUTPUT_DIRS)
 
-for TARGET_CAR,OUTPUT_DIR in zip(['file-1.car', 'function-1.car'],
-                                 ['out/file','out/func']):
+for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
     @F.autocurry
     def copy_fixed(output_dir, ftype):
         os.makedirs(Path(output_dir,ftype),exist_ok=True)
