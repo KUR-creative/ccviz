@@ -1,6 +1,7 @@
 .comp_table {
   border-collapse: collapse;
   width: 97%;
+  margin-left: 10px;
 }
 
 .comp_table .center_cell {
