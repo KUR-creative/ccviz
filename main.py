@@ -384,7 +384,7 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
                         [h('th',class_='center_cell')[s] for s in [
                             'A 파일','B 파일'
                         ]] + [h('th',s) for s in [
-                            '매치수','절대점수','평균점수',
+                            '매치수','점수총합','평균점수',
                             '비교 화면 보기'
                         ]]
                     ),
