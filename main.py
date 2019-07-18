@@ -251,12 +251,12 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
     def emphasized(line, color):
         return '<span style="background-color:{}; width:100%; float:left;">{} </span>'.format(
             color, line
-        )
+        ) if color else line
 
-    def rand_html_color():
+    def rand_html_color(alpha=0.25):
         import random
         r = lambda: random.randint(0,255)
-        return 'rgba(%d,%d,%d,0.25)' % (r(),r(),r())
+        return 'rgba(%d,%d,%d,%.2f)' % (r(),r(),r(),alpha)
 
     #-----------------------------------------------------------------
     import json
@@ -348,14 +348,45 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
 
     @F.autocurry
     def emphasize(code_dic,match_pair_dic, codeA,codeB):
-        def emphasize_lines(lines, beg, end, color):
-            ''' side effect! '''
-            for i in range(beg,end):
-                if 0 <= i < len(lines):
-                    lines[i] = emphasized(lines[i],color)
         a,b = codeA,codeB
         match_pairs = match_pair_dic[a.fidx, b.fidx]
-        colors = F.repeatedly(rand_html_color, len(match_pairs))
+
+        def stp(m): return namedtuple('STP','s t p')(m.beg, m.end, m.proj)
+        import networkx as nx
+        g = nx.Graph()
+        g.add_edges_from( fp.lmap(fp.lmap(stp), match_pairs) )
+        ccs = list(nx.connected_components(g))
+        colors = F.repeatedly(rand_html_color, len(ccs))
+        color_dic = fp.go(
+            zip(ccs,colors),
+            fp.lmap(fp.tup( 
+                lambda mset,rgba: (mset, F.repeat(rgba,len(mset))) 
+            )), 
+            fp.lmapcat(fp.tup(zip)), dict
+        )
+
+        def color_dic2colors(X, color_dic):
+            return fp.go(
+                color_dic,
+                F.curry(F.select_keys)( 
+                    lambda stp: stp.p == X 
+                ),
+                F.curry(F.walk_keys)(fp.tup( 
+                    lambda s,t,_: (s,t)
+                ))
+            )
+        colorsA = color_dic2colors('A',color_dic)
+        colorsB = color_dic2colors('B',color_dic)
+
+        def line_color(colors):
+            return fp.go(
+                colors.items(),
+                fp.map(fp.tup( lambda st,color: (range(*st),color) )),
+                fp.map(fp.tup( lambda r,c: (r, F.repeat(c, len(r))) )),
+                fp.lmapcat(fp.tup(zip)), dict
+            )
+        line_colorA = line_color(colorsA)
+        line_colorB = line_color(colorsB)
 
         srcA   = code_dic[a.proj,a.fidx].text     
         srcB   = code_dic[b.proj,b.fidx].text      
@@ -363,9 +394,11 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
         preB   = all_pre(srcB)[1]
         linesA = preA.split('\n'); 
         linesB = preB.split('\n')
-        for color, (mA,mB) in zip(colors, match_pairs):
-            emphasize_lines(linesA, mA.beg,mA.end, color)
-            emphasize_lines(linesB, mB.beg,mB.end, color)
+
+        for idx,line in enumerate(linesA):
+            linesA[idx] = emphasized(line, line_colorA.get(idx))
+        for idx,line in enumerate(linesB):
+            linesB[idx] = emphasized(line, line_colorB.get(idx))
 
         return (srcA.replace(preA, '\n'.join(linesA)),
                 srcB.replace(preB, '\n'.join(linesB)))
