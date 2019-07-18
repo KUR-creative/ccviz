@@ -53,9 +53,12 @@ OUTPUT_DIRS = fp.lmap(
     TARGET_CARS
 )
 
+ABS_THRESHOLD = args.absolute_score_threshold
+
 print(INPUT_DIR)
 print(TARGET_CARS)
 print(OUTPUT_DIRS)
+#=================================================================
 
 for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
     @F.autocurry
@@ -241,6 +244,7 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
         r = lambda: random.randint(0,255)
         return 'rgba(%d,%d,%d,0.25)' % (r(),r(),r())
 
+    #-----------------------------------------------------------------
     import json
     read_json = fp.pipe(fu.read_text, json.loads)
     root_dir = Path(INPUT_DIR)
@@ -284,9 +288,17 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
         MatchStat, F.last(fp.unzip(car_dict['CLONE_LIST'])))
 
     abs_scores = fp.lmap(F.first, match_stats)
-    match_pairs = sorted(zip(
+    match_pairs = fp.lfilter(
+        fp.tup(lambda m,_: m.abs_score >= ABS_THRESHOLD),
+        zip(fp.lmap(match('A'), raw_A_ms, abs_scores), 
+            fp.lmap(match('B'), raw_B_ms, abs_scores))
+    )
+    '''
+    match_pairs = list(zip(
         fp.lmap(match('A'), raw_A_ms, abs_scores), 
         fp.lmap(match('B'), raw_B_ms, abs_scores)))
+    '''
+    print('=>',len(match_pairs))
     match_pair_dic = F.walk_values(
         lambda pairs: sorted(pairs, key=fp.tup(
             lambda mA,mB: (mA.beg, mB.beg)
