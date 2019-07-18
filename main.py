@@ -34,18 +34,11 @@ parser.add_argument('-r', '--relative_score_threshold',
 
 args = parser.parse_args()
 
-print('i',args.input_zip)
-print('-o',args.output_directory)
-print('-a',args.absolute_score_threshold)
-print('-r',args.relative_score_threshold)
-
 TARGET_ZIP = args.input_zip
 INPUT_DIR  = Path('UNZIPPED') / Path(TARGET_ZIP).stem
 with zipfile.ZipFile(TARGET_ZIP) as zf:
     zf.extractall(INPUT_DIR)
 
-print(TARGET_ZIP)
-print(Path(TARGET_ZIP).stem)
 TARGET_CARS = fp.go(
     INPUT_DIR / 'Alignment',
     fu.children,
@@ -62,12 +55,7 @@ OUTPUT_DIRS = fp.lmap(
 ABS_THRESHOLD = args.absolute_score_threshold
 REL_THRESHOLD = args.relative_score_threshold
 
-print(INPUT_DIR)
-print(TARGET_CARS)
-print(OUTPUT_DIRS)
-print(ABS_THRESHOLD)
 #=================================================================
-
 @F.autocurry
 def copy_fixed(output_dir, ftype):
     os.makedirs(Path(output_dir,ftype),exist_ok=True)
@@ -78,6 +66,7 @@ def copy_fixed(output_dir, ftype):
     dsts = fp.lmap(lambda c: dst_dir / c, fnames)
     for src,dst in zip(srcs,dsts):
         shutil.copyfile(src,dst)
+
 def document_str(head_tags,body_tags,is_pretty=True):
     doc = h('html')[
         h('head')[head_tags], 
@@ -99,6 +88,7 @@ def popup_window(match_id, content):
             ],
         ]
     ]
+
 def car2btn_name(car_stem):
     target,depth = str(car_stem).split('-')
     return h('p', style='text-align: center;',children=[
@@ -145,15 +135,6 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
 
     #-----------------------------------------------------------------
     def comp_table(match_pair_dic, match_stat_dic, matchA,matchB):
-        '''
-        top = h('tr', class_='center_th')[
-            h('th', class_='center_th', colspan='2')['A'], 
-            h('th', class_='center_th', colspan='2')['B'],
-            h('th', class_='center_th', colspan='2')['score'],
-            h('th', class_='center_th', colspan='4')['#matchings'],
-            h('th', class_='center_th', colspan='2')['#others'],
-        ]
-        '''
         header = h('tr')[
             h('th', class_='center_cell')['A' ],
             h('th', class_='center_cell')['B' ],
@@ -297,7 +278,6 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
 
     @F.autocurry
     def code(proj, fidx, fpath):
-        #print(fpath)
         return Code(proj, fidx, fpath, highlight(fu.read_text(fpath)))
     @F.autocurry
     def match(proj, raw_match, abs_score, rel_score):
@@ -340,7 +320,6 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
         fp.tup(
             lambda m,_: m.abs_score >= ABS_THRESHOLD and m.rel_score >= REL_THRESHOLD
         ),
-        #fp.tup(lambda m,_: F.tap(F.tap(m.abs_score) >= ABS_THRESHOLD)),
         zip(fp.lmap(match('A'), raw_A_ms, abs_scores, rel_scores), 
             fp.lmap(match('B'), raw_B_ms, abs_scores, rel_scores))
     )
