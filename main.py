@@ -67,49 +67,56 @@ print(OUTPUT_DIRS)
 print(ABS_THRESHOLD)
 #=================================================================
 
+@F.autocurry
+def copy_fixed(output_dir, ftype):
+    os.makedirs(Path(output_dir,ftype),exist_ok=True)
+    src_dir = Path('fixed_'+ftype)
+    dst_dir = Path(OUTPUT_DIR, ftype)
+    fnames = os.listdir(src_dir)
+    srcs = fp.lmap(lambda c: src_dir / c, fnames)
+    dsts = fp.lmap(lambda c: dst_dir / c, fnames)
+    for src,dst in zip(srcs,dsts):
+        shutil.copyfile(src,dst)
+def document_str(head_tags,body_tags,is_pretty=True):
+    doc = h('html')[
+        h('head')[head_tags], 
+        h('body')[body_tags]
+    ]
+    retstr = str(doc.pretty() if is_pretty else doc)
+    return '<!DOCTYPE html>\n' + retstr
+def popup_btn(match_id, content):
+    return h('label', class_='btn', for_=match_id)[content]
+def popup_window(match_id, content):
+    ''' input after div - order is important! '''
+    return [
+        h('input', class_='modal-state', id=match_id, type='checkbox'),
+        div(class_='modal')[
+            h('label', class_='modal_bg', for_=match_id),
+            div(class_='modal_inner')[
+                content,
+                h('label', class_='modal_close', for_=match_id)
+            ],
+        ]
+    ]
+#=================================================================
+
+
+#=================================================================
+fu.write_text(Path(OUTPUT_ROOT,'index.html'), document_str([], [
+    h1('index (start) page'),
+    fp.lmap(
+        fp.pipe(
+            lambda p: Path(p).stem,
+            lambda p: Path(p) / 'overview.html',
+            lambda p: h('a', href=str(p))[ str(p.parts[-2]) ] # car file stem
+        ),
+        TARGET_CARS
+    )
+]))
+
 for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
-    @F.autocurry
-    def copy_fixed(output_dir, ftype):
-        os.makedirs(Path(output_dir,ftype),exist_ok=True)
-        src_dir = Path('fixed_'+ftype)
-        dst_dir = Path(OUTPUT_DIR, ftype)
-        fnames = os.listdir(src_dir)
-        srcs = fp.lmap(lambda c: src_dir / c, fnames)
-        dsts = fp.lmap(lambda c: dst_dir / c, fnames)
-        for src,dst in zip(srcs,dsts):
-            shutil.copyfile(src,dst)
+    print('Processing on {}...'.format(TARGET_CAR))
     fp.foreach(copy_fixed(OUTPUT_DIR), ['css','js'])
-    #=================================================================
-    def document_str(head_tags,body_tags,is_pretty=True):
-        doc = h('html')[
-            h('head')[head_tags], 
-            h('body')[body_tags]
-        ]
-        retstr = str(doc.pretty() if is_pretty else doc)
-        return '<!DOCTYPE html>\n' + retstr
-
-    fu.write_text(Path(OUTPUT_DIR,'index.html'), document_str([], [
-        h1('index (start) page'),
-        h('a', href='overview.html')['goto overview'],
-    ]))
-
-    def popup_btn(match_id, content):
-        return h('label', class_='btn', for_=match_id)[content]
-    def popup_window(match_id, content):
-        ''' input after div - order is important! '''
-        return [
-            h('input', class_='modal-state', id=match_id, type='checkbox'),
-            div(class_='modal')[
-                h('label', class_='modal_bg', for_=match_id),
-                div(class_='modal_inner')[
-                    content,
-                    h('label', class_='modal_close', for_=match_id)
-                ],
-            ]
-        ]
-
-    #=================================================================
-
     #=================================================================
     highlight_css = 'css/highlight.css'
     fu.write_text(
