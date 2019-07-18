@@ -197,7 +197,7 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
         [
             meta(name="viewport", content="width=device-width, initial-scale=1"),
             link(rel="stylesheet", href='../css/viz1.css'), # comps/x.html
-            link(rel="stylesheet", href='../css/comp_table.css'),
+            link(rel="stylesheet", href='../css/table.css'),
             link(rel="stylesheet", href='../css/popup.css'),
             link(rel="stylesheet", href='../' + highlight_css)
         ], 
@@ -416,7 +416,7 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
     fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
         [
             link(rel="stylesheet", href="css/overview.css"),
-            link(rel="stylesheet", href='css/comp_table.css'),
+            link(rel="stylesheet", href='css/table.css'),
         ], 
         [
             h1('overview page'),
@@ -429,7 +429,7 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
                     h2('Result Overview'),
                     p('테이블의 헤더를 클릭하여 정렬할 수 있습니다.'),
 
-                    h('table',class_='comp_table')[
+                    h('table',class_='overview_table')[
                         h('tr', children=
                             [h('th',class_='center_cell')[s] for s in [
                                 'A 파일','B 파일'
