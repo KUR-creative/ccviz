@@ -23,16 +23,21 @@ parser = argparse.ArgumentParser(description='CloneCop Visalization program')
 parser.add_argument('input_zip', help='Compressed zip file from CloneCop')
 parser.add_argument('-o', '--output_directory', 
     help="Output directory name. If specified directory isn't exists, then create it.")
-parser.add_argument('-t', '--absolute_score_threshold',
+parser.add_argument('-a', '--absolute_score_threshold',
     help=("Only matches with absolute score higher than threshold are visualized. "
          +"default threshold = 100"),
     type=int, default=100)
+parser.add_argument('-r', '--relative_score_threshold',
+    help=("Only matches with relative score higher than threshold are visualized. "
+         +"default threshold = 0.5"),
+    type=float, default=0.5)
 
 args = parser.parse_args()
 
 print('i',args.input_zip)
 print('-o',args.output_directory)
-print('-t',args.absolute_score_threshold)
+print('-a',args.absolute_score_threshold)
+print('-r',args.relative_score_threshold)
 
 TARGET_ZIP = args.input_zip
 INPUT_DIR  = Path('UNZIPPED') / Path(TARGET_ZIP).stem
@@ -54,6 +59,7 @@ OUTPUT_DIRS = fp.lmap(
 )
 
 ABS_THRESHOLD = args.absolute_score_threshold
+REL_THRESHOLD = args.relative_score_threshold
 
 print(INPUT_DIR)
 print(TARGET_CARS)
@@ -183,8 +189,11 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
 
         match_id = 'open-popup'
         return [
-            h('p',style='text-align: center;')[ 
-                'absolute score threshold = {}'.format(ABS_THRESHOLD) 
+            h('p',style='text-align: center; margin:3px;')[ 
+                'absolute score threshold(abs) = {}'.format(ABS_THRESHOLD),
+            ],
+            h('p',style='text-align: center; margin:3px;')[ 
+                'relative score threshold(rel) = {}'.format(REL_THRESHOLD),
             ],
             h('table', class_='comp_table', children=[header] + data),
             popup_btn(match_id, 'go'),
@@ -264,7 +273,7 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
 
     from collections import namedtuple
     Code = namedtuple('Code', 'proj fidx fpath text')
-    Match = namedtuple('Match', 'proj fidx func_name beg end abs_score') # TODO: rm score
+    Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score') # TODO: rm score
     MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
     @F.autocurry
@@ -272,12 +281,16 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
         #print(fpath)
         return Code(proj, fidx, fpath, highlight(fu.read_text(fpath)))
     @F.autocurry
-    def match(proj, raw_match, abs_score):
+    def match(proj, raw_match, abs_score, rel_score):
         file_idx, func_name, beg, end = raw_match
-        return Match(proj, file_idx - 1, func_name, beg - 1, end, abs_score)
+        return Match(
+            proj, file_idx - 1, func_name, beg - 1, end, abs_score, rel_score
+        )
     def match2raw(match):
         m = match
-        return Match(m.proj, m.fidx + 1, m.func_name, m.beg + 1, m.end, m.abs_score)
+        return Match(
+            m.proj, m.fidx + 1, m.func_name, m.beg + 1, m.end, m.abs_score, m.rel_score
+        )
     def x_id(match_or_code):
         return (match_or_code.proj, match_or_code.fidx)
     def ab_fidx(codeA_codeB): 
@@ -297,15 +310,20 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
         fp.unzip,
         F.last,
         fp.starmap(MatchStat),
-        fp.lfilter(lambda s: s.abs_score >= ABS_THRESHOLD)
+        fp.lfilter(
+            lambda s: s.abs_score >= ABS_THRESHOLD and s.rel_score >= REL_THRESHOLD
+        )
     )
 
     abs_scores = fp.lmap(F.first, match_stats)
+    rel_scores = fp.lmap(F.second, match_stats)
     match_pairs = fp.lfilter(
-        fp.tup(lambda m,_: m.abs_score >= ABS_THRESHOLD),
+        fp.tup(
+            lambda m,_: m.abs_score >= ABS_THRESHOLD and m.rel_score >= REL_THRESHOLD
+        ),
         #fp.tup(lambda m,_: F.tap(F.tap(m.abs_score) >= ABS_THRESHOLD)),
-        zip(fp.lmap(match('A'), raw_A_ms, abs_scores), 
-            fp.lmap(match('B'), raw_B_ms, abs_scores))
+        zip(fp.lmap(match('A'), raw_A_ms, abs_scores, rel_scores), 
+            fp.lmap(match('B'), raw_B_ms, abs_scores, rel_scores))
     )
     match_pair_dic = F.walk_values(
         lambda pairs: sorted(pairs, key=fp.tup(
