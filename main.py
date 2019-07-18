@@ -18,18 +18,23 @@ from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
 
 import argparse
+parser = argparse.ArgumentParser(description='CloneCop Visalization program')
 
-if '-h' in sys.argv:
-    print(
-'''
-usage: 
-python main.py <car-file-name> <input-dir> <output-dir-name> 
+parser.add_argument('input_zip', help='Compressed zip file from CloneCop')
+parser.add_argument('-o', '--output_directory', 
+    help="Output directory name. If specified directory isn't exists, then create it.")
+parser.add_argument('-t', '--absolute_score_threshold',
+    help=("Only matches with absolute score higher than threshold are visualized. "
+         +"default threshold = 100"),
+    type=int, default=100)
 
-input-dir:  Uncompressed directory from result zip file from CloneCop
-output-dir: New directory name is allowed
-If there is 3rd cmd arg, viz target: function.car. Otherwise, target: file.car
-''')
-TARGET_ZIP = sys.argv[1]
+args = parser.parse_args()
+
+print('i',args.input_zip)
+print('-o',args.output_directory)
+print('-t',args.absolute_score_threshold)
+
+TARGET_ZIP = args.input_zip
 INPUT_DIR  = Path('UNZIPPED') / Path(TARGET_ZIP).stem
 with zipfile.ZipFile(TARGET_ZIP) as zf:
     zf.extractall(INPUT_DIR)
@@ -41,13 +46,12 @@ TARGET_CARS = fp.go(
     fu.children,
     fp.lmap(lambda p: Path(p).name)
 )
-OUTPUT_ROOT = (Path(sys.argv[3]) if len(sys.argv) > 3 
+OUTPUT_ROOT = (Path(args.output_directory) if args.output_directory
                else Path('OUT', str(Path(INPUT_DIR).name)))
 OUTPUT_DIRS = fp.lmap(
     lambda p: OUTPUT_ROOT / Path(p).stem,
     TARGET_CARS
 )
-#TARGET_CAR = 'function-1.car' if len(sys.argv) > 3 else 'file-1.car'
 
 print(INPUT_DIR)
 print(TARGET_CARS)
