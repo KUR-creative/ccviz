@@ -43,6 +43,13 @@ def lstarmap(f,*seq):
     return list(I.starmap(f,*seq)) if seq \
     else lambda *xs: list(I.starmap(f,*xs))
 
+def mapcat(f,*seq):
+    return F.mapcat(f,*seq) if seq \
+    else lambda *xs: F.mapcat(f,*xs)
+def lmapcat(f,*seq):
+    return F.lmapcat(f,*seq) if seq \
+    else lambda *xs: F.lmapcat(f,*xs)
+
 def foreach(f,*seq):
     F.lmap(f,*seq)
     return None
