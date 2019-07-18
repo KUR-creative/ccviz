@@ -3,7 +3,7 @@
   width: 100%;
 }
 
-.comp_table th.center_th {
+.comp_table .center_cell {
   text-align: center;
 }
 
