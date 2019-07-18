@@ -91,7 +91,7 @@ def popup_window(match_id, content):
 
 def car2btn_name(car_stem):
     target,depth = str(car_stem).split('-')
-    return h('p', style='text-align: center;',children=[
+    return h('p', style='text-align: center;', children=[
         '{}'.format(target), h('br'), 'depth : {}'.format(depth)
     ])
     
@@ -435,7 +435,7 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
             link(rel="stylesheet", href='css/table.css'),
         ], 
         [
-            h1('overview page'),
+            h1('overview', style='text-align: center; font-size: 3em;'),
             div(class_='row')[
                 div(class_='column left')[
                     h2('Result Matrix'),
