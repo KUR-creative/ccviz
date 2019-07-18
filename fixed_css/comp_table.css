@@ -8,8 +8,15 @@
   text-align: center;
 }
 
-.comp_table th, .comp_table td {
+.comp_table td {
   padding: 2px;
   text-align: right;
   border-bottom: 1px solid #ddd;
+}
+
+.comp_table th {
+  padding: 2px;
+  text-align: right;
+  border-top: 2px solid #bbb;
+  border-bottom: 2px solid #bbb;
 }
