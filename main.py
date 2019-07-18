@@ -98,21 +98,34 @@ def popup_window(match_id, content):
             ],
         ]
     ]
+def car2btn_name(car_stem):
+    target,depth = str(car_stem).split('-')
+    return h('p', style='text-align: center;',children=[
+        '{}'.format(target), h('br'), 'depth : {}'.format(depth)
+    ])
+    
 #=================================================================
 
 
 #=================================================================
 fu.write_text(Path(OUTPUT_ROOT,'index.html'), document_str([], [
-    h1('index (start) page'),
+    h1('{C}lone{C2}op {Viz}ualization', 
+        style='text-align: center; margin-top: 10%; font-size: 4em'),
     fp.lmap(
         fp.pipe(
             lambda p: Path(p).stem,
             lambda p: Path(p) / 'overview.html',
-            lambda p: h('a', href=str(p))[ str(p.parts[-2]) ] # car file stem
+            lambda p: h('a', href=str(p))[ 
+                car2btn_name(p.parts[-2]) # car stem
+            ] 
         ),
         TARGET_CARS
     )
-]))
+    ]).format(
+        C='<span style="color: red;">C</span>',
+        C2='<span style="color: red;">C</span>',
+        Viz='<span style="color: red;">Viz</span>'
+    ))
 
 for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
     print('Processing on {}...'.format(TARGET_CAR))
