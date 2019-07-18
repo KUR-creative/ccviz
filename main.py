@@ -8,7 +8,7 @@ import re
 import fp
 import sys
 import zipfile
-
+#from pprint import pprint
 
 #-----------------------------------------------------------------
 import os
@@ -58,6 +58,7 @@ ABS_THRESHOLD = args.absolute_score_threshold
 print(INPUT_DIR)
 print(TARGET_CARS)
 print(OUTPUT_DIRS)
+print(ABS_THRESHOLD)
 #=================================================================
 
 for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
@@ -141,7 +142,7 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
         match_pairs = match_pair_dic[matchA.fidx, matchB.fidx]
         range_infos = fp.go(
             match_pairs,
-            fp.map(fp.map(match2raw)), 
+            fp.map(fp.lmap(match2raw)), 
             fp.starmap(
                 lambda rA,rB: 
                 ('{} ~ {}'.format(rA.beg,rA.end), 
@@ -181,6 +182,9 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
 
         match_id = 'open-popup'
         return [
+            h('p',style='text-align: center;')[ 
+                'absolute score threshold = {}'.format(ABS_THRESHOLD) 
+            ],
             h('table', class_='comp_table', children=[header] + data),
             popup_btn(match_id, 'go'),
             popup_window(match_id, '{match}'),
@@ -264,7 +268,7 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
 
     @F.autocurry
     def code(proj, fidx, fpath):
-        print(fpath)
+        #print(fpath)
         return Code(proj, fidx, fpath, highlight(fu.read_text(fpath)))
     @F.autocurry
     def match(proj, raw_match, abs_score):
@@ -287,18 +291,21 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
     match_stats = fp.lstarmap(
         MatchStat, F.last(fp.unzip(car_dict['CLONE_LIST'])))
 
+    match_stats = fp.go(
+        car_dict['CLONE_LIST'],
+        fp.unzip,
+        F.last,
+        fp.starmap(MatchStat),
+        fp.lfilter(lambda s: s.abs_score >= ABS_THRESHOLD)
+    )
+
     abs_scores = fp.lmap(F.first, match_stats)
     match_pairs = fp.lfilter(
         fp.tup(lambda m,_: m.abs_score >= ABS_THRESHOLD),
+        #fp.tup(lambda m,_: F.tap(F.tap(m.abs_score) >= ABS_THRESHOLD)),
         zip(fp.lmap(match('A'), raw_A_ms, abs_scores), 
             fp.lmap(match('B'), raw_B_ms, abs_scores))
     )
-    '''
-    match_pairs = list(zip(
-        fp.lmap(match('A'), raw_A_ms, abs_scores), 
-        fp.lmap(match('B'), raw_B_ms, abs_scores)))
-    '''
-    print('=>',len(match_pairs))
     match_pair_dic = F.walk_values(
         lambda pairs: sorted(pairs, key=fp.tup(
             lambda mA,mB: (mA.beg, mB.beg)
@@ -309,6 +316,9 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
         F.distinct(match_pairs, ab_fidx), key = ab_fidx
     )
     match_stat_dic = F.zipdict(match_pairs, match_stats)
+    for (mA,mB),stat in match_stat_dic.items():
+        assert mA.abs_score == mB.abs_score
+        assert mA.abs_score == stat.abs_score
 
     html_paths = fp.lstarmap(
         lambda a,b: 'comps/{}_{}.html'.format(a.fidx, b.fidx),
