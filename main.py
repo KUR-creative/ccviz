@@ -351,13 +351,15 @@ def match_link(href, content):
 def link_row(name_pair, match_pair, href, content):
     a,b = match_pair
     match_pairs = match_pair_dic[a.fidx, b.fidx]
-    score_sum = 0
-    for m,_ in match_pairs:
-        score_sum += m.abs_score
+    num_matches = len(match_pairs)
+    score_sum = sum(m.abs_score for m,_ in match_pairs)
     a_name,b_name = name_pair
     return h('tr')[ 
-        h('td')[a_name], h('td')[b_name], 
+        h('td',class_='center_cell')[a_name], 
+        h('td',class_='center_cell')[b_name], 
+        h('td')[num_matches],
         h('td')[score_sum],
+        h('td')['{:.3f}'.format(score_sum / num_matches)],
         h('td')[match_link(href,content)],
     ]
 
@@ -378,7 +380,14 @@ fu.write_text(Path(OUTPUT_DIR,'overview.html'), document_str(
                 p('테이블의 헤더를 클릭하여 정렬할 수 있습니다.'),
 
                 h('table',class_='comp_table')[
-                    h('tr')[ h('th')['A 파일'], h('th')['B 파일'], h('th')['절대점수'], h('th')['비교 화면 보기'], ],
+                    h('tr', children=
+                        [h('th',class_='center_cell')[s] for s in [
+                            'A 파일','B 파일'
+                        ]] + [h('th',s) for s in [
+                            '매치수','절대점수','평균점수',
+                            '비교 화면 보기'
+                        ]]
+                    ),
                     fp.lmap(
                         link_row, 
                         match_name_pairs, unique_match_pairs,
