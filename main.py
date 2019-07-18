@@ -219,9 +219,7 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
                 ],
                 div(class_='row')[
                     div(class_='column')[
-                        div(class_='centered')[
-                            '{source1}',
-                        ]
+                        div('{source1}'),
                     ],
                     div(class_='column')[
                         div('{source2}'),
