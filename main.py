@@ -155,8 +155,8 @@ for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
                  '{} ~ {}'.format(rB.beg,rB.end))
             ),
             fp.lmap(fp.lmap(
-                #lambda s: h('td', class_='center_cell')[s]
-                lambda s: h('td')[s]
+                lambda s: h('td', class_='center_cell')[s]
+                #lambda s: h('td')[s]
             )),
         )
 
