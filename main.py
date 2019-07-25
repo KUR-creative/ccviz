@@ -52,6 +52,16 @@ OUTPUT_DIRS = fp.lmap(
     TARGET_CARS
 )
 
+CONFIG = fp.go(
+    INPUT_DIR / 'config.ini',
+    fu.read_text,
+    lambda s: s.split('\n'),
+    fp.filter(lambda s: '[' not in s and len(s) != 0),
+    fp.map(lambda s: s.split('=')),
+    fp.lmap(fp.lmap(lambda s: s.strip()))
+)
+#print(CONFIG)
+
 ABS_THRESHOLD = args.absolute_score_threshold
 REL_THRESHOLD = args.relative_score_threshold
 
