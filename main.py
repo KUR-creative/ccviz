@@ -17,26 +17,27 @@ import pygments #import highlight
 from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
 
-#--------------------------------------------------------------------------------------
-import argparse
-parser = argparse.ArgumentParser(description='CloneCop Visalization program')
-
-parser.add_argument('input_zip', help='Compressed zip file from CloneCop')
-parser.add_argument('-o', '--output_directory', 
-    help="Output directory name. If specified directory isn't exists, then create it.")
-parser.add_argument('-a', '--absolute_score_threshold',
-    help=("Only matches with absolute score higher than threshold are visualized. "
-         +"default threshold = 100"),
-    type=int, default=100)
-parser.add_argument('-r', '--relative_score_threshold',
-    help=("Only matches with relative score higher than threshold are visualized. "
-         +"default threshold = 0.5"),
-    type=float, default=0.5)
-
-args = parser.parse_args()
 
 #--------------------------------------------------------------------------------------
-def main(args):
+def main(args, call_itself=False):
+    if call_itself:
+        import argparse
+        parser = argparse.ArgumentParser(description='CloneCop Visalization program')
+
+        parser.add_argument('input_zip', help='Compressed zip file from CloneCop')
+        parser.add_argument('-o', '--output_directory', 
+            help="Output directory name. If specified directory isn't exists, then create it.")
+        parser.add_argument('-a', '--absolute_score_threshold',
+            help=("Only matches with absolute score higher than threshold are visualized. "
+                 +"default threshold = 100"),
+            type=int, default=100)
+        parser.add_argument('-r', '--relative_score_threshold',
+            help=("Only matches with relative score higher than threshold are visualized. "
+                 +"default threshold = 0.5"),
+            type=float, default=0.5)
+        args = parser.parse_args()
+
+    #--------------------------------------------------------------------------------------
     TARGET_ZIP = args.input_zip
     INPUT_DIR  = Path('UNZIPPED') / Path(TARGET_ZIP).stem
     with zipfile.ZipFile(TARGET_ZIP) as zf:
@@ -55,6 +56,7 @@ def main(args):
         TARGET_CARS
     )
 
+    print('wtf',OUTPUT_DIRS)
     CONFIG = fp.go(
         INPUT_DIR / 'config.ini',
         fu.read_text,
@@ -533,4 +535,4 @@ def main(args):
         ]))
         '''
 if __name__ == '__main__':
-    main(args)
+    main(args, call_itself=True)
