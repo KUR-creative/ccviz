@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="../css/viz1.css"/>
+    <link rel="stylesheet" href="../css/table.css"/>
+    <link rel="stylesheet" href="../css/popup.css"/>
+    <link rel="stylesheet" href="../css/highlight.css"/>
+  </head>
+  <body>
+    <div class="all">
+      <div class="header_row">
+        <div class="column">
+          <h2>A: main.c</h2>
+        </div>
+        <div class="column">
+          <h2>B: firm.c</h2>
+        </div>
+        <div class="column">
+          <h2>Result Table</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column">
+          <div><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;types.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;memory.h&quot;</span><span class="cp"></span>
+
+<span class="cp">#define BRIGHTNESS 0x39</span>
+
+<span class="kt">void</span> <span class="nf">prepareForFirmlaunch</span><span class="p">(</span> <span class="kt">void</span> <span class="p">);</span>
+<span class="k">extern</span> <span class="n">u32</span> <span class="n">prepareForFirmlaunchSize</span><span class="p">;</span>
+
+<span class="k">extern</span> <span class="k">volatile</span> <span class="n">Arm11Operation</span> <span class="n">operation</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">initScreens</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10141200</span> <span class="o">=</span> <span class="mh">0x1007F</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10202014</span> <span class="o">=</span> <span class="mh">0x00000001</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1020200C</span> <span class="o">&amp;=</span> <span class="mh">0xFFFEFFFE</span><span class="p">;</span>
+
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10202240</span> <span class="o">=</span> <span class="n">BRIGHTNESS</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10202A40</span> <span class="o">=</span> <span class="n">BRIGHTNESS</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10202244</span> <span class="o">=</span> <span class="mh">0x1023E</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10202A44</span> <span class="o">=</span> <span class="mh">0x1023E</span><span class="p">;</span>
+
+  <span class="c1">//Top screen</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400400</span> <span class="o">=</span> <span class="mh">0x000001c2</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400404</span> <span class="o">=</span> <span class="mh">0x000000d1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400408</span> <span class="o">=</span> <span class="mh">0x000001c1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040040c</span> <span class="o">=</span> <span class="mh">0x000001c1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400410</span> <span class="o">=</span> <span class="mh">0x00000000</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400414</span> <span class="o">=</span> <span class="mh">0x000000cf</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400418</span> <span class="o">=</span> <span class="mh">0x000000d1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040041c</span> <span class="o">=</span> <span class="mh">0x01c501c1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400420</span> <span class="o">=</span> <span class="mh">0x00010000</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400424</span> <span class="o">=</span> <span class="mh">0x0000019d</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400428</span> <span class="o">=</span> <span class="mh">0x00000002</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040042c</span> <span class="o">=</span> <span class="mh">0x00000192</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400430</span> <span class="o">=</span> <span class="mh">0x00000192</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400434</span> <span class="o">=</span> <span class="mh">0x00000192</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400438</span> <span class="o">=</span> <span class="mh">0x00000001</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040043c</span> <span class="o">=</span> <span class="mh">0x00000002</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400440</span> <span class="o">=</span> <span class="mh">0x01960192</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400444</span> <span class="o">=</span> <span class="mh">0x00000000</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400448</span> <span class="o">=</span> <span class="mh">0x00000000</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040045C</span> <span class="o">=</span> <span class="mh">0x00f00190</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400460</span> <span class="o">=</span> <span class="mh">0x01c100d1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400464</span> <span class="o">=</span> <span class="mh">0x01920002</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400468</span> <span class="o">=</span> <span class="mh">0x18300000</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400470</span> <span class="o">=</span> <span class="mh">0x80341</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400474</span> <span class="o">=</span> <span class="mh">0x00010501</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400478</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400490</span> <span class="o">=</span> <span class="mh">0x000002D0</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040049C</span> <span class="o">=</span> <span class="mh">0x00000000</span><span class="p">;</span>
+
+  <span class="c1">//Disco register</span>
+  <span class="k">for</span><span class="p">(</span> <span class="n">u32</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
+    <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400484</span> <span class="o">=</span> <span class="mh">0x10101</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+
+  <span class="c1">//Bottom screen</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400500</span> <span class="o">=</span> <span class="mh">0x000001c2</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400504</span> <span class="o">=</span> <span class="mh">0x000000d1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400508</span> <span class="o">=</span> <span class="mh">0x000001c1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040050c</span> <span class="o">=</span> <span class="mh">0x000001c1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400510</span> <span class="o">=</span> <span class="mh">0x000000cd</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400514</span> <span class="o">=</span> <span class="mh">0x000000cf</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400518</span> <span class="o">=</span> <span class="mh">0x000000d1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040051c</span> <span class="o">=</span> <span class="mh">0x01c501c1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400520</span> <span class="o">=</span> <span class="mh">0x00010000</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400524</span> <span class="o">=</span> <span class="mh">0x0000019d</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400528</span> <span class="o">=</span> <span class="mh">0x00000052</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040052c</span> <span class="o">=</span> <span class="mh">0x00000192</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400530</span> <span class="o">=</span> <span class="mh">0x00000192</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400534</span> <span class="o">=</span> <span class="mh">0x0000004f</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400538</span> <span class="o">=</span> <span class="mh">0x00000050</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040053c</span> <span class="o">=</span> <span class="mh">0x00000052</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400540</span> <span class="o">=</span> <span class="mh">0x01980194</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400544</span> <span class="o">=</span> <span class="mh">0x00000000</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400548</span> <span class="o">=</span> <span class="mh">0x00000011</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040055C</span> <span class="o">=</span> <span class="mh">0x00f00140</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400560</span> <span class="o">=</span> <span class="mh">0x01c100d1</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400564</span> <span class="o">=</span> <span class="mh">0x01920052</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400568</span> <span class="o">=</span> <span class="mh">0x18300000</span> <span class="o">+</span> <span class="mh">0x46500</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400570</span> <span class="o">=</span> <span class="mh">0x80301</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400574</span> <span class="o">=</span> <span class="mh">0x00010501</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400578</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400590</span> <span class="o">=</span> <span class="mh">0x000002D0</span><span class="p">;</span>
+<span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;">  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040059C</span> <span class="o">=</span> <span class="mh">0x00000000</span><span class="p">;</span> </span>
+<span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;">  <span class="c1">//Disco register</span> </span>
+<span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;">  <span class="k">for</span><span class="p">(</span> <span class="n">u32</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> </span>
+<span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;">    <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400584</span> <span class="o">=</span> <span class="mh">0x10101</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span> </span>
+
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400468</span> <span class="o">=</span> <span class="mh">0x18300000</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040046c</span> <span class="o">=</span> <span class="mh">0x18400000</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400494</span> <span class="o">=</span> <span class="mh">0x18300000</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400498</span> <span class="o">=</span> <span class="mh">0x18400000</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400568</span> <span class="o">=</span> <span class="mh">0x18346500</span><span class="p">;</span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040056c</span> <span class="o">=</span> <span class="mh">0x18446500</span><span class="p">;</span>
+
+  <span class="c1">//Clear both framebuffer sets</span>
+  <span class="n">vu32</span> <span class="o">*</span> <span class="n">REGs_PSC0</span> <span class="o">=</span> <span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400010</span><span class="p">,</span>
+         <span class="o">*</span><span class="n">REGs_PSC1</span> <span class="o">=</span> <span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400020</span><span class="p">;</span>
+
+  <span class="n">REGs_PSC0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x18300000</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">//Start address</span>
+  <span class="n">REGs_PSC0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mh">0x18300000</span> <span class="o">+</span> <span class="n">SCREEN_TOP_FBSIZE</span> <span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">//End address</span>
+  <span class="n">REGs_PSC0</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//Fill value</span>
+  <span class="n">REGs_PSC0</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span> <span class="p">)</span> <span class="o">|</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//32-bit pattern; start</span>
+
+  <span class="n">REGs_PSC1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x18346500</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">//Start address</span>
+  <span class="n">REGs_PSC1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mh">0x18346500</span> <span class="o">+</span> <span class="n">SCREEN_BOTTOM_FBSIZE</span> <span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">//End address</span>
+  <span class="n">REGs_PSC1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//Fill value</span>
+  <span class="n">REGs_PSC1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span> <span class="p">)</span> <span class="o">|</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//32-bit pattern; start</span>
+
+  <span class="k">while</span><span class="p">(</span> <span class="o">!</span><span class="p">(</span> <span class="p">(</span> <span class="n">REGs_PSC0</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mi">2</span> <span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">REGs_PSC1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">)</span> <span class="p">);</span>
+
+  <span class="n">REGs_PSC0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x18400000</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">//Start address</span>
+  <span class="n">REGs_PSC0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mh">0x18400000</span> <span class="o">+</span> <span class="n">SCREEN_TOP_FBSIZE</span> <span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">//End address</span>
+  <span class="n">REGs_PSC0</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//Fill value</span>
+  <span class="n">REGs_PSC0</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span> <span class="p">)</span> <span class="o">|</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//32-bit pattern; start</span>
+
+  <span class="n">REGs_PSC1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x18446500</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">//Start address</span>
+  <span class="n">REGs_PSC1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mh">0x18446500</span> <span class="o">+</span> <span class="n">SCREEN_BOTTOM_FBSIZE</span> <span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">//End address</span>
+  <span class="n">REGs_PSC1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//Fill value</span>
+  <span class="n">REGs_PSC1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">2</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span> <span class="p">)</span> <span class="o">|</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//32-bit pattern; start</span>
+
+  <span class="k">while</span><span class="p">(</span> <span class="o">!</span><span class="p">(</span> <span class="p">(</span> <span class="n">REGs_PSC0</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mi">2</span> <span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">REGs_PSC1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">)</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">waitBootromLocked</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="k">while</span><span class="p">(</span> <span class="o">*</span><span class="p">(</span> <span class="n">vu64</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x18000</span> <span class="o">!=</span> <span class="mi">0ULL</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="n">operation</span> <span class="o">=</span> <span class="n">ARM11_READY</span><span class="p">;</span>
+
+  <span class="k">while</span><span class="p">(</span> <span class="nb">true</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="k">switch</span><span class="p">(</span> <span class="n">operation</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nl">ARM11_READY</span><span class="p">:</span>
+      <span class="k">continue</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">INIT_SCREENS</span><span class="p">:</span>
+      <span class="n">initScreens</span><span class="p">();</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">WAIT_BOOTROM11_LOCKED</span><span class="p">:</span>
+      <span class="n">waitBootromLocked</span><span class="p">();</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">PREPARE_ARM11_FOR_FIRMLAUNCH</span><span class="p">:</span>
+      <span class="n">memcpy</span><span class="p">(</span> <span class="p">(</span> <span class="kt">void</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1FFFFC00</span><span class="p">,</span> <span class="p">(</span> <span class="kt">void</span> <span class="o">*</span> <span class="p">)</span><span class="n">prepareForFirmlaunch</span><span class="p">,</span> <span class="n">prepareForFirmlaunchSize</span> <span class="p">);</span>
+      <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1FFFFFFC</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="p">(</span> <span class="p">(</span> <span class="kt">void</span> <span class="p">(</span> <span class="o">*</span> <span class="p">)(</span> <span class="n">u32</span><span class="p">,</span> <span class="k">volatile</span> <span class="n">Arm11Operation</span> <span class="o">*</span> <span class="p">)</span> <span class="p">)</span><span class="mh">0x1FFFFC00</span> <span class="p">)(</span> <span class="n">ARM11_READY</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">operation</span> <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">operation</span> <span class="o">=</span> <span class="n">ARM11_READY</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+        </div>
+        <div class="column">
+          <div><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm">*   This file is part of Luma3DS</span>
+<span class="cm">*   Copyright (C) 2017 Aurora Wright, TuxSH</span>
+<span class="cm">*</span>
+<span class="cm">*   This program is free software: you can redistribute it and/or modify</span>
+<span class="cm">*   it under the terms of the GNU General Public License as published by</span>
+<span class="cm">*   the Free Software Foundation, either version 3 of the License, or</span>
+<span class="cm">*   (at your option) any later version.</span>
+<span class="cm">*</span>
+<span class="cm">*   This program is distributed in the hope that it will be useful,</span>
+<span class="cm">*   but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="cm">*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="cm">*   GNU General Public License for more details.</span>
+<span class="cm">*</span>
+<span class="cm">*   You should have received a copy of the GNU General Public License</span>
+<span class="cm">*   along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="cm">*</span>
+<span class="cm">*   Additional Terms 7.b of GPLv3 applies to this file: Requiring preservation of specified</span>
+<span class="cm">*   reasonable legal notices or author attributions in that material or in the Appropriate Legal</span>
+<span class="cm">*   Notices displayed by works containing it.</span>
+<span class="cm">*/</span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;firm.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;memory.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cache.h&quot;</span><span class="cp"></span>
+
+<span class="kt">void</span> <span class="nf">disableMpuAndJumpToEntrypoints</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">arm11Entry</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">arm9Entry</span> <span class="p">);</span>
+
+<span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;"><span class="kt">void</span> <span class="nf">launchFirm</span><span class="p">(</span> <span class="n">Firm</span> <span class="o">*</span> <span class="n">firm</span><span class="p">,</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span> <span class="p">)</span> <span class="p">{</span> </span>
+<span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;">  <span class="c1">//Copy FIRM sections to respective memory locations</span> </span>
+<span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;">  <span class="k">for</span><span class="p">(</span> <span class="n">u32</span> <span class="n">sectionNum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">sectionNum</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">sectionNum</span><span class="o">++</span> <span class="p">)</span> </span>
+<span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;">    <span class="n">memcpy</span><span class="p">(</span> <span class="n">firm</span><span class="o">-&gt;</span><span class="n">section</span><span class="p">[</span><span class="n">sectionNum</span><span class="p">].</span><span class="n">address</span><span class="p">,</span> <span class="p">(</span> <span class="n">u8</span> <span class="o">*</span> <span class="p">)</span><span class="n">firm</span> <span class="o">+</span> <span class="n">firm</span><span class="o">-&gt;</span><span class="n">section</span><span class="p">[</span><span class="n">sectionNum</span><span class="p">].</span><span class="n">offset</span><span class="p">,</span> <span class="n">firm</span><span class="o">-&gt;</span><span class="n">section</span><span class="p">[</span><span class="n">sectionNum</span><span class="p">].</span><span class="n">size</span> <span class="p">);</span> </span>
+
+  <span class="n">disableMpuAndJumpToEntrypoints</span><span class="p">(</span> <span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="n">firm</span><span class="o">-&gt;</span><span class="n">arm9Entry</span><span class="p">,</span> <span class="n">firm</span><span class="o">-&gt;</span><span class="n">arm11Entry</span> <span class="p">);</span>
+
+  <span class="n">__builtin_unreachable</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+        </div>
+        <div class="column">
+          <p style="text-align: center; margin:3px;">absolute score threshold(abs) = 100</p>
+          <p style="text-align: center; margin:3px;">relative score threshold(rel) = 0.5</p>
+          <table class="comp_table">
+            <tr>
+              <th class="center_cell">A</th>
+              <th class="center_cell">B</th>
+              <th>abs</th>
+              <th>rel</th>
+              <th>M1</th>
+              <th>M2</th>
+              <th>M3</th>
+              <th>M4</th>
+              <th>gap</th>
+              <th>miss</th>
+            </tr>
+            <tr>
+              <td class="center_cell">83 ~ 87</td>
+              <td class="center_cell">29 ~ 32</td>
+              <td>285</td>
+              <td>1.00</td>
+              <td>20</td>
+              <td>19</td>
+              <td>2</td>
+              <td>24</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </table>
+          <label class="btn" for="open-popup">go</label>
+          <input class="modal-state" id="open-popup" type="checkbox"/>
+          <div class="modal">
+            <label class="modal_bg" for="open-popup"/>
+            <div class="modal_inner"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;types.h&quot;</span><span class="cp"></span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span></span><span class="cm">/*</span> </span>
+<span class="cp">#include</span> <span class="cpf">&quot;memory.h&quot;</span><span class="cp"></span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   This file is part of Luma3DS</span> </span>
+
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   Copyright (C) 2017 Aurora Wright, TuxSH</span> </span>
+<span class="cp">#define BRIGHTNESS 0x39</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*</span> </span>
+
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   This program is free software: you can redistribute it and/or modify</span> </span>
+<span class="kt">void</span> <span class="nf">prepareForFirmlaunch</span><span class="p">(</span> <span class="kt">void</span> <span class="p">);</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   it under the terms of the GNU General Public License as published by</span> </span>
+<span class="k">extern</span> <span class="n">u32</span> <span class="n">prepareForFirmlaunchSize</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   the Free Software Foundation, either version 3 of the License, or</span> </span>
+
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   (at your option) any later version.</span> </span>
+<span class="k">extern</span> <span class="k">volatile</span> <span class="n">Arm11Operation</span> <span class="n">operation</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*</span> </span>
+
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   This program is distributed in the hope that it will be useful,</span> </span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">initScreens</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span> <span class="p">{</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   but WITHOUT ANY WARRANTY; without even the implied warranty of</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10141200</span> <span class="o">=</span> <span class="mh">0x1007F</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10202014</span> <span class="o">=</span> <span class="mh">0x00000001</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   GNU General Public License for more details.</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1020200C</span> <span class="o">&amp;=</span> <span class="mh">0xFFFEFFFE</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*</span> </span>
+
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   You should have received a copy of the GNU General Public License</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10202240</span> <span class="o">=</span> <span class="n">BRIGHTNESS</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10202A40</span> <span class="o">=</span> <span class="n">BRIGHTNESS</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10202244</span> <span class="o">=</span> <span class="mh">0x1023E</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   Additional Terms 7.b of GPLv3 applies to this file: Requiring preservation of specified</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10202A44</span> <span class="o">=</span> <span class="mh">0x1023E</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   reasonable legal notices or author attributions in that material or in the Appropriate Legal</span> </span>
+
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*   Notices displayed by works containing it.</span> </span>
+  <span class="c1">//Top screen</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cm">*/</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400400</span> <span class="o">=</span> <span class="mh">0x000001c2</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400404</span> <span class="o">=</span> <span class="mh">0x000000d1</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&quot;firm.h&quot;</span><span class="cp"></span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400408</span> <span class="o">=</span> <span class="mh">0x000001c1</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&quot;memory.h&quot;</span><span class="cp"></span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040040c</span> <span class="o">=</span> <span class="mh">0x000001c1</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&quot;cache.h&quot;</span><span class="cp"></span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400410</span> <span class="o">=</span> <span class="mh">0x00000000</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400414</span> <span class="o">=</span> <span class="mh">0x000000cf</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="kt">void</span> <span class="nf">disableMpuAndJumpToEntrypoints</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">arm11Entry</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">arm9Entry</span> <span class="p">);</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400418</span> <span class="o">=</span> <span class="mh">0x000000d1</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040041c</span> <span class="o">=</span> <span class="mh">0x01c501c1</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;"><span class="kt">void</span> <span class="nf">launchFirm</span><span class="p">(</span> <span class="n">Firm</span> <span class="o">*</span> <span class="n">firm</span><span class="p">,</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span> <span class="p">)</span> <span class="p">{</span> </span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400420</span> <span class="o">=</span> <span class="mh">0x00010000</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;">  <span class="c1">//Copy FIRM sections to respective memory locations</span> </span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400424</span> <span class="o">=</span> <span class="mh">0x0000019d</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;">  <span class="k">for</span><span class="p">(</span> <span class="n">u32</span> <span class="n">sectionNum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">sectionNum</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">sectionNum</span><span class="o">++</span> <span class="p">)</span> </span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400428</span> <span class="o">=</span> <span class="mh">0x00000002</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(1,162,71,0.25); width:100%; float:left;">    <span class="n">memcpy</span><span class="p">(</span> <span class="n">firm</span><span class="o">-&gt;</span><span class="n">section</span><span class="p">[</span><span class="n">sectionNum</span><span class="p">].</span><span class="n">address</span><span class="p">,</span> <span class="p">(</span> <span class="n">u8</span> <span class="o">*</span> <span class="p">)</span><span class="n">firm</span> <span class="o">+</span> <span class="n">firm</span><span class="o">-&gt;</span><span class="n">section</span><span class="p">[</span><span class="n">sectionNum</span><span class="p">].</span><span class="n">offset</span><span class="p">,</span> <span class="n">firm</span><span class="o">-&gt;</span><span class="n">section</span><span class="p">[</span><span class="n">sectionNum</span><span class="p">].</span><span class="n">size</span> <span class="p">);</span> </span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040042c</span> <span class="o">=</span> <span class="mh">0x00000192</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400430</span> <span class="o">=</span> <span class="mh">0x00000192</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;">  <span class="n">disableMpuAndJumpToEntrypoints</span><span class="p">(</span> <span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="n">firm</span><span class="o">-&gt;</span><span class="n">arm9Entry</span><span class="p">,</span> <span class="n">firm</span><span class="o">-&gt;</span><span class="n">arm11Entry</span> <span class="p">);</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400434</span> <span class="o">=</span> <span class="mh">0x00000192</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400438</span> <span class="o">=</span> <span class="mh">0x00000001</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;">  <span class="n">__builtin_unreachable</span><span class="p">();</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x1040043c</span> <span class="o">=</span> <span class="mh">0x00000002</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span class="p">}</span> </span>
+  <span class="o">*</span><span class="p">(</span> <span class="n">vu32</span> <span class="o">*</span> <span class="p">)</span><span class="mh">0x10400440</span> <span class="o">=</span> <span class="mh">0x01960192</span><span class="p">;</span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"> </span></pre></div><label class="modal_close" for="open-popup"/></div>
+          </div>
+          <script src="../js/sort_table.js"> </script>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

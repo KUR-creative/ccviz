@@ -1,0 +1,29 @@
+.comp_table {
+  border-collapse: collapse;
+  width: 97%;
+  margin-left: 10px;
+  background: #f4ffff
+}
+
+.overview_table {
+  border-collapse: collapse;
+  width: 97%;
+  margin-left: 10px;
+}
+
+.overview_table .center_cell, .comp_table .center_cell {
+  text-align: center;
+}
+
+.overview_table td, .comp_table td {
+  padding: 2px;
+  text-align: right;
+  border-bottom: 1px solid #ddd;
+}
+
+.overview_table th, .comp_table th {
+  padding: 2px;
+  text-align: right;
+  border-top: 2px solid #bbb;
+  border-bottom: 2px solid #bbb;
+}

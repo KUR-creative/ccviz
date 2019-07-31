@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="../css/viz1.css"/>
+    <link rel="stylesheet" href="../css/table.css"/>
+    <link rel="stylesheet" href="../css/popup.css"/>
+    <link rel="stylesheet" href="../css/highlight.css"/>
+  </head>
+  <body>
+    <div class="all">
+      <div class="header_row">
+        <div class="column">
+          <h2>A: TODO.c</h2>
+        </div>
+        <div class="column">
+          <h2>B: TODO.c</h2>
+        </div>
+        <div class="column">
+          <h2>Result Table</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column">
+          <div><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195</pre></div></td><td class="code"><div class="highlight"><pre><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span></span><span class="n">what</span><span class="err">&#39;</span><span class="n">s</span> <span class="n">going</span> <span class="n">on</span> <span class="k">this</span> <span class="n">project</span><span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">OBJECTIVE</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">all</span> <span class="n">test</span> <span class="n">passed</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">**</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">vim</span> <span class="n">session</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">how</span> <span class="n">to</span> <span class="n">press</span> <span class="o">&lt;</span><span class="n">F12</span><span class="o">&gt;</span> <span class="n">in</span> <span class="n">starting</span> <span class="n">vim</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="o">*</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//just input &#39;\n&#39; then segfault? wtf?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">undefined</span> <span class="n">cmd</span> <span class="o">-&gt;</span> <span class="n">don</span><span class="err">&#39;</span><span class="n">t</span> <span class="n">fork</span> <span class="n">anything</span> <span class="n">but</span> <span class="n">just</span> <span class="n">filter</span> <span class="n">it</span><span class="p">.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">is</span> <span class="n">it</span> <span class="n">impossible</span> <span class="o">??</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test1 //maybe...</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test2</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh need to deal with &#39;quit&#39; cmd</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test3</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//do foreground job - how to test?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is it ok with bg jobs?  need to implement bg &amp; fg</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test4</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why it prints in arbitrary order?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//because fork and execve echo. need to explicitly wait fg jobs..!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//t3,t4 test:</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1. explicit wait test: sh never wait bg explicitly</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2. reaping test: use WNOHANG!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//can&#39;t use criterion. use my on test functions...</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//now WRITE SIGNAL HANDLER.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3. bg job allocation info output</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//[jobnum] (pid) cmdline</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.why SEGFAULT occurred?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//&quot;\n&quot; 같은 거는 argv[0] = NULL이 들어가.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//5.why waiting explicitly? (in sigchld handler)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//jobs command error.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//아마 WNOHANG을 안 쓰므로 다 기다린다고 그러는 것이다...</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use different loop.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//using WNOHANG waitpid. but..</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//need to implement joblist and operations.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use jobs! that will be work!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use git branch! it would be slightly dangerous..!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="mf">6.</span><span class="n">eval</span><span class="p">(</span> <span class="s">&quot;&amp;&quot;</span> <span class="p">)</span> <span class="n">is</span> <span class="n">exceptional</span><span class="p">.</span> <span class="c1">// is it ok?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test5</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//job list</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//addjob</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//if jobs are full? : job won&#39;t be allocated. already implemented.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//delete job when job process terminated. using sigchld_handler</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why [0] job never deleted??</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change sigchld_handler... using jobs array.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change fg reaping test(use jobs too)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is fg reaped correctly?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is fg job in jobs deleted?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when eval, add job into jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">more</span> <span class="n">state</span> <span class="n">job</span> <span class="n">operations</span><span class="p">.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//FG</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">ST</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//func: deleteAllJobs</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//func: isAllZero</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when child terminated, del child from jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//FG</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; jobs   (interface)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement jobs command actually!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//it&#39;s already implemented, but error: by sigchld_handler code</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//deleteAllJobs jobs기준으로 sigchld handler에서 job을 삭제한다면</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//이 함수 사용시 문제가 생길 수 있다.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//**sigchld_handler 변경으로 인해 고쳐질 수 있는 현상(테스트)들</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//t3, t4는 eval만 가지고는 테스트할 수 없다.. 유닛테스트가 아냐.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//trace04: print echo ouptuts in no delay(delay after first echo)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//trace05: command jobs actually prints jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//utest: (crash test)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test6</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement sigint_handler.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//don&#39;t die</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg job.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg job only</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill ONLY fg job. not bg jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//-&gt; delete fg job from jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg only test: test08 passed. but it actually didn&#39;t work!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//need manual test.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(ex)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./tsh</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50 &amp;</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50 &amp;</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//C^</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./jobs</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//then all jobs are gone! wtf?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when no fg job run, then C^ must never work.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">why</span> <span class="n">test08</span> <span class="n">is</span> <span class="n">a</span> <span class="nb">false</span> <span class="n">test</span> <span class="o">??</span> <span class="o">?</span> <span class="n">why</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test7</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//impl sigint_handler</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test8</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement sigstop_handler</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//now fg --stop--&gt; st: then no more explicit waiting.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1- change state in jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2- check fg is in job list? at fg waiting loop in eval</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test9</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// doBgFg access critical section.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// but... have to block signals??</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// 만일 프로세스가 죽었는데 jobs에서 찾는다면?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// 안 나오고 INVALID_PID가 뜨겠지.. 그럼 된 거 아냐?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">implement</span> <span class="n">bg</span> <span class="n">builtin</span> <span class="o">-</span> <span class="n">command</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//cmd bg interface</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg &#39;\0&#39;</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg command requires PID or %jobid argument</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg ^^tg</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg: argument must be a PID or %jobid</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg -231</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg: argument must be a PID or %jobid</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3.1.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg %asd</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//%asd: No such job</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg %123</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//%123: No such job</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3.2.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg 0</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(0): No such process</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg 123</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(123): No such process</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.1</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//succes jobid</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.2</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//succes pid</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//go futehr: success bg case. ST -&gt; BG</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change target job in jobs</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//send signal to target job(real thing!) // need to t9 test.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg interface</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg real thing</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG -&gt; FG  : fg command</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ST -&gt; FG  : fg command</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">/*</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">do_bgfg</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">  synchronization error?(in utest)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 1:bg \n&quot;)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;bg \n&quot;)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 2:bg xt\n&quot;)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 3:bg \n&quot;)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">  result:</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    1:bg</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    2:bg xt</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    3:bg</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    bg command requires PID or %jobid argument</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">*/</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="o">*</span> <span class="n">fix</span> <span class="n">Makefile</span> <span class="o">----</span> <span class="o">%</span> <span class="n">d</span><span class="o">----</span> <span class="n">reflect</span> <span class="nb">true</span> <span class="n">test</span> <span class="n">number</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test10</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//sending SIGINT to just one process didn&#39;t work?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//no, it works! is it build error???</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test11</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ok..</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test12</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ok..</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test13</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg %1 ST -&gt; BG but it doesn&#39;t run?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why it doesn&#39;t exit?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//because the child of child isn&#39;t run again?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//maybe..?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test14</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//minor fix turn!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//Execve error to shell error</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg a</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg a</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//argument must be a PID or %jobid</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//rewrite do_bgfg output</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(jid valid! -&gt; ...)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test15</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test16</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">why</span> <span class="n">wait</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">mt</span> <span class="n">own</span> <span class="n">tiny</span> <span class="n">tester</span> <span class="n">library</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ASSERT</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ASSERT_EQ</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">maybe</span> <span class="n">I</span> <span class="n">can</span> <span class="n">check</span> <span class="n">job</span> <span class="n">list</span><span class="p">..</span> <span class="n">to</span> <span class="n">test</span> <span class="n">something</span> <span class="o">-&gt;</span> <span class="n">code</span> <span class="n">it</span><span class="o">!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="n">can</span> <span class="n">you</span> <span class="n">print</span> <span class="n">test</span> <span class="n">output</span> <span class="n">in</span> <span class="n">color</span> <span class="o">?</span> </span>
+</pre></div>
+</td></tr></table></div>
+        </div>
+        <div class="column">
+          <div><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195</pre></div></td><td class="code"><div class="highlight"><pre><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span></span><span class="n">what</span><span class="err">&#39;</span><span class="n">s</span> <span class="n">going</span> <span class="n">on</span> <span class="k">this</span> <span class="n">project</span><span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">OBJECTIVE</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">all</span> <span class="n">test</span> <span class="n">passed</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">**</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">vim</span> <span class="n">session</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">how</span> <span class="n">to</span> <span class="n">press</span> <span class="o">&lt;</span><span class="n">F12</span><span class="o">&gt;</span> <span class="n">in</span> <span class="n">starting</span> <span class="n">vim</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="o">*</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//just input &#39;\n&#39; then segfault? wtf?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">undefined</span> <span class="n">cmd</span> <span class="o">-&gt;</span> <span class="n">don</span><span class="err">&#39;</span><span class="n">t</span> <span class="n">fork</span> <span class="n">anything</span> <span class="n">but</span> <span class="n">just</span> <span class="n">filter</span> <span class="n">it</span><span class="p">.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">is</span> <span class="n">it</span> <span class="n">impossible</span> <span class="o">??</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test1 //maybe...</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test2</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh need to deal with &#39;quit&#39; cmd</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test3</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//do foreground job - how to test?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is it ok with bg jobs?  need to implement bg &amp; fg</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test4</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why it prints in arbitrary order?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//because fork and execve echo. need to explicitly wait fg jobs..!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//t3,t4 test:</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1. explicit wait test: sh never wait bg explicitly</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2. reaping test: use WNOHANG!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//can&#39;t use criterion. use my on test functions...</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//now WRITE SIGNAL HANDLER.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3. bg job allocation info output</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//[jobnum] (pid) cmdline</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.why SEGFAULT occurred?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//&quot;\n&quot; 같은 거는 argv[0] = NULL이 들어가.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//5.why waiting explicitly? (in sigchld handler)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//jobs command error.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//아마 WNOHANG을 안 쓰므로 다 기다린다고 그러는 것이다...</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use different loop.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//using WNOHANG waitpid. but..</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//need to implement joblist and operations.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use jobs! that will be work!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use git branch! it would be slightly dangerous..!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="mf">6.</span><span class="n">eval</span><span class="p">(</span> <span class="s">&quot;&amp;&quot;</span> <span class="p">)</span> <span class="n">is</span> <span class="n">exceptional</span><span class="p">.</span> <span class="c1">// is it ok?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test5</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//job list</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//addjob</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//if jobs are full? : job won&#39;t be allocated. already implemented.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//delete job when job process terminated. using sigchld_handler</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why [0] job never deleted??</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change sigchld_handler... using jobs array.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change fg reaping test(use jobs too)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is fg reaped correctly?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is fg job in jobs deleted?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when eval, add job into jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">more</span> <span class="n">state</span> <span class="n">job</span> <span class="n">operations</span><span class="p">.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//FG</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">ST</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//func: deleteAllJobs</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//func: isAllZero</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when child terminated, del child from jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//FG</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; jobs   (interface)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement jobs command actually!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//it&#39;s already implemented, but error: by sigchld_handler code</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//deleteAllJobs jobs기준으로 sigchld handler에서 job을 삭제한다면</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//이 함수 사용시 문제가 생길 수 있다.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//**sigchld_handler 변경으로 인해 고쳐질 수 있는 현상(테스트)들</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//t3, t4는 eval만 가지고는 테스트할 수 없다.. 유닛테스트가 아냐.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//trace04: print echo ouptuts in no delay(delay after first echo)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//trace05: command jobs actually prints jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//utest: (crash test)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test6</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement sigint_handler.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//don&#39;t die</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg job.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg job only</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill ONLY fg job. not bg jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//-&gt; delete fg job from jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg only test: test08 passed. but it actually didn&#39;t work!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//need manual test.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(ex)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./tsh</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50 &amp;</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50 &amp;</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//C^</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./jobs</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//then all jobs are gone! wtf?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when no fg job run, then C^ must never work.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">why</span> <span class="n">test08</span> <span class="n">is</span> <span class="n">a</span> <span class="nb">false</span> <span class="n">test</span> <span class="o">??</span> <span class="o">?</span> <span class="n">why</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test7</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//impl sigint_handler</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test8</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement sigstop_handler</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//now fg --stop--&gt; st: then no more explicit waiting.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1- change state in jobs.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2- check fg is in job list? at fg waiting loop in eval</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test9</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// doBgFg access critical section.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// but... have to block signals??</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// 만일 프로세스가 죽었는데 jobs에서 찾는다면?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// 안 나오고 INVALID_PID가 뜨겠지.. 그럼 된 거 아냐?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">implement</span> <span class="n">bg</span> <span class="n">builtin</span> <span class="o">-</span> <span class="n">command</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//cmd bg interface</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg &#39;\0&#39;</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg command requires PID or %jobid argument</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg ^^tg</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg: argument must be a PID or %jobid</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg -231</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg: argument must be a PID or %jobid</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3.1.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg %asd</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//%asd: No such job</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg %123</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//%123: No such job</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3.2.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg 0</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(0): No such process</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg 123</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(123): No such process</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.1</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//succes jobid</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.2</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//succes pid</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//go futehr: success bg case. ST -&gt; BG</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change target job in jobs</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//send signal to target job(real thing!) // need to t9 test.</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg interface</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg real thing</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG -&gt; FG  : fg command</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ST -&gt; FG  : fg command</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">/*</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">do_bgfg</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">  synchronization error?(in utest)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 1:bg \n&quot;)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;bg \n&quot;)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 2:bg xt\n&quot;)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 3:bg \n&quot;)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">  result:</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    1:bg</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    2:bg xt</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    3:bg</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    bg command requires PID or %jobid argument</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">*/</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="o">*</span> <span class="n">fix</span> <span class="n">Makefile</span> <span class="o">----</span> <span class="o">%</span> <span class="n">d</span><span class="o">----</span> <span class="n">reflect</span> <span class="nb">true</span> <span class="n">test</span> <span class="n">number</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test10</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//sending SIGINT to just one process didn&#39;t work?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//no, it works! is it build error???</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test11</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ok..</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test12</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ok..</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test13</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg %1 ST -&gt; BG but it doesn&#39;t run?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why it doesn&#39;t exit?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//because the child of child isn&#39;t run again?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//maybe..?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test14</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//minor fix turn!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//Execve error to shell error</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg a</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg a</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//argument must be a PID or %jobid</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//rewrite do_bgfg output</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(jid valid! -&gt; ...)</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test15</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test16</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">why</span> <span class="n">wait</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">mt</span> <span class="n">own</span> <span class="n">tiny</span> <span class="n">tester</span> <span class="n">library</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ASSERT</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ASSERT_EQ</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">maybe</span> <span class="n">I</span> <span class="n">can</span> <span class="n">check</span> <span class="n">job</span> <span class="n">list</span><span class="p">..</span> <span class="n">to</span> <span class="n">test</span> <span class="n">something</span> <span class="o">-&gt;</span> <span class="n">code</span> <span class="n">it</span><span class="o">!</span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="n">can</span> <span class="n">you</span> <span class="n">print</span> <span class="n">test</span> <span class="n">output</span> <span class="n">in</span> <span class="n">color</span> <span class="o">?</span> </span>
+</pre></div>
+</td></tr></table></div>
+        </div>
+        <div class="column">
+          <p style="text-align: center; margin:3px;">absolute score threshold(abs) = 100</p>
+          <p style="text-align: center; margin:3px;">relative score threshold(rel) = 0.5</p>
+          <table class="comp_table">
+            <tr>
+              <th class="center_cell">A</th>
+              <th class="center_cell">B</th>
+              <th>abs</th>
+              <th>rel</th>
+              <th>M1</th>
+              <th>M2</th>
+              <th>M3</th>
+              <th>M4</th>
+              <th>gap</th>
+              <th>miss</th>
+            </tr>
+            <tr>
+              <td class="center_cell">1 ~ 195</td>
+              <td class="center_cell">1 ~ 195</td>
+              <td>898</td>
+              <td>1.00</td>
+              <td>34</td>
+              <td>94</td>
+              <td>128</td>
+              <td>13</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </table>
+          <label class="btn" for="open-popup">go</label>
+          <input class="modal-state" id="open-popup" type="checkbox"/>
+          <div class="modal">
+            <label class="modal_bg" for="open-popup"/>
+            <div class="modal_inner"><div class="highlight"><pre><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span></span><span class="n">what</span><span class="err">&#39;</span><span class="n">s</span> <span class="n">going</span> <span class="n">on</span> <span class="k">this</span> <span class="n">project</span><span class="o">?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span></span><span class="n">what</span><span class="err">&#39;</span><span class="n">s</span> <span class="n">going</span> <span class="n">on</span> <span class="k">this</span> <span class="n">project</span><span class="o">?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">OBJECTIVE</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">OBJECTIVE</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">all</span> <span class="n">test</span> <span class="n">passed</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">all</span> <span class="n">test</span> <span class="n">passed</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">**</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">**</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">vim</span> <span class="n">session</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">vim</span> <span class="n">session</span> <span class="o">?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">how</span> <span class="n">to</span> <span class="n">press</span> <span class="o">&lt;</span><span class="n">F12</span><span class="o">&gt;</span> <span class="n">in</span> <span class="n">starting</span> <span class="n">vim</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">how</span> <span class="n">to</span> <span class="n">press</span> <span class="o">&lt;</span><span class="n">F12</span><span class="o">&gt;</span> <span class="n">in</span> <span class="n">starting</span> <span class="n">vim</span> <span class="o">?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="o">*</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="o">*</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//just input &#39;\n&#39; then segfault? wtf?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//just input &#39;\n&#39; then segfault? wtf?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">undefined</span> <span class="n">cmd</span> <span class="o">-&gt;</span> <span class="n">don</span><span class="err">&#39;</span><span class="n">t</span> <span class="n">fork</span> <span class="n">anything</span> <span class="n">but</span> <span class="n">just</span> <span class="n">filter</span> <span class="n">it</span><span class="p">.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">undefined</span> <span class="n">cmd</span> <span class="o">-&gt;</span> <span class="n">don</span><span class="err">&#39;</span><span class="n">t</span> <span class="n">fork</span> <span class="n">anything</span> <span class="n">but</span> <span class="n">just</span> <span class="n">filter</span> <span class="n">it</span><span class="p">.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">is</span> <span class="n">it</span> <span class="n">impossible</span> <span class="o">??</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">is</span> <span class="n">it</span> <span class="n">impossible</span> <span class="o">??</span> <span class="o">?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test1 //maybe...</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test1 //maybe...</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test2</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test2</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh need to deal with &#39;quit&#39; cmd</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh need to deal with &#39;quit&#39; cmd</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test3</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test3</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//do foreground job - how to test?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//do foreground job - how to test?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is it ok with bg jobs?  need to implement bg &amp; fg</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is it ok with bg jobs?  need to implement bg &amp; fg</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test4</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test4</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why it prints in arbitrary order?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why it prints in arbitrary order?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//because fork and execve echo. need to explicitly wait fg jobs..!</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//because fork and execve echo. need to explicitly wait fg jobs..!</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//t3,t4 test:</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//t3,t4 test:</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1. explicit wait test: sh never wait bg explicitly</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1. explicit wait test: sh never wait bg explicitly</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2. reaping test: use WNOHANG!</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2. reaping test: use WNOHANG!</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//can&#39;t use criterion. use my on test functions...</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//can&#39;t use criterion. use my on test functions...</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//now WRITE SIGNAL HANDLER.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//now WRITE SIGNAL HANDLER.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3. bg job allocation info output</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3. bg job allocation info output</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//[jobnum] (pid) cmdline</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//[jobnum] (pid) cmdline</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.why SEGFAULT occurred?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.why SEGFAULT occurred?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//&quot;\n&quot; 같은 거는 argv[0] = NULL이 들어가.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//&quot;\n&quot; 같은 거는 argv[0] = NULL이 들어가.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//5.why waiting explicitly? (in sigchld handler)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//5.why waiting explicitly? (in sigchld handler)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//jobs command error.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//jobs command error.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//아마 WNOHANG을 안 쓰므로 다 기다린다고 그러는 것이다...</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//아마 WNOHANG을 안 쓰므로 다 기다린다고 그러는 것이다...</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use different loop.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use different loop.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//using WNOHANG waitpid. but..</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//using WNOHANG waitpid. but..</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//need to implement joblist and operations.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//need to implement joblist and operations.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use jobs! that will be work!</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use jobs! that will be work!</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use git branch! it would be slightly dangerous..!</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//use git branch! it would be slightly dangerous..!</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="mf">6.</span><span class="n">eval</span><span class="p">(</span> <span class="s">&quot;&amp;&quot;</span> <span class="p">)</span> <span class="n">is</span> <span class="n">exceptional</span><span class="p">.</span> <span class="c1">// is it ok?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="mf">6.</span><span class="n">eval</span><span class="p">(</span> <span class="s">&quot;&amp;&quot;</span> <span class="p">)</span> <span class="n">is</span> <span class="n">exceptional</span><span class="p">.</span> <span class="c1">// is it ok?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test5</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test5</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//job list</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//job list</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//addjob</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//addjob</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//if jobs are full? : job won&#39;t be allocated. already implemented.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//if jobs are full? : job won&#39;t be allocated. already implemented.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//delete job when job process terminated. using sigchld_handler</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//delete job when job process terminated. using sigchld_handler</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why [0] job never deleted??</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why [0] job never deleted??</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change sigchld_handler... using jobs array.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change sigchld_handler... using jobs array.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change fg reaping test(use jobs too)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change fg reaping test(use jobs too)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is fg reaped correctly?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is fg reaped correctly?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is fg job in jobs deleted?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//is fg job in jobs deleted?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when eval, add job into jobs.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when eval, add job into jobs.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">more</span> <span class="n">state</span> <span class="n">job</span> <span class="n">operations</span><span class="p">.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">more</span> <span class="n">state</span> <span class="n">job</span> <span class="n">operations</span><span class="p">.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//FG</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//FG</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">ST</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">ST</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//func: deleteAllJobs</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//func: deleteAllJobs</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//func: isAllZero</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//func: isAllZero</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when child terminated, del child from jobs.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when child terminated, del child from jobs.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//FG</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//FG</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; jobs   (interface)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; jobs   (interface)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement jobs command actually!</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement jobs command actually!</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//it&#39;s already implemented, but error: by sigchld_handler code</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//it&#39;s already implemented, but error: by sigchld_handler code</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//deleteAllJobs jobs기준으로 sigchld handler에서 job을 삭제한다면</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//deleteAllJobs jobs기준으로 sigchld handler에서 job을 삭제한다면</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//이 함수 사용시 문제가 생길 수 있다.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//이 함수 사용시 문제가 생길 수 있다.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//**sigchld_handler 변경으로 인해 고쳐질 수 있는 현상(테스트)들</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//**sigchld_handler 변경으로 인해 고쳐질 수 있는 현상(테스트)들</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//t3, t4는 eval만 가지고는 테스트할 수 없다.. 유닛테스트가 아냐.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//t3, t4는 eval만 가지고는 테스트할 수 없다.. 유닛테스트가 아냐.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//trace04: print echo ouptuts in no delay(delay after first echo)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//trace04: print echo ouptuts in no delay(delay after first echo)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//trace05: command jobs actually prints jobs.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//trace05: command jobs actually prints jobs.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//utest: (crash test)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//utest: (crash test)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test6</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test6</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement sigint_handler.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement sigint_handler.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//don&#39;t die</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//don&#39;t die</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg job.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg job.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg job only</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg job only</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill ONLY fg job. not bg jobs.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill ONLY fg job. not bg jobs.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//-&gt; delete fg job from jobs.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//-&gt; delete fg job from jobs.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg only test: test08 passed. but it actually didn&#39;t work!</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//kill fg only test: test08 passed. but it actually didn&#39;t work!</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//need manual test.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//need manual test.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(ex)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(ex)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./tsh</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./tsh</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50 &amp;</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50 &amp;</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50 &amp;</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50 &amp;</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./myspin 50</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//C^</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//C^</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./jobs</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//./jobs</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//then all jobs are gone! wtf?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//then all jobs are gone! wtf?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when no fg job run, then C^ must never work.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//when no fg job run, then C^ must never work.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">why</span> <span class="n">test08</span> <span class="n">is</span> <span class="n">a</span> <span class="nb">false</span> <span class="n">test</span> <span class="o">??</span> <span class="o">?</span> <span class="n">why</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">why</span> <span class="n">test08</span> <span class="n">is</span> <span class="n">a</span> <span class="nb">false</span> <span class="n">test</span> <span class="o">??</span> <span class="o">?</span> <span class="n">why</span> <span class="o">?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test7</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test7</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//impl sigint_handler</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//impl sigint_handler</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test8</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test8</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement sigstop_handler</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//implement sigstop_handler</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//now fg --stop--&gt; st: then no more explicit waiting.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//now fg --stop--&gt; st: then no more explicit waiting.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1- change state in jobs.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1- change state in jobs.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2- check fg is in job list? at fg waiting loop in eval</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2- check fg is in job list? at fg waiting loop in eval</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test9</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test9</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// doBgFg access critical section.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// doBgFg access critical section.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// but... have to block signals??</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// but... have to block signals??</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// 만일 프로세스가 죽었는데 jobs에서 찾는다면?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// 만일 프로세스가 죽었는데 jobs에서 찾는다면?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// 안 나오고 INVALID_PID가 뜨겠지.. 그럼 된 거 아냐?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">// 안 나오고 INVALID_PID가 뜨겠지.. 그럼 된 거 아냐?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">implement</span> <span class="n">bg</span> <span class="n">builtin</span> <span class="o">-</span> <span class="n">command</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">implement</span> <span class="n">bg</span> <span class="n">builtin</span> <span class="o">-</span> <span class="n">command</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//cmd bg interface</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//cmd bg interface</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//1.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg &#39;\0&#39;</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg &#39;\0&#39;</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg command requires PID or %jobid argument</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg command requires PID or %jobid argument</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//2.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg ^^tg</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg ^^tg</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg: argument must be a PID or %jobid</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg: argument must be a PID or %jobid</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg -231</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg -231</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg: argument must be a PID or %jobid</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg: argument must be a PID or %jobid</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3.1.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3.1.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg %asd</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg %asd</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//%asd: No such job</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//%asd: No such job</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg %123</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg %123</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//%123: No such job</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//%123: No such job</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3.2.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//3.2.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg 0</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg 0</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(0): No such process</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(0): No such process</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg 123</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//tsh&gt; bg 123</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(123): No such process</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(123): No such process</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.1</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.1</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//succes jobid</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//succes jobid</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.2</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//4.2</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//succes pid</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//succes pid</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//go futehr: success bg case. ST -&gt; BG</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//go futehr: success bg case. ST -&gt; BG</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change target job in jobs</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//change target job in jobs</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//send signal to target job(real thing!) // need to t9 test.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//send signal to target job(real thing!) // need to t9 test.</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg interface</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg interface</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg real thing</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg real thing</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG -&gt; FG  : fg command</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//BG -&gt; FG  : fg command</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ST -&gt; FG  : fg command</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ST -&gt; FG  : fg command</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">/*</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">/*</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">do_bgfg</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">do_bgfg</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">  synchronization error?(in utest)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">  synchronization error?(in utest)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 1:bg \n&quot;)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 1:bg \n&quot;)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;bg \n&quot;)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;bg \n&quot;)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 2:bg xt\n&quot;)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 2:bg xt\n&quot;)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 3:bg \n&quot;)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    eval(&quot;/bin/echo 3:bg \n&quot;)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">  result:</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">  result:</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    1:bg</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    1:bg</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    2:bg xt</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    2:bg xt</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    3:bg</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    3:bg</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    bg command requires PID or %jobid argument</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">    bg command requires PID or %jobid argument</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">*/</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="cm">*/</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="o">*</span> <span class="n">fix</span> <span class="n">Makefile</span> <span class="o">----</span> <span class="o">%</span> <span class="n">d</span><span class="o">----</span> <span class="n">reflect</span> <span class="nb">true</span> <span class="n">test</span> <span class="n">number</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="o">*</span> <span class="n">fix</span> <span class="n">Makefile</span> <span class="o">----</span> <span class="o">%</span> <span class="n">d</span><span class="o">----</span> <span class="n">reflect</span> <span class="nb">true</span> <span class="n">test</span> <span class="n">number</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test10</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test10</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//sending SIGINT to just one process didn&#39;t work?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//sending SIGINT to just one process didn&#39;t work?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//no, it works! is it build error???</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//no, it works! is it build error???</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test11</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test11</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ok..</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ok..</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test12</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test12</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ok..</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ok..</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test13</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test13</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg %1 ST -&gt; BG but it doesn&#39;t run?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg %1 ST -&gt; BG but it doesn&#39;t run?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why it doesn&#39;t exit?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//why it doesn&#39;t exit?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//because the child of child isn&#39;t run again?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//because the child of child isn&#39;t run again?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//maybe..?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//maybe..?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test14</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test14</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//minor fix turn!</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//minor fix turn!</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//Execve error to shell error</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//Execve error to shell error</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg a</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//fg a</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg a</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//bg a</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//argument must be a PID or %jobid</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//argument must be a PID or %jobid</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//rewrite do_bgfg output</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//rewrite do_bgfg output</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(jid valid! -&gt; ...)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//(jid valid! -&gt; ...)</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test15</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//test15</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test16</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">test16</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">why</span> <span class="n">wait</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">why</span> <span class="n">wait</span> <span class="o">?</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">mt</span> <span class="n">own</span> <span class="n">tiny</span> <span class="n">tester</span> <span class="n">library</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">mt</span> <span class="n">own</span> <span class="n">tiny</span> <span class="n">tester</span> <span class="n">library</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ASSERT</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ASSERT</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ASSERT_EQ</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="c1">//ASSERT_EQ</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">maybe</span> <span class="n">I</span> <span class="n">can</span> <span class="n">check</span> <span class="n">job</span> <span class="n">list</span><span class="p">..</span> <span class="n">to</span> <span class="n">test</span> <span class="n">something</span> <span class="o">-&gt;</span> <span class="n">code</span> <span class="n">it</span><span class="o">!</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="n">maybe</span> <span class="n">I</span> <span class="n">can</span> <span class="n">check</span> <span class="n">job</span> <span class="n">list</span><span class="p">..</span> <span class="n">to</span> <span class="n">test</span> <span class="n">something</span> <span class="o">-&gt;</span> <span class="n">code</span> <span class="n">it</span><span class="o">!</span> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="n">can</span> <span class="n">you</span> <span class="n">print</span> <span class="n">test</span> <span class="n">output</span> <span class="n">in</span> <span class="n">color</span> <span class="o">?</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(21,8,191,0.25); width:100%; float:left;"><span class="o">*</span> <span class="n">can</span> <span class="n">you</span> <span class="n">print</span> <span class="n">test</span> <span class="n">output</span> <span class="n">in</span> <span class="n">color</span> <span class="o">?</span> </span> </span>
+
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"> </span></pre></div><label class="modal_close" for="open-popup"/></div>
+          </div>
+          <script src="../js/sort_table.js"> </script>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
