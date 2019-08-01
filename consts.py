@@ -4,7 +4,7 @@ from pathlib import Path
 from collections import namedtuple
 
 import fp
-import futils as fu
+import file_utils as fu
 
 def args():
     parser = argparse.ArgumentParser(description='CloneCop Visalization program')

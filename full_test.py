@@ -5,7 +5,7 @@ from collections import namedtuple
 import re
 
 import funcy as F
-import futils as fu
+import file_utils as fu
 import fp
 import main
 

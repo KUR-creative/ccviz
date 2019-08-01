@@ -10,7 +10,7 @@ from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
 
 import fp
-import futils as fu
+import file_utils as fu
 import html_utils as hu
 
 Code = namedtuple('Code', 'proj fidx fpath text')
