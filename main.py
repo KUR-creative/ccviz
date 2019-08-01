@@ -8,7 +8,6 @@ import funcy as F
 import re
 import fp
 import sys
-import zipfile
 #from pprint import pprint
 
 import os
@@ -17,60 +16,15 @@ import pygments #import highlight
 from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
 
+import consts
 
 #--------------------------------------------------------------------------------------
 def main(args=None):
-    if args is None:
-        import argparse
-        parser = argparse.ArgumentParser(description='CloneCop Visalization program')
-
-        parser.add_argument('input_zip', help='Compressed zip file from CloneCop')
-        parser.add_argument('-o', '--output_directory', 
-            help="Output directory name. If specified directory isn't exists, then create it.")
-        parser.add_argument('-a', '--absolute_score_threshold',
-            help=("Only matches with absolute score higher than threshold are visualized. "
-                 +"default threshold = 100"),
-            type=int, default=100)
-        parser.add_argument('-r', '--relative_score_threshold',
-            help=("Only matches with relative score higher than threshold are visualized. "
-                 +"default threshold = 0.5"),
-            type=float, default=0.5)
-        args = parser.parse_args()
-
-    #--------------------------------------------------------------------------------------
-    TARGET_ZIP = args.input_zip
-    INPUT_DIR  = Path('UNZIPPED') / Path(TARGET_ZIP).stem
-    with zipfile.ZipFile(TARGET_ZIP) as zf:
-        zf.extractall(INPUT_DIR)
-
-    TARGET_CARS = fp.go(
-        INPUT_DIR / 'Alignment',
-        fu.children,
-        fp.lmap(lambda p: Path(p).name),
-        sorted
-    )
-    OUTPUT_ROOT = (Path(args.output_directory) if args.output_directory
-                   else Path('OUT', str(Path(INPUT_DIR).name)))
-    OUTPUT_DIRS = fp.lmap(
-        lambda p: OUTPUT_ROOT / Path(p).stem,
-        TARGET_CARS
+    # global constant data
+    gdat = consts.consts(
+        args if args else consts.args()
     )
 
-    print('wtf',OUTPUT_DIRS)
-    CONFIG = fp.go(
-        INPUT_DIR / 'config.ini',
-        fu.read_text,
-        lambda s: s.split('\n'),
-        fp.filter(lambda s: '[' not in s and len(s) != 0),
-        fp.map(lambda s: s.split('=')),
-        fp.lmap(fp.lmap(lambda s: s.strip()))
-    )
-    #print(CONFIG)
-
-    ABS_THRESHOLD = args.absolute_score_threshold
-    REL_THRESHOLD = args.relative_score_threshold
-
-    #=================================================================
     @F.autocurry
     def copy_fixed(output_dir, ftype):
         os.makedirs(Path(output_dir,ftype),exist_ok=True)
@@ -115,11 +69,11 @@ def main(args=None):
 
 
     #=================================================================
-    fu.write_text(Path(OUTPUT_ROOT,'index.html'), document_str(
+    fu.write_text(Path(gdat.OUTPUT_ROOT,'index.html'), document_str(
         [
             link(rel="stylesheet", 
                  href=fp.go(
-                     TARGET_CARS[0],
+                     gdat.TARGET_CARS[0],
                      lambda p: Path(p).stem,
                      lambda s: Path(s, 'css', 'index.css'),
                      lambda p: str(p))),
@@ -136,7 +90,7 @@ def main(args=None):
                         car2btn_name(p.parts[-2]) # car stem
                     ] 
                 ),
-                TARGET_CARS
+                gdat.TARGET_CARS
             )
         )
         ]).format(
@@ -145,7 +99,7 @@ def main(args=None):
             Viz='<span style="color: red;">Viz</span>'
         ))
 
-    for TARGET_CAR,OUTPUT_DIR in zip(TARGET_CARS,OUTPUT_DIRS):
+    for TARGET_CAR,OUTPUT_DIR in zip(gdat.TARGET_CARS,gdat.OUTPUT_DIRS):
         print('Processing on {}...'.format(TARGET_CAR))
         fp.foreach(copy_fixed(OUTPUT_DIR), ['css','js'])
         #=================================================================
@@ -222,10 +176,10 @@ def main(args=None):
             match_id = 'open-popup'
             return [
                 h('p',style='text-align: center; margin:3px;')[ 
-                    'absolute score threshold(abs) = {}'.format(ABS_THRESHOLD),
+                    'absolute score threshold(abs) = {}'.format(gdat.ABS_THRESHOLD),
                 ],
                 h('p',style='text-align: center; margin:3px;')[ 
-                    'relative score threshold(rel) = {}'.format(REL_THRESHOLD),
+                    'relative score threshold(rel) = {}'.format(gdat.REL_THRESHOLD),
                 ],
                 h('table', class_='comp_table', children=[header] + data),
                 popup_btn(match_id, 'go'),
@@ -291,7 +245,7 @@ def main(args=None):
         #-----------------------------------------------------------------
         import json
         read_json = fp.pipe(fu.read_text, json.loads)
-        root_dir = Path(INPUT_DIR)
+        root_dir = Path(gdat.INPUT_DIR)
         car_dict = read_json(root_dir / 'Alignment' / TARGET_CAR)
 
         @F.curry
@@ -340,7 +294,7 @@ def main(args=None):
             F.last,
             fp.starmap(MatchStat),
             fp.lfilter(
-                lambda s: s.abs_score >= ABS_THRESHOLD and s.rel_score >= REL_THRESHOLD
+                lambda s: s.abs_score >= gdat.ABS_THRESHOLD and s.rel_score >= gdat.REL_THRESHOLD
             )
         )
 
@@ -348,7 +302,7 @@ def main(args=None):
         rel_scores = fp.lmap(F.second, match_stats)
         match_pairs = fp.lfilter(
             fp.tup(
-                lambda m,_: m.abs_score >= ABS_THRESHOLD and m.rel_score >= REL_THRESHOLD
+                lambda m,_: m.abs_score >= gdat.ABS_THRESHOLD and m.rel_score >= gdat.REL_THRESHOLD
             ),
             zip(fp.lmap(match('A'), raw_A_ms, abs_scores, rel_scores), 
                 fp.lmap(match('B'), raw_B_ms, abs_scores, rel_scores))

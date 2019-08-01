@@ -14,7 +14,6 @@ Args = namedtuple(
     'Args', 
     'input_zip output_directory absolute_score_threshold relative_score_threshold')
 
-'''
 try:
     shutil.rmtree('./fixture/0.2.0')
 except FileNotFoundError as e:
@@ -37,7 +36,6 @@ for viz_in,viz_out in [
         absolute_score_threshold=100,
         relative_score_threshold=0.5
     ))
-'''
 
 # https://stackoverflow.com/questions/7543818/regex-javascript-to-match-both-rgb-and-rgba
 rgba_regex = re.compile(
