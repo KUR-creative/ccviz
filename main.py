@@ -403,13 +403,5 @@ def main(args=None):
             pages.overview.page(
                 match_pair_dic, match_name_pairs, unique_match_pairs, html_paths
             ))
-
-        '''
-        #=================================================================
-        fu.write_text(Path(OUTPUT_DIR,'compare2bi.html'), document_str([], [
-            h1('compare2bi page'),
-            h('a',href='matching.html')['goto matching'],
-        ]))
-        '''
 if __name__ == '__main__':
     main()
