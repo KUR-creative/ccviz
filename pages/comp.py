@@ -10,7 +10,6 @@ import funcy as F
 import fp
 import data
 import html_utils as hu
-from . import common_fns as cf
 
 def popup_btn(match_id, content):
     return h('label', class_='btn', for_=match_id)[content]
@@ -106,7 +105,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
 
 def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
     ''' combine srcA, srcB into one html string '''
-    return cf.document_str(
+    return hu.document_str(
     [
         meta(name="viewport", content="width=device-width, initial-scale=1"),
         link(rel="stylesheet", href='../css/viz1.css'), # comps/x.html

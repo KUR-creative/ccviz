@@ -5,7 +5,7 @@ from pathlib import Path
 from hyperpython import h, h1, div, link
 
 import fp
-from . import common_fns as cf
+import html_utils as hu
 
 def car2btn_name(car_stem):
     target,depth = str(car_stem).split('-')
@@ -14,7 +14,7 @@ def car2btn_name(car_stem):
     ])
 
 def page(gdat):
-    return cf.document_str(
+    return hu.document_str(
     [
         link(rel="stylesheet", 
              href=fp.go(

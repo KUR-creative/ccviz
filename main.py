@@ -9,7 +9,6 @@ from pygments.formatters import HtmlFormatter
 
 import fp
 import futils as fu
-
 import data
 import consts
 import pages.index, pages.overview, pages.comp

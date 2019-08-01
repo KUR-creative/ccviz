@@ -5,7 +5,7 @@ import funcy as F
 from hyperpython import h, h1, h2, p, div, link
 
 import fp
-from . import common_fns as cf
+import html_utils as hu
 
 def match_link(href, content):
     return h('a',href=href)[content]
@@ -32,7 +32,7 @@ def page(comp_data):
     unique_match_pairs = comp_data.unique_match_pairs
     html_paths = comp_data.html_paths
 
-    return cf.document_str(
+    return hu.document_str(
         [
             link(rel="stylesheet", href="css/overview.css"),
             link(rel="stylesheet", href='css/table.css'),
