@@ -25,7 +25,6 @@ def link_row(match_pair_dic, name_pair, match_pair, href, content):
         h('td',class_='center_cell')[match_link(href,content)],
     ]
 
-#def page(match_pair_dic, match_name_pairs, unique_match_pairs, html_paths):
 def page(comp_data):
     match_pair_dic = comp_data.match_pair_dic
     match_name_pairs = comp_data.match_name_pairs

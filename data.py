@@ -32,14 +32,12 @@ def match(proj, raw_match, abs_score, rel_score):
         proj, file_idx - 1, func_name, beg - 1, end, abs_score, rel_score
     )
 
-#--------------------------------------------------------------------------------------
 def x_id(match_or_code):
     return (match_or_code.proj, match_or_code.fidx)
 def ab_fidx(codeA_codeB): 
     a,b = codeA_codeB
     return (a.fidx, b.fidx)
 
-#--------------------------------------------------------------------------------------
 def rand_html_color(alpha=0.25):
     import random
     r = lambda: random.randint(0,255)
@@ -98,7 +96,6 @@ def emphasize(code_dic,match_pair_dic, codeA,codeB):
     return (srcA.replace(preA, '\n'.join(linesA)),
             srcB.replace(preB, '\n'.join(linesB)))
 
-#--------------------------------------------------------------------------------------
 def comp_data(gdat, car_dict):
     @F.curry
     def raw2real(root_path, descendant):
@@ -174,4 +171,3 @@ def comp_data(gdat, car_dict):
         html_paths = html_paths,
     )
     return namedtuple('Data', dic.keys())(**dic)
-

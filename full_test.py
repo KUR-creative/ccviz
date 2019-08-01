@@ -41,8 +41,8 @@ for viz_in,viz_out in [
 rgba_regex = re.compile(
     "background-color:rgba?\(((25[0-5]|2[0-4]\d|1\d{1,2}|\d\d?)\s*,\s*?){2}(25[0-5]|2[0-4]\d|1\d{1,2}|\d\d?)\s*,?\s*([01]\.?\d*?)?\);"
 )
+
 # Compare outputs and fixture
-#'./fixture/0.1.0/arm/out/',
 txt_lines_list = fp.pipe(
     fu.descendants,
     fu.human_sorted,

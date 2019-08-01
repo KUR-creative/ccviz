@@ -55,9 +55,8 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
             ('{} ~ {}'.format(rA.beg,rA.end), 
              '{} ~ {}'.format(rB.beg,rB.end))
         ),
-        fp.lmap(fp.lmap( #TODO: 그냥 map 가능?
+        fp.map(fp.lmap(
             lambda s: h('td', class_='center_cell')[s]
-            #lambda s: h('td')[s]
         )),
     )
 
@@ -85,7 +84,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         )),
     )
     #-----------------------------------------------------
-    rows = fp.lstarmap(#TODO: 그냥 starmap 가능?
+    rows = fp.lstarmap(
         lambda i,s: h('tr')[i + s],
         zip(range_infos, match_stats)
     )
@@ -155,7 +154,7 @@ def temp_match_view(eA,eB):
         lambda s: '<div class="highlight"><pre>' + s + '</pre></div>'
     )
 
-def page(gdat, comp_data): # 
+def page(gdat, comp_data):
     emphasized_AB = comp_data.emphasized_AB
     unique_match_pairs = comp_data.unique_match_pairs
     A_srcpaths = comp_data.A_srcpaths
