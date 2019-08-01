@@ -155,14 +155,14 @@ def temp_match_view(eA,eB):
         lambda s: '<div class="highlight"><pre>' + s + '</pre></div>'
     )
 
-def page(gdat, cdat):
-    emphasized_AB = cdat.emphasized_AB
-    unique_match_pairs = cdat.unique_match_pairs
-    A_srcpaths = cdat.A_srcpaths
-    B_srcpaths = cdat.B_srcpaths
-    match_pair_dic = cdat.match_pair_dic
-    match_stat_dic = cdat.match_stat_dic
-    html_paths = cdat.html_paths
+def page(gdat, comp_data): # 
+    emphasized_AB = comp_data.emphasized_AB
+    unique_match_pairs = comp_data.unique_match_pairs
+    A_srcpaths = comp_data.A_srcpaths
+    B_srcpaths = comp_data.B_srcpaths
+    match_pair_dic = comp_data.match_pair_dic
+    match_stat_dic = comp_data.match_stat_dic
+    html_paths = comp_data.html_paths
 
     comp_htmls = []
     for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs), 
