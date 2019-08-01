@@ -2,7 +2,7 @@ import os,sys
 sys.path.append( os.path.abspath('..') )
 
 import funcy as F
-from hyperpython import h, h1, h2, p, div,  link
+from hyperpython import h, h1, h2, p, div, link
 
 import fp
 from . import common_fns as cf

@@ -2,12 +2,13 @@ import os,sys
 sys.path.append( os.path.abspath('..') )
 
 from tqdm import tqdm
-from hyperpython import h, h1, h2, p, div, link, meta
+from hyperpython import h, div, link, meta
 from pathlib import Path
+
+import funcy as F
 
 import fp
 import data
-import funcy as F
 import html_utils as hu
 from . import common_fns as cf
 

@@ -1,26 +1,31 @@
 # -*- coding: utf-8 -*-
-#TODO: unify A/B pair variable name style!
-import json
-from tqdm import tqdm
-from itertools import product
-from pathlib import Path
-import futils as fu
-import html_utils as hu
-from hyperpython import h, h1, h2, p, meta, link, div, br, span
-import funcy as F
-import fp
-import sys
-
-from pygments.lexers import CppLexer
-from pygments.formatters import HtmlFormatter
-#from pprint import pprint
-
 import os
 import shutil
+import json
+from pathlib import Path
 
+from tqdm import tqdm
+from pygments.formatters import HtmlFormatter
+
+import fp
+import futils as fu
+
+import data
 import consts
 import pages.index, pages.overview, pages.comp
-import data
+
+def copy_fixed(output_dir, ftype=None):
+    if ftype:
+        os.makedirs(Path(output_dir,ftype),exist_ok=True)
+        src_dir = Path('fixed_'+ftype)
+        dst_dir = Path(output_dir, ftype)
+        fnames = os.listdir(src_dir)
+        srcs = fp.lmap(lambda c: src_dir / c, fnames)
+        dsts = fp.lmap(lambda c: dst_dir / c, fnames)
+        for src,dst in zip(srcs,dsts):
+            shutil.copyfile(src,dst)
+    else:
+        return lambda ftype: copy_fixed(output_dir,ftype)
 
 def main(args=None):
     # global (constant) data
@@ -33,17 +38,6 @@ def main(args=None):
         Path(gdat.OUTPUT_ROOT,'index.html'), 
         pages.index.page(gdat)
     )
-
-    @F.autocurry
-    def copy_fixed(output_dir, ftype):
-        os.makedirs(Path(output_dir,ftype),exist_ok=True)
-        src_dir = Path('fixed_'+ftype)
-        dst_dir = Path(output_dir, ftype)
-        fnames = os.listdir(src_dir)
-        srcs = fp.lmap(lambda c: src_dir / c, fnames)
-        dsts = fp.lmap(lambda c: dst_dir / c, fnames)
-        for src,dst in zip(srcs,dsts):
-            shutil.copyfile(src,dst)
 
     for TARGET_CAR,OUTPUT_DIR in zip(gdat.TARGET_CARS,gdat.OUTPUT_DIRS):
         # Copy fixed css,js scripts

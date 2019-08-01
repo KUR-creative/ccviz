@@ -1,3 +1,4 @@
+#TODO: unify A/B pair variable name style!
 from collections import namedtuple
 from pathlib import Path
 import json
