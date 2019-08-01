@@ -17,6 +17,7 @@ from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
 
 import consts
+import pages.index
 
 #--------------------------------------------------------------------------------------
 def main(args=None):
@@ -29,7 +30,7 @@ def main(args=None):
     def copy_fixed(output_dir, ftype):
         os.makedirs(Path(output_dir,ftype),exist_ok=True)
         src_dir = Path('fixed_'+ftype)
-        dst_dir = Path(OUTPUT_DIR, ftype)
+        dst_dir = Path(output_dir, ftype)
         fnames = os.listdir(src_dir)
         srcs = fp.lmap(lambda c: src_dir / c, fnames)
         dsts = fp.lmap(lambda c: dst_dir / c, fnames)
@@ -59,45 +60,11 @@ def main(args=None):
             ]
         ]
 
-    def car2btn_name(car_stem):
-        target,depth = str(car_stem).split('-')
-        return h('p', style='text-align: center;', children=[
-            '{}'.format(target), h('br'), 'depth : {}'.format(depth)
-        ])
-        
     #=================================================================
-
-
-    #=================================================================
-    fu.write_text(Path(gdat.OUTPUT_ROOT,'index.html'), document_str(
-        [
-            link(rel="stylesheet", 
-                 href=fp.go(
-                     gdat.TARGET_CARS[0],
-                     lambda p: Path(p).stem,
-                     lambda s: Path(s, 'css', 'index.css'),
-                     lambda p: str(p))),
-        ], 
-        [
-        h1('{C}lone{C2}op {Viz}ualization', 
-            style='text-align: center; margin-top: 10%; font-size: 4em'),
-        div(style='text-align: center;',
-            children=fp.lmap(
-                fp.pipe(
-                    lambda p: Path(p).stem,
-                    lambda p: Path(p) / 'overview.html',
-                    lambda p: h('a', class_='btn', href=str(p))[ 
-                        car2btn_name(p.parts[-2]) # car stem
-                    ] 
-                ),
-                gdat.TARGET_CARS
-            )
-        )
-        ]).format(
-            C='<span style="color: red;">C</span>',
-            C2='<span style="color: red;">C</span>',
-            Viz='<span style="color: red;">Viz</span>'
-        ))
+    fu.write_text(
+        Path(gdat.OUTPUT_ROOT,'index.html'), 
+        pages.index.page(gdat)
+    )
 
     for TARGET_CAR,OUTPUT_DIR in zip(gdat.TARGET_CARS,gdat.OUTPUT_DIRS):
         print('Processing on {}...'.format(TARGET_CAR))
