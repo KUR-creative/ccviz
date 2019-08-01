@@ -19,8 +19,8 @@ from pygments.formatters import HtmlFormatter
 
 
 #--------------------------------------------------------------------------------------
-def main(args, call_itself=False):
-    if call_itself:
+def main(args=None):
+    if args is None:
         import argparse
         parser = argparse.ArgumentParser(description='CloneCop Visalization program')
 
@@ -535,4 +535,4 @@ def main(args, call_itself=False):
         ]))
         '''
 if __name__ == '__main__':
-    main(args, call_itself=True)
+    main()
