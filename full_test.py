@@ -1,3 +1,4 @@
+import shutil
 import difflib
 
 text1 = """Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer
@@ -33,14 +34,14 @@ from pathlib import Path
 mvm_in  = './fixture/0.1.0/mvm/164.125.34.91_2019-07-31-15-56-26.zip'
 mvm_out = './fixture/0.2.0/mvm/out'
 
-from collections import namedtuple
-Args = namedtuple('Args', 'input_zip output_directory absolute_score_threshold relative_score_threshold')
-args = Args(
-    input_zip=str(mvm_in),
-    output_directory=str(mvm_out),
-    absolute_score_threshold=100,
-    relative_score_threshold=0.5
-)
+try:
+    shutil.rmtree('./fixture/0.2.0')
+except FileNotFoundError as e:
+    print(e)
+try:
+    shutil.rmtree('./UNZIPPED/')
+except FileNotFoundError as e:
+    print(e)
 
 import main
 main.main(args)
