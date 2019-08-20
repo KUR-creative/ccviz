@@ -27,7 +27,19 @@ def page(gdat):
     h1('{C}lone{C2}op {Viz}ualization', 
         style='text-align: center; margin-top: 10%; font-size: 4em'),
     div(style='text-align: center;',
-        children=fp.lmap(
+        children= [
+            h('table',style='margin-left:auto; \
+                             margin-right:auto;\
+                             margin-bottom:20px;')[
+                h('tbody', children=[
+                        h('tr')[ h('th')['config var'], h('th')['value'] ] 
+                    ] + fp.lstarmap(
+                        lambda k,v: h('tr')[ h('td')[k], h('td')[v] ],
+                        gdat.CONFIG
+                    )
+                )
+            ]
+        ] + fp.lmap(
             fp.pipe(
                 lambda p: Path(p).stem,
                 lambda p: Path(p) / 'overview.html',

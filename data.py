@@ -13,14 +13,16 @@ import fp
 import file_utils as fu
 import html_utils as hu
 
-Code = namedtuple('Code', 'proj fidx fpath text')
-Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score') # TODO: rm score
-MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
-
 def highlight(src, linenos='table'):
     return pygments.highlight(
         src, CppLexer(), HtmlFormatter(linenos=linenos)
     )
+def highlight_css(style_def='.highlight'):
+    return HtmlFormatter().get_style_defs(style_def)
+
+Code = namedtuple('Code', 'proj fidx fpath text')
+Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score') # TODO: rm score
+MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
 @F.autocurry
 def code(proj, fidx, fpath):
