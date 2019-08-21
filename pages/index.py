@@ -51,7 +51,7 @@ def page(gdat):
         )
     )
     ]).format(
-        C='<span style="color: red;">C</span>',
-        C2='<span style="color: red;">C</span>',
-        Viz='<span style="color: red;">Viz</span>'
+        C  ='<span style="color: #d73a4a;">C</span>',
+        C2 ='<span style="color: #d73a4a;">C</span>',
+        Viz='<span style="color: #d73a4a;">Viz</span>'
     )
