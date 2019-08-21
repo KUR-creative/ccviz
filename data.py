@@ -172,6 +172,7 @@ def comp_data(gdat, car_dict):
         match_pair_dic = match_pair_dic,
         match_name_pairs = match_name_pairs,
         html_paths = html_paths,
+        code_dic = code_dic
     )
     print('----------------------')
     print(code_dic['A',0].raw)

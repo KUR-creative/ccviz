@@ -162,11 +162,15 @@ def page(gdat, comp_data):
     match_pair_dic = comp_data.match_pair_dic
     match_stat_dic = comp_data.match_stat_dic
     html_paths = comp_data.html_paths
+    code_dic = comp_data.code_dic
 
     comp_htmls = []
     for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs), 
                                 total=len(unique_match_pairs),
                                 desc='   generate htmls'):
+        rA = code_dic[mA.proj, mA.fidx].raw
+        rB = code_dic[mB.proj, mB.fidx].raw
+        print(rA, rB)
         Ainfo = h('h2')[ 'A: ' + Path(A_srcpaths[mA.fidx]).name ]
         Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
         table_info = h('h2')[ 'Result Table' ]
