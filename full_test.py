@@ -51,9 +51,9 @@ txt_lines_list = fp.pipe(
     fp.lmap(lambda s: s.splitlines()),
 )
 
-print('mvm eq?',  (txt_lines_list('./fixture/answers/mvm/out/') 
-                == txt_lines_list('./fixture/0.2.0/mvm/')))
-print('arm eq?',  (txt_lines_list('./fixture/answers/arm/out/') 
-                == txt_lines_list('./fixture/0.2.0/arm/')))
-print('mvs eq?',  (txt_lines_list('./fixture/answers/mvs/out/') 
-                == txt_lines_list('./fixture/0.2.0/mvs/')))
+print('mvm eq?  [',  (txt_lines_list('./fixture/answers/mvm/out/') 
+                   == txt_lines_list('./fixture/0.2.0/mvm/')), ']')
+print('arm eq?  [',  (txt_lines_list('./fixture/answers/arm/out/') 
+                   == txt_lines_list('./fixture/0.2.0/arm/')), ']')
+print('mvs eq?  [',  (txt_lines_list('./fixture/answers/mvs/out/') 
+                   == txt_lines_list('./fixture/0.2.0/mvs/')), ']')
