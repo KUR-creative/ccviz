@@ -28,6 +28,8 @@ for viz_in,viz_out in [
     './fixture/0.2.0/mvm'),
     ('./fixture/answers/arm/164.125.34.91_2019-07-31-15-47-54.zip',
     './fixture/0.2.0/arm'),
+    ('./fixture/answers/arm9vs11/164.125.34.91_2019-08-21-14-27-04.zip',
+    './fixture/0.2.0/arm9vs11'),
     ('./fixture/answers/mvs/164.125.34.91_2019-07-31-15-58-01.zip',
     './fixture/0.2.0/mvs')]:
     main.main(Args(
@@ -51,6 +53,8 @@ txt_lines_list = fp.pipe(
     fp.lmap(lambda s: s.splitlines()),
 )
 
+print('mvm eq?  [',  (txt_lines_list('./fixture/answers/arm9vs11/out/') 
+                   == txt_lines_list('./fixture/0.2.0/arm9vs11/')), ']')
 print('mvm eq?  [',  (txt_lines_list('./fixture/answers/mvm/out/') 
                    == txt_lines_list('./fixture/0.2.0/mvm/')), ']')
 print('arm eq?  [',  (txt_lines_list('./fixture/answers/arm/out/') 
