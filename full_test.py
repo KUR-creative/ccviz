@@ -24,11 +24,11 @@ except FileNotFoundError as e:
     print(e)
 
 for viz_in,viz_out in [
-    ('./fixture/0.1.0/mvm/164.125.34.91_2019-07-31-15-56-26.zip', 
+    ('./fixture/answers/mvm/164.125.34.91_2019-07-31-15-56-26.zip', 
     './fixture/0.2.0/mvm'),
-    ('./fixture/0.1.0/arm/164.125.34.91_2019-07-31-15-47-54.zip',
+    ('./fixture/answers/arm/164.125.34.91_2019-07-31-15-47-54.zip',
     './fixture/0.2.0/arm'),
-    ('./fixture/0.1.0/mvs/164.125.34.91_2019-07-31-15-58-01.zip',
+    ('./fixture/answers/mvs/164.125.34.91_2019-07-31-15-58-01.zip',
     './fixture/0.2.0/mvs')]:
     main.main(Args(
         input_zip=str(viz_in),
@@ -51,9 +51,9 @@ txt_lines_list = fp.pipe(
     fp.lmap(lambda s: s.splitlines()),
 )
 
-print('mvm eq?',  (txt_lines_list('./fixture/0.1.0/mvm/out/') 
+print('mvm eq?',  (txt_lines_list('./fixture/answers/mvm/out/') 
                 == txt_lines_list('./fixture/0.2.0/mvm/')))
-print('arm eq?',  (txt_lines_list('./fixture/0.1.0/arm/out/') 
+print('arm eq?',  (txt_lines_list('./fixture/answers/arm/out/') 
                 == txt_lines_list('./fixture/0.2.0/arm/')))
-print('mvs eq?',  (txt_lines_list('./fixture/0.1.0/mvs/out/') 
+print('mvs eq?',  (txt_lines_list('./fixture/answers/mvs/out/') 
                 == txt_lines_list('./fixture/0.2.0/mvs/')))
