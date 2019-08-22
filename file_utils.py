@@ -23,6 +23,13 @@ def descendants(root_dirpath):
             fpaths.append(str(path))
     return fpaths
 
+import funcy as F
+@F.autocurry
+def replace1(old, new, path):
+    parts = list(Path(path).parts) # NOTE: because of set_in implementation..
+    idx = parts.index(old)
+    return str(Path(*F.set_in(parts, [idx], new)))
+
 def human_sorted(iterable):
     ''' Sorts the given iterable in the way that is expected. '''
     convert = lambda text: int(text) if text.isdigit() else text
