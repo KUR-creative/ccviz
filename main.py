@@ -55,18 +55,19 @@ def main(args=None):
         comp_data = data.comp_data(gdat, car_dict)
 
         # Generate overview.html
-        fu.write_text(
-            Path(OUTPUT_DIR,'overview.html'), 
-            pages.overview.page(comp_data)
-        )
+        if comp_data:
+            fu.write_text (
+                Path(OUTPUT_DIR,'overview.html'), 
+                pages.overview.page(comp_data)
+            )
 
-        # Generate comp/X_X.html
-        html_paths = comp_data.html_paths
-        comp_htmls = pages.comp.page(gdat, comp_data)
-        for path,html in tqdm(zip(html_paths, comp_htmls),
-                              total=len(html_paths),
-                              desc='wrte html to disk'):
-            fu.write_text(Path(OUTPUT_DIR,path), html)
+            # Generate comp/X_X.html
+            html_paths = comp_data.html_paths
+            comp_htmls = pages.comp.page(gdat, comp_data)
+            for path,html in tqdm(zip(html_paths, comp_htmls),
+                                  total=len(html_paths),
+                                  desc='wrte html to disk'):
+                fu.write_text(Path(OUTPUT_DIR,path), html)
 
 
 if __name__ == '__main__':

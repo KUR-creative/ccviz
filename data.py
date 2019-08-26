@@ -129,7 +129,11 @@ def comp_data(gdat, car_dict):
     codes = ( fp.lstarmap(code('A'), enumerate(A_srcpaths))
             + fp.lstarmap(code('B'), enumerate(B_srcpaths)))
     code_dic = F.zipdict(fp.map(x_id, codes), codes)
-    raw_A_ms,raw_B_ms, tok_raw_idxsA,tok_raw_idxsB = F.butlast( fp.unzip(car_dict['CLONE_LIST']) )
+
+    if fp.is_empty(car_dict['CLONE_LIST']):
+        return None
+    raw_A_ms,raw_B_ms, tok_raw_idxsA,tok_raw_idxsB \
+        = F.butlast( fp.unzip(car_dict['CLONE_LIST']) )
     tok_idxsA = fp.lmap(lambda x: x - 1, tok_raw_idxsA[0])
     tok_idxsB = fp.lmap(lambda x: x - 1, tok_raw_idxsB[0])
     match_stats = fp.lstarmap(
