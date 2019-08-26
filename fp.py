@@ -54,6 +54,9 @@ def foreach(f,*seq):
     F.lmap(f,*seq)
     return None
 
+def is_empty(coll):
+    return (not coll)
+
 class A():
     def __init__(self,x): self.x = x
     def m(self,x): return x

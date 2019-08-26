@@ -21,18 +21,35 @@ def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
 Code = namedtuple('Code', 'proj fidx fpath text raw')
-Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score') # TODO: rm score
+Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens') # TODO: rm score
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
+
+def token_path(dirpath):
+    if 'Formatted_A' in dirpath:
+        old,new = 'Formatted_A','Token_A'
+    elif 'Formatted_B' in dirpath:
+        old,new = 'Formatted_B','Token_B'
+    return fu.replace1(old, new, dirpath)
 
 @F.autocurry
 def code(proj, fidx, fpath):
+    import os
+    sep_map_path = token_path(fpath) + 'map'
+    assert os.path.exists(sep_map_path)
     raw = fu.read_text(fpath)
     return Code(proj, fidx, fpath, highlight(raw), raw)
+
 @F.autocurry
-def match(proj, raw_match, abs_score, rel_score):
+def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
     file_idx, func_name, beg, end = raw_match
+    fidx = file_idx - 1
+
+    #code = code_dic[proj, fidx].raw
+    #print( code.splitlines(), len(code.splitlines()) )
+    #exit()
+
     return Match(
-        proj, file_idx - 1, func_name, beg - 1, end, abs_score, rel_score
+        proj, fidx, func_name, beg - 1, end, abs_score, rel_score, None
     )
 
 def x_id(match_or_code):
@@ -112,7 +129,13 @@ def comp_data(gdat, car_dict):
     codes = ( fp.lstarmap(code('A'), enumerate(A_srcpaths))
             + fp.lstarmap(code('B'), enumerate(B_srcpaths)))
     code_dic = F.zipdict(fp.map(x_id, codes), codes)
-    raw_A_ms, raw_B_ms = F.take(2, fp.unzip(car_dict['CLONE_LIST']))
+
+    if fp.is_empty(car_dict['CLONE_LIST']):
+        return None
+    raw_A_ms,raw_B_ms, tok_raw_idxsA,tok_raw_idxsB \
+        = F.butlast( fp.unzip(car_dict['CLONE_LIST']) )
+    tok_idxsA = fp.lmap(lambda x: x - 1, tok_raw_idxsA[0])
+    tok_idxsB = fp.lmap(lambda x: x - 1, tok_raw_idxsB[0])
     match_stats = fp.lstarmap(
         MatchStat, F.last(fp.unzip(car_dict['CLONE_LIST'])))
 
@@ -132,8 +155,12 @@ def comp_data(gdat, car_dict):
         fp.tup(
             lambda m,_: m.abs_score >= gdat.ABS_THRESHOLD and m.rel_score >= gdat.REL_THRESHOLD
         ),
-        zip(fp.lmap(match('A'), raw_A_ms, abs_scores, rel_scores), 
-            fp.lmap(match('B'), raw_B_ms, abs_scores, rel_scores))
+        zip(fp.lmap(match(code_dic, 'A'), 
+                raw_A_ms, abs_scores, rel_scores, 
+                tok_idxsA), 
+            fp.lmap(match(code_dic, 'B'), 
+                raw_B_ms, abs_scores, rel_scores, 
+                tok_idxsB))
     )
     match_pair_dic = F.walk_values(
         lambda pairs: sorted(pairs, key=fp.tup(
@@ -174,7 +201,7 @@ def comp_data(gdat, car_dict):
         html_paths = html_paths,
         code_dic = code_dic
     )
-    print('----------------------')
-    print(code_dic['A',0].raw)
-    print('----------------------')
+    #print('----------------------')
+    #print(code_dic['A',0].raw)
+    #print('----------------------')
     return namedtuple('Data', dic.keys())(**dic)

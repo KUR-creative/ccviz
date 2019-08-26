@@ -7,6 +7,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 import fp
+import funcy as F
 import file_utils as fu
 import data
 import consts
@@ -31,12 +32,7 @@ def main(args=None):
         args if args else consts.args()
     )
 
-    # Generate index.html
-    fu.write_text(
-        Path(gdat.OUTPUT_ROOT,'index.html'), 
-        pages.index.page(gdat)
-    )
-
+    matched_cars = []
     for TARGET_CAR,OUTPUT_DIR in zip(gdat.TARGET_CARS,gdat.OUTPUT_DIRS):
         # Copy fixed css,js scripts
         print('Processing on {}...'.format(TARGET_CAR))
@@ -55,18 +51,28 @@ def main(args=None):
         comp_data = data.comp_data(gdat, car_dict)
 
         # Generate overview.html
-        fu.write_text(
-            Path(OUTPUT_DIR,'overview.html'), 
-            pages.overview.page(comp_data)
-        )
+        if comp_data:
+            fu.write_text (
+                Path(OUTPUT_DIR,'overview.html'), 
+                pages.overview.page(comp_data)
+            )
 
-        # Generate comp/X_X.html
-        html_paths = comp_data.html_paths
-        comp_htmls = pages.comp.page(gdat, comp_data)
-        for path,html in tqdm(zip(html_paths, comp_htmls),
-                              total=len(html_paths),
-                              desc='wrte html to disk'):
-            fu.write_text(Path(OUTPUT_DIR,path), html)
+            # Generate comp/X_X.html
+            html_paths = comp_data.html_paths
+            comp_htmls = pages.comp.page(gdat, comp_data)
+            for path,html in tqdm(zip(html_paths, comp_htmls),
+                                  total=len(html_paths),
+                                  desc='wrte html to disk'):
+                fu.write_text(Path(OUTPUT_DIR,path), html)
+
+            matched_cars.append(TARGET_CAR)
+
+    # Generate index.html
+    matched_gdat = gdat._replace(TARGET_CARS=matched_cars)
+    fu.write_text(
+        Path(gdat.OUTPUT_ROOT,'index.html'), 
+        pages.index.page(matched_gdat)
+    )
 
 
 if __name__ == '__main__':

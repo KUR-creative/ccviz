@@ -29,7 +29,10 @@ def popup_window(match_id, content):
 def match2raw(match):
     m = match
     return data.Match(
-        m.proj, m.fidx + 1, m.func_name, m.beg + 1, m.end, m.abs_score, m.rel_score
+        m.proj, m.fidx + 1, 
+        m.func_name, m.beg + 1, m.end, 
+        m.abs_score, m.rel_score, 
+        m.tokens 
     )
 def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
     header = h('tr')[
@@ -170,7 +173,6 @@ def page(gdat, comp_data):
                                 desc='   generate htmls'):
         rA = code_dic[mA.proj, mA.fidx].raw
         rB = code_dic[mB.proj, mB.fidx].raw
-        print(rA, rB)
         Ainfo = h('h2')[ 'A: ' + Path(A_srcpaths[mA.fidx]).name ]
         Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
         table_info = h('h2')[ 'Result Table' ]
