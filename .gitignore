@@ -7,3 +7,5 @@
 __pycache__/
 *.taghl
 tags
+
+fixture/0.2.0/

@@ -5,7 +5,6 @@ import json
 from pathlib import Path
 
 from tqdm import tqdm
-from pygments.formatters import HtmlFormatter
 
 import fp
 import file_utils as fu
@@ -46,7 +45,7 @@ def main(args=None):
         # Generate code style css
         fu.write_text(
             Path(OUTPUT_DIR, 'css/highlight.css'),
-            HtmlFormatter().get_style_defs('.highlight'),
+            data.highlight_css()
         )
 
         # Data processing

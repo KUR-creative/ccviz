@@ -13,18 +13,21 @@ import fp
 import file_utils as fu
 import html_utils as hu
 
-Code = namedtuple('Code', 'proj fidx fpath text')
-Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score') # TODO: rm score
-MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
-
 def highlight(src, linenos='table'):
     return pygments.highlight(
         src, CppLexer(), HtmlFormatter(linenos=linenos)
     )
+def highlight_css(style_def='.highlight'):
+    return HtmlFormatter().get_style_defs(style_def)
+
+Code = namedtuple('Code', 'proj fidx fpath text raw')
+Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score') # TODO: rm score
+MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
 @F.autocurry
 def code(proj, fidx, fpath):
-    return Code(proj, fidx, fpath, highlight(fu.read_text(fpath)))
+    raw = fu.read_text(fpath)
+    return Code(proj, fidx, fpath, highlight(raw), raw)
 @F.autocurry
 def match(proj, raw_match, abs_score, rel_score):
     file_idx, func_name, beg, end = raw_match
@@ -169,5 +172,9 @@ def comp_data(gdat, car_dict):
         match_pair_dic = match_pair_dic,
         match_name_pairs = match_name_pairs,
         html_paths = html_paths,
+        code_dic = code_dic
     )
+    print('----------------------')
+    print(code_dic['A',0].raw)
+    print('----------------------')
     return namedtuple('Data', dic.keys())(**dic)
