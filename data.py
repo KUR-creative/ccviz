@@ -20,7 +20,7 @@ def highlight(src, linenos='table'):
 def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
-Code = namedtuple('Code', 'proj fidx fpath text raw')
+Code = namedtuple('Code', 'proj fidx fpath text raw tok_map') # tok_map is 2d list
 Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens') # TODO: rm score
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
@@ -34,19 +34,24 @@ def token_path(dirpath):
 @F.autocurry
 def code(proj, fidx, fpath):
     import os
-    sep_map_path = token_path(fpath) + 'map'
-    assert os.path.exists(sep_map_path)
+    tok_map_path = token_path(fpath) + 'map'
+    assert os.path.exists(tok_map_path)
     raw = fu.read_text(fpath)
-    return Code(proj, fidx, fpath, highlight(raw), raw)
+    print('->>', tok_map_path)
+    return Code(
+        proj, fidx, fpath, 
+        highlight(raw), raw, 
+        json.loads( open(tok_map_path).read() )
+    )
 
 @F.autocurry
 def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
     file_idx, func_name, beg, end = raw_match
     fidx = file_idx - 1
 
-    #code = code_dic[proj, fidx].raw
-    #print( code.splitlines(), len(code.splitlines()) )
-    #exit()
+    code = code_dic[proj, fidx]
+    from pprint import pprint
+    pprint(code.tok_map)
 
     return Match(
         proj, fidx, func_name, beg - 1, end, abs_score, rel_score, None
