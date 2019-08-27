@@ -1,3 +1,4 @@
+from collections import namedtuple
 import funcy as F
 import itertools as I
 
@@ -56,6 +57,9 @@ def foreach(f,*seq):
 
 def is_empty(coll):
     return (not coll)
+
+def dict2namedtuple(type_name, dic):
+    return namedtuple(type_name, sorted(dic))(**dic)
 
 class A():
     def __init__(self,x): self.x = x

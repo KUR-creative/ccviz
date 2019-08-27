@@ -2,6 +2,7 @@ import zipfile
 import argparse
 from pathlib import Path
 from collections import namedtuple
+import funcy as F
 
 import fp
 import file_utils as fu
@@ -44,12 +45,14 @@ def consts(args):
     CONFIG = fp.go(
         INPUT_DIR / 'config.ini',
         fu.read_text,
+        # parse ini format
         lambda s: s.split('\n'),
         fp.filter(lambda s: '[' not in s and len(s) != 0),
         fp.map(lambda s: s.split('=')),
-        fp.lmap(fp.lmap(lambda s: s.strip()))
+        fp.lmap(fp.lmap(lambda s: s.strip())),
+        # list of tuples -> dictionary
+        fp.unzip, fp.tup(F.zipdict)
     )
-
     ABS_THRESHOLD = args.absolute_score_threshold
     REL_THRESHOLD = args.relative_score_threshold
 
