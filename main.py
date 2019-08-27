@@ -71,7 +71,7 @@ def main(args=None):
     matched_gdat = gdat._replace(TARGET_CARS=matched_cars)
     fu.write_text(
         Path(gdat.OUTPUT_ROOT,'index.html'), 
-        pages.index.page(matched_gdat)
+        pages.index.page(matched_gdat.TARGET_CARS, matched_gdat.CONFIG)
     )
 
 

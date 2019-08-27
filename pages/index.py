@@ -2,6 +2,7 @@ import os,sys
 sys.path.append( os.path.abspath('..') )
 
 from pathlib import Path
+from collections import namedtuple
 from hyperpython import h, h1, div, link
 
 import fp
@@ -13,12 +14,58 @@ def car2btn_name(car_stem):
         '{}'.format(target), h('br'), 'depth : {}'.format(depth)
     ])
 
-def page(gdat):
+def interpret(config):
+    source_type, target_type \
+      =(('file','file')       if config.get('TARGET_File2File') == '1' else
+        ('project','project') if config.get('TARGET_Proj2Proj') == '1' else
+        ('query','DB')        if config.get('TARGET_Proj2DB')   == '1' else 
+        (None,None))
+
+    ret = dict(
+        source_type=source_type,
+        target_type=target_type,
+        search_type \
+         = ('File vs File'           if source_type == 'file' else
+            'Project vs Project'     if source_type == 'project' else
+            'Query to Project in DB' if source_type == 'query' else None),
+
+        token_types = fp.lfilter(
+            None,
+            ['File'     if config.get('TOKEN_File2File') else None, 
+             'Function' if config.get('TOKEN_Func2Func') else None]
+        ),
+        depth_levels = fp.lfilter(
+            None,
+            ['1' if config.get('DEPTH_LV1') else None, 
+             '2' if config.get('DEPTH_LV2') else None]
+        ),
+
+        alignment_score_type \
+         = ('Strong Link' if config['SCORE'] == '1' else
+            'Medium Link' if config['SCORE'] == '2' else
+            'Weak Link'   if config['SCORE'] == '3' else None),
+
+        abs_threshold = config['ABSOLUTE'],
+        rel_threshold = config['RELATIVE']
+    )
+
+    assert ret['source_type'] is not None
+    assert ret['search_type'] is not None
+    assert ret['alignment_score_type'] is not None
+    return fp.dict2namedtuple('Interpreted', ret)
+
+def page(target_cars, config):
+    c = interpret(config)
+
+    def lined_th(content):
+        return h('th', style='border-bottom:1px solid black;')[content]
+    def lined_td(content):
+        return h('td', style='border-bottom:1px solid black;')[content]
     return hu.document_str(
     [
         link(rel="stylesheet", 
              href=fp.go(
-                 gdat.TARGET_CARS[0],
+                 target_cars[0],
                  lambda p: Path(p).stem,
                  lambda s: Path(s, 'css', 'index.css'),
                  lambda p: str(p))),
@@ -32,12 +79,27 @@ def page(gdat):
                              margin-right:auto;\
                              margin-bottom:20px;')[
                 h('tbody', children=[
-                        h('tr')[ h('th')['config var'], h('th')['value'] ] 
-                    ] + fp.lstarmap(
-                        lambda k,v: h('tr')[ h('td')[k], h('td')[v] ],
-                        gdat.CONFIG
-                    )
-                )
+                    #fp.lmap( h('tr'),
+                    h('tr')[lined_th('Property'), lined_th('Value')],
+
+                    h('tr')[h('td')['Source'], 
+                            h('td')['{}({})'.format( config['NAME_A'], c.source_type )], ], 
+                    h('tr')[h('td')['Target'],
+                            h('td')['{}({})'.format( config['NAME_B'], c.target_type )], ], 
+                    h('tr')[lined_td('Search Type'), lined_td(c.search_type),], 
+
+                    h('tr')[h('td')['Token Type'], h('td')[', '.join(c.token_types)],], 
+                    h('tr')[lined_td('Depth level'), lined_td(', '.join(c.depth_levels)),], 
+
+                    h('tr')[
+                        h('td')['Alignment Type'], h('td')[c.alignment_score_type],], 
+                    h('tr')[
+                        h('td')['Absolute Score Threshold'], 
+                        h('td')[c.abs_threshold],], 
+                    h('tr')[
+                        lined_td('Relative Score Threshold'), 
+                        lined_td(c.rel_threshold),], 
+                ])
             ]
         ] + fp.lmap(
             fp.pipe(
@@ -47,7 +109,7 @@ def page(gdat):
                     car2btn_name(p.parts[-2]) # car stem
                 ] 
             ),
-            gdat.TARGET_CARS
+            target_cars
         )
     )
     ]).format(
