@@ -5,7 +5,11 @@ import itertools as I
 tup = lambda f: lambda argtup: f(*argtup)
 go = lambda x,*fs: F.rcompose(*fs)(x)
 pipe = F.rcompose
-def take(n, seq):
+
+def inc(x): return x + 1
+def dec(x): return x - 1
+
+def take(n, seq=None):
     return F.take(n,seq) if seq \
     else lambda xs: F.take(n,xs)
 
