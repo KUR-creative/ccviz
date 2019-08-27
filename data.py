@@ -53,15 +53,29 @@ def code(proj, fidx, fpath):
 
 @F.autocurry
 def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
-    file_idx, func_name, beg, end = raw_match
+    file_idx, func_name, raw_beg, end = raw_match
     fidx = file_idx - 1
+    beg  = raw_beg  - 1
 
-    code = code_dic[proj, fidx]
+    tokens = tuple(fp.take(
+        end - beg + 1,
+        F.tap(code_dic[proj, fidx].tok_map, 'wtf')
+    ))
+    print('================')
+    print(beg, end, tokens)
+    print(tok_idxs)
+    print('----------------')
+
     from pprint import pprint
-    pprint(code.tok_map)
+    tok_map = code_dic[proj, fidx].tok_map
+    pprint(tok_map)
+    exit()
 
     return Match(
-        proj, fidx, func_name, beg - 1, end, abs_score, rel_score, None
+        proj, fidx, func_name, 
+        beg, end, 
+        abs_score, rel_score, 
+        tokens
     )
 
 def x_id(match_or_code):
@@ -146,8 +160,6 @@ def comp_data(gdat, car_dict):
         return None
     raw_A_ms,raw_B_ms, tok_raw_idxsA,tok_raw_idxsB \
         = F.butlast( fp.unzip(car_dict['CLONE_LIST']) )
-    tok_idxsA = fp.lmap(lambda x: x - 1, tok_raw_idxsA[0])
-    tok_idxsB = fp.lmap(lambda x: x - 1, tok_raw_idxsB[0])
     match_stats = fp.lstarmap(
         MatchStat, F.last(fp.unzip(car_dict['CLONE_LIST'])))
 
@@ -163,17 +175,18 @@ def comp_data(gdat, car_dict):
 
     abs_scores = fp.lmap(F.first, match_stats)
     rel_scores = fp.lmap(F.second, match_stats)
+
+    #print('=>',len(abs_scores), len(tok_raw_idxsA)); exit()
+    tok_idxsA = fp.lmap(fp.lmap(fp.dec), tok_raw_idxsA)
+    tok_idxsB = fp.lmap(fp.lmap(fp.dec), tok_raw_idxsB)
     match_pairs = fp.lfilter(
         fp.tup(
             lambda m,_: m.abs_score >= gdat.ABS_THRESHOLD and m.rel_score >= gdat.REL_THRESHOLD
         ),
-        zip(fp.lmap(match(code_dic, 'A'), 
-                raw_A_ms, abs_scores, rel_scores, 
-                tok_idxsA), 
-            fp.lmap(match(code_dic, 'B'), 
-                raw_B_ms, abs_scores, rel_scores, 
-                tok_idxsB))
+        zip(fp.lmap(match(code_dic, 'A'), raw_A_ms, abs_scores, rel_scores, tok_idxsA), 
+            fp.lmap(match(code_dic, 'B'), raw_B_ms, abs_scores, rel_scores, tok_idxsB))
     )
+    print('=====>',tok_idxsA)
     match_pair_dic = F.walk_values(
         lambda pairs: sorted(pairs, key=fp.tup(
             lambda mA,mB: (mA.beg, mB.beg)
