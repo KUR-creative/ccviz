@@ -33,15 +33,22 @@ def token_path(dirpath):
 
 @F.autocurry
 def code(proj, fidx, fpath):
+    def load_token_map(path):
+        assert os.path.exists(path)
+        return fp.go(
+            open(path).read(),
+            json.loads,
+            fp.lmap(tuple), tuple
+        )
+
     import os
     tok_map_path = token_path(fpath) + 'map'
-    assert os.path.exists(tok_map_path)
     raw = fu.read_text(fpath)
     print('->>', tok_map_path)
     return Code(
         proj, fidx, fpath, 
         highlight(raw), raw, 
-        json.loads( open(tok_map_path).read() )
+        load_token_map(tok_map_path)
     )
 
 @F.autocurry
