@@ -151,9 +151,14 @@ def len_equalize(s1, s2, padval=' '):
         )
 
 def temp_match_view(code_dic, eA,eB, mA,mB):
-    Atoks,Btoks = mA.tokens, mB.tokens
-    # add space to display gap
+    @F.autocurry
+    def idx2tok(toks, idx):
+        print(len(toks), abs(idx), toks)
+        return ' ' if idx == -1 else toks[abs(idx)]
 
+    # set space as gap to display
+    Atoks = fp.go(mA.tok_idxs, fp.map(idx2tok(mA.tokens)), tuple)
+    Btoks = fp.go(mB.tok_idxs, fp.map(idx2tok(mB.tokens)), tuple)
     # pad space to sync length of tokens
     Atoks,Btoks = fp.go(
         len_equalize(Atoks, Btoks),
@@ -163,22 +168,15 @@ def temp_match_view(code_dic, eA,eB, mA,mB):
         fp.unzip
     )
 
-    #Atoks = fp.lmap(lambda s: s.rstrip(), mA.tokens)
-    #Btoks = fp.lmap(lambda s: s.rstrip(), mB.tokens)
-    #print('----------------')
-    #print(Atoks,'\n',Btoks)
-
-    delim = '│' #' ┋ '
+    delim = '│'
     for a,b in zip(Atoks,Btoks):
-        #print(a,b)
-        #print(len(a),len(b))
         assert len(a) == len(b)
     assert len(delim.join(Atoks)) == len(delim.join(Btoks))
+
     return h('div')[
         h('pre')[delim.join(Atoks)],
         h('pre')[delim.join(Btoks)]
     ]
-    #mB.tokens
     '''
     print('----------------')
     print('fidx', mA.fidx, mA.beg, mA.end, mA.tok_idxs)
