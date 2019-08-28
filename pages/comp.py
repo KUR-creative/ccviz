@@ -32,7 +32,7 @@ def match2raw(match):
         m.proj, m.fidx + 1, 
         m.func_name, m.beg + 1, m.end, 
         m.abs_score, m.rel_score, 
-        m.tokens 
+        m.tokens, fp.lmap(fp.inc, m.tok_idxs)
     )
 def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
     header = h('tr')[
@@ -140,7 +140,59 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
         source1=srcA, source2=srcB, match=temp_match  
     )) #{match} in table TODO:(remove it)
 
-def temp_match_view(eA,eB):
+def len_equalize(s1, s2, padval=' '): 
+    slen = max(len(s1), len(s2))
+    if isinstance(s1, str):
+        return s1.ljust(slen,padval), s2.ljust(slen,padval)
+    else:
+        return (
+            s1 + (padval,) * (slen - len(s1)),
+            s2 + (padval,) * (slen - len(s2))
+        )
+
+def temp_match_view(code_dic, eA,eB, mA,mB):
+    Atoks,Btoks = mA.tokens, mB.tokens
+    # add space to display gap
+
+    # pad space to sync length of tokens
+    Atoks,Btoks = fp.go(
+        len_equalize(Atoks, Btoks),
+        fp.tup(zip),
+        fp.map(fp.map( lambda s: s.rstrip() )),
+        fp.map(fp.tup( len_equalize )),
+        fp.unzip
+    )
+
+    #Atoks = fp.lmap(lambda s: s.rstrip(), mA.tokens)
+    #Btoks = fp.lmap(lambda s: s.rstrip(), mB.tokens)
+    #print('----------------')
+    #print(Atoks,'\n',Btoks)
+
+    delim = '│' #' ┋ '
+    for a,b in zip(Atoks,Btoks):
+        #print(a,b)
+        #print(len(a),len(b))
+        assert len(a) == len(b)
+    assert len(delim.join(Atoks)) == len(delim.join(Btoks))
+    return h('div')[
+        h('pre')[delim.join(Atoks)],
+        h('pre')[delim.join(Btoks)]
+    ]
+    #mB.tokens
+    '''
+    print('----------------')
+    print('fidx', mA.fidx, mA.beg, mA.end, mA.tok_idxs)
+    print('A', mA.tokens)
+    print('B', mB.tokens)
+    print('fidx', mB.fidx, mB.beg, mB.end, mB.tok_idxs)
+    print('----------------')
+    print( code_dic[mA.proj, mA.fidx].raw )
+    print('--x---x---xxxxx--xx-x---------------------')
+    print( code_dic[mB.proj, mB.fidx].raw )
+    print('================')
+    from pprint import pprint
+    #pprint(list(zip(mA.tokens, mB.tokens)))
+    print('----------------')
     preA   = hu.all_pre(eA)[1]; 
     preB   = hu.all_pre(eB)[1]
     linesA = preA.split('\n'); 
@@ -156,6 +208,7 @@ def temp_match_view(eA,eB):
         lambda lines: '\n'.join(lines),
         lambda s: '<div class="highlight"><pre>' + s + '</pre></div>'
     )
+    '''
 
 def page(gdat, comp_data):
     emphasized_AB = comp_data.emphasized_AB
@@ -176,7 +229,7 @@ def page(gdat, comp_data):
         Ainfo = h('h2')[ 'A: ' + Path(A_srcpaths[mA.fidx]).name ]
         Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
         table_info = h('h2')[ 'Result Table' ]
-        temp_match = temp_match_view(eA,eB)
+        temp_match = temp_match_view(code_dic, eA,eB, mA,mB)
         comp_htmls.append(gen_comp_html(
             Ainfo,Binfo,table_info, eA,eB, 
             comp_table(match_pair_dic, match_stat_dic, mA,mB, gdat), 
