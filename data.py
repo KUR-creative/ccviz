@@ -67,7 +67,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
     tokens = fp.go(
         code_dic[proj, fidx].tok_map[beg:end],
         F.flatten, tuple, 
-        lambda toks: toks[beg_idx:end_idx+1]
+        lambda toks: toks[:end_idx+1]
     )
     #print('================')
     #print(code_dic[proj, fidx].raw)
