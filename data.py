@@ -21,7 +21,7 @@ def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
 Code = namedtuple('Code', 'proj fidx fpath text raw tok_map') # tok_map is 2d list
-Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens') # TODO: rm score
+Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens tok_idxs') # TODO: rm score
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
 def token_path(dirpath):
@@ -57,25 +57,35 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
     fidx = file_idx - 1
     beg  = raw_beg  - 1
 
-    tokens = tuple(fp.take(
-        end - beg + 1,
-        F.tap(code_dic[proj, fidx].tok_map, 'wtf')
-    ))
-    print('================')
-    print(beg, end, tokens)
-    print(tok_idxs)
-    print('----------------')
+    beg_idx,end_idx = fp.go(
+        tok_idxs,
+        fp.remove(lambda x: x == -1), # NOTE: 0 in raw_match, means "gap" (not that good idea)
+        fp.lmap(abs),
+        lambda xs: (min(xs), max(xs))
+    )
 
-    from pprint import pprint
+    tokens = fp.go(
+        code_dic[proj, fidx].tok_map[beg:end],
+        F.flatten, tuple, 
+        lambda toks: toks[beg_idx:end_idx+1]
+    )
+    #print('================')
+    #print(code_dic[proj, fidx].raw)
+    #print(beg, end, tokens, len(tokens))
+    #print(len(tokens))
+    #print(tok_idxs)
+    #print('----------------')
+
     tok_map = code_dic[proj, fidx].tok_map
-    pprint(tok_map)
-    exit()
+    #from pprint import pprint
+    #pprint(tok_map)
+    #exit()
 
     return Match(
         proj, fidx, func_name, 
         beg, end, 
         abs_score, rel_score, 
-        tokens
+        tokens, tuple(tok_idxs)
     )
 
 def x_id(match_or_code):
@@ -186,7 +196,7 @@ def comp_data(gdat, car_dict):
         zip(fp.lmap(match(code_dic, 'A'), raw_A_ms, abs_scores, rel_scores, tok_idxsA), 
             fp.lmap(match(code_dic, 'B'), raw_B_ms, abs_scores, rel_scores, tok_idxsB))
     )
-    print('=====>',tok_idxsA)
+    #print('=====>',tok_idxsA)
     match_pair_dic = F.walk_values(
         lambda pairs: sorted(pairs, key=fp.tup(
             lambda mA,mB: (mA.beg, mB.beg)
