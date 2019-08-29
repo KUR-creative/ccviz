@@ -25,10 +25,11 @@ Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tok
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
 def xmap_path(dirpath):
-    if 'Formatted_A' in dirpath:
-        old,new = 'Formatted_A','Token_A'
-    elif 'Formatted_B' in dirpath:
-        old,new = 'Formatted_B','Token_B'
+    old,new = (
+        ('Formatted_A','Token_A') if 'Formatted_A' in dirpath else 
+        ('Formatted_B','Token_B') if 'Formatted_B' in dirpath else 
+        (None,None)
+    )
     return fu.replace1(old, new, dirpath)
 
 @F.autocurry
