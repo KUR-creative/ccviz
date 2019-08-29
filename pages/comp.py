@@ -26,14 +26,6 @@ def popup_window(match_id, content):
         ]
     ]
 
-def match2raw(match):
-    m = match
-    return data.Match(
-        m.proj, m.fidx + 1, 
-        m.func_name, m.beg + 1, m.end, 
-        m.abs_score, m.rel_score, 
-        m.tokens, fp.lmap(fp.inc, m.tok_idxs), m.num_toks_in_line
-    )
 def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
     header = h('tr')[
         h('th', class_='center_cell')['A' ],
@@ -52,7 +44,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
 
     range_infos = fp.go(
         match_pairs,
-        fp.map(fp.lmap(match2raw)), 
+        fp.map(fp.lmap(data.match2raw)), 
         fp.starmap(
             lambda rA,rB: 
             ('{} ~ {}'.format(rA.beg,rA.end), 

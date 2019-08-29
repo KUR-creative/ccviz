@@ -21,7 +21,7 @@ def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
 Code = namedtuple('Code', 'proj fidx fpath text raw parts_map') # parts_map: li<li<str>>
-Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens tok_idxs num_toks_in_line') # TODO: rm score
+Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score parts_map notes_map') # TODO: rm score
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
 def xmap_path(dirpath):
@@ -102,7 +102,15 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
         proj, fidx, func_name, 
         beg, end, 
         abs_score, rel_score, 
-        tokens, tuple(tok_idxs), tuple(num_toks_in_line)
+        parts_map, notes_map
+    )
+
+def match2raw(m):
+    return Match(
+        m.proj, m.fidx + 1, 
+        m.func_name, m.beg + 1, m.end, 
+        m.abs_score, m.rel_score, 
+        m.parts_map, m.notes_map
     )
 
 def x_id(match_or_code):
