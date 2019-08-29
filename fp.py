@@ -89,6 +89,15 @@ def lsplit_with(sep_idxs, li):
 def tsplit_with(sep_idxs, li):
     return tuple(split_with(sep_idxs, li))
 
+'''
+def partition_with(nums_in_parts, seq):
+    ret = []
+    iseq = iter(seq)
+    for n in nums_in_parts:
+        ret.append( fp.take(n,iseq) )
+    return ret
+'''
+
 def foreach(f,*seq):
     F.lmap(f,*seq)
     return None

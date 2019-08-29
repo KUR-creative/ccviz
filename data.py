@@ -34,22 +34,33 @@ def xmap_path(dirpath):
 
 @F.autocurry
 def code(proj, fidx, fpath):
-    def load_xmap(path):
-        assert os.path.exists(path)
-        return fp.go(
-            open(path).read(),
-            json.loads,
-            fp.lmap(tuple), tuple
+    def load_xmap(mpath, raw):
+        import os
+        assert os.path.exists(mpath)
+
+        slice_idxs = fp.map( #TODO: change to map and pipe
+            fp.pipe(
+                lambda s: s.strip(),
+                lambda s: s.split(),
+                fp.map(int),
+                fp.map(fp.dec),
+            ),
+            open(mpath).readlines(),
         )
 
-    import os
-    path = xmap_path(fpath) + 'map'
+        from pprint import pprint
+        pprint( fp.tmap( fp.tsplit_with, slice_idxs, raw.splitlines() ) )
+        return fp.tmap( 
+            fp.tsplit_with, slice_idxs, raw.splitlines() 
+        )
+
+    mpath = xmap_path(fpath) + 'map'
     raw = fu.read_text(fpath)
-    print('->>', path)
+    print('->>', mpath)
     return Code(
         proj, fidx, fpath, 
         highlight(raw), raw, 
-        load_xmap(path) # token list of lists (separated by '\n')
+        load_xmap(mpath, raw) # token list of lists (separated by '\n')
     )
 
 @F.autocurry
