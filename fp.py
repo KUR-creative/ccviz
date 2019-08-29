@@ -77,6 +77,18 @@ def tmapcat(f,*seq):
     return tuple(F.mapcat(f,*seq)) if seq \
     else lambda *xs: tuple(F.mapcat(f,*xs))
 
+def split_with(sep_idxs, li):
+    ''' 
+    If sep_idxs is empty, then it returns empty generator. 
+    But I don't know why..
+    '''
+    for s,t in F.pairwise( I.chain(sep_idxs, [len(li)]) ):
+        yield li[s:t]
+def lsplit_with(sep_idxs, li):
+    return list(split_with(sep_idxs, li))
+def tsplit_with(sep_idxs, li):
+    return tuple(split_with(sep_idxs, li))
+
 def foreach(f,*seq):
     F.lmap(f,*seq)
     return None
@@ -124,3 +136,12 @@ if __name__ == '__main__':
     assert 'b'   == prop('b',x)
     assert '123' == prop('d',x)
     assert 56.2  == prop(2,x), prop(2,x)
+
+
+    split_with([0,8,16], '0123456789-123456789=1')
+    assert list(split_with([0,8,16], '0123456789-123456789=1'))  == ['01234567', '89-12345', '6789=1']
+    assert lsplit_with(iter([0,8,16]), '0123456789-123456789=1') == ['01234567', '89-12345', '6789=1']
+    assert tsplit_with([0,8,16], '0123456789-123456789=1')       == ('01234567', '89-12345', '6789=1')
+
+    assert tsplit_with([], '0123456789-123456789=1') == ()
+    #split_with([], '0123456789-123456789=1')
