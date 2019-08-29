@@ -48,8 +48,8 @@ def code(proj, fidx, fpath):
             open(mpath).readlines(),
         )
 
-        from pprint import pprint
-        pprint( fp.tmap( fp.tsplit_with, slice_idxs, raw.splitlines() ) )
+        #from pprint import pprint
+        #pprint( fp.tmap( fp.tsplit_with, slice_idxs, raw.splitlines() ) )
         return fp.tmap( 
             fp.tsplit_with, slice_idxs, raw.splitlines() 
         )
