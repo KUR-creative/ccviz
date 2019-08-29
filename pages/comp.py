@@ -181,6 +181,7 @@ def temp_match_view(code_dic, eA,eB, mA,mB):
         # tokens를 애초에 토큰의 리스트로 만들? B를 어떻게 A에 맞추나 그러면
         # A.tok_idxs의 시작이 0이 아닐 때 모두 어긋나게 된다.
         # 결국 출력할 때, struct fb {에서 fb 부터 매칭이 되도, struct를 출력해야 한다.
+
         # 즉 {no concern / match / mismatch / gap}으로 표현해야 한다. 색깔을 이용한다.
         # 1. A,B 한 라인의 두 문자열의 길이를 토큰에 따라 맞춘다.
         # 2. 토큰에 따라 색깔로 위 4가지 경우를 처리한다.
