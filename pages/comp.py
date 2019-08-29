@@ -1,5 +1,6 @@
 # map <F5> :wa<CR>:!rm -rf tmp-result/tmp-matching-window/arm9_11; python main.py fixture/tmp-matching-window/arm9_11/strong_link/164.125.34.91_2019-08-29-14-34-07.zip -a 10 -r 0.1 -o tmp-result/tmp-matching-window/arm9_11/strong_link<CR>
 # map <F8> :!rm -rf tmp2/;python main.py fixture/tmp-matching-window/ms/164.125.34.91_2019-08-29-22-58-04.zip -o tmp2<CR>
+from pprint import pprint
 import os,sys
 sys.path.append( os.path.abspath('..') )
 
@@ -135,6 +136,7 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
     )) #{match} in table TODO:(remove it)
 
 def len_equalize(s1, s2, padval=' '): 
+    #print(s1,s2)
     slen = max(len(s1), len(s2))
     if isinstance(s1, str):
         return s1.ljust(slen,padval), s2.ljust(slen,padval)
@@ -145,16 +147,51 @@ def len_equalize(s1, s2, padval=' '):
         )
 
 def temp_match_view(code_dic, eA,eB, mA,mB):
+    _,flatBparts = len_equalize(
+        tuple(F.flatten(mA.parts_map)), 
+        tuple(F.flatten(mB.parts_map))
+    )
+
+    # pad spaces to sync length of parts of source
+    iBparts = iter(flatBparts)
+    Aparts_map = fp.tmap(
+        fp.tmap(lambda s: len_equalize( s, F.first(iBparts) )[0]), 
+        mA.parts_map)
+    iBparts = iter(flatBparts)
+    Bparts_map = fp.tmap(
+        fp.tmap(lambda s: len_equalize( s, F.first(iBparts) )[1]), 
+        Aparts_map)
+
+    # join to one string
     delim = '│'
     Alines = fp.map(
         lambda parts: delim.join(parts) if parts else ' ', 
-        mA.parts_map
-    )
-    #Bparts = F.lflatten(mB.parts_map)
-    return h('div')[
-        fp.lmap(
-            lambda a: h('pre',style='margin:4px;')[a], 
-            Alines)
+        Aparts_map)
+    Blines = fp.map(
+        lambda parts: delim.join(parts) if parts else ' ', 
+        Bparts_map)
+
+    '''
+    # colorize
+    def color(x):
+        return('green' if x == data.MATCH
+          else 'blue'  if x == data.GAP 
+          else 'red'   if x == data.MISMATCH
+          else 'gray')
+    Acolors = fp.lmap(fp.lmap(color), mA.notes_map)
+    #print(Acolors)
+    fp.map(lambda s: s.split(delim), Alines)
+    coloredAlines = fp.go(
+    '''
+
+
+
+    css = 'margin:4px;border-bottom:0.1px solid black;'
+    return h('div',style='border-top:0.1px solid black;')[
+        fp.lmap( 
+            lambda a,b: h('pre',style = css)[a + '\n' + b], 
+            Alines, Blines)
+            #coloredAlines, coloredBlines)
     ]
     '''
     @F.autocurry
