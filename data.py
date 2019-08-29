@@ -84,19 +84,6 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
     num_toks_in_line = fp.lmap(
         len, code_dic[proj, fidx].parts_map[beg:end]
     )
-    #print(num_toks_in_line)
-
-    #print('================')
-    #print(code_dic[proj, fidx].raw)
-    #print(beg, end, tokens, len(tokens))
-    #print(len(tokens))
-    #print(tok_idxs)
-    #print('----------------')
-
-    #parts_map = code_dic[proj, fidx].parts_map
-    #from pprint import pprint
-    #pprint(parts_map)
-    #exit()
 
     return Match(
         proj, fidx, func_name, 
@@ -203,7 +190,6 @@ def comp_data(gdat, car_dict):
     abs_scores = fp.lmap(F.first, match_stats)
     rel_scores = fp.lmap(F.second, match_stats)
 
-    #print('=>',len(abs_scores), len(tok_raw_idxsA)); exit()
     tok_idxsA = fp.lmap(fp.lmap(fp.dec), tok_raw_idxsA)
     tok_idxsB = fp.lmap(fp.lmap(fp.dec), tok_raw_idxsB)
     match_pairs = fp.lfilter(
@@ -213,7 +199,6 @@ def comp_data(gdat, car_dict):
         zip(fp.lmap(match(code_dic, 'A'), raw_A_ms, abs_scores, rel_scores, tok_idxsA), 
             fp.lmap(match(code_dic, 'B'), raw_B_ms, abs_scores, rel_scores, tok_idxsB))
     )
-    #print('=====>',tok_idxsA)
     match_pair_dic = F.walk_values(
         lambda pairs: sorted(pairs, key=fp.tup(
             lambda mA,mB: (mA.beg, mB.beg)
@@ -253,7 +238,4 @@ def comp_data(gdat, car_dict):
         html_paths = html_paths,
         code_dic = code_dic
     )
-    #print('----------------------')
-    #print(code_dic['A',0].raw)
-    #print('----------------------')
     return namedtuple('Data', dic.keys())(**dic)
