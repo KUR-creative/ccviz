@@ -21,7 +21,7 @@ def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
 Code = namedtuple('Code', 'proj fidx fpath text raw tok_map') # tok_map is 2d list
-Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens tok_idxs') # TODO: rm score
+Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens tok_idxs num_toks_in_line') # TODO: rm score
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
 def token_path(dirpath):
@@ -48,7 +48,7 @@ def code(proj, fidx, fpath):
     return Code(
         proj, fidx, fpath, 
         highlight(raw), raw, 
-        load_token_map(tok_map_path)
+        load_token_map(tok_map_path) # token list of lists (separated by '\n')
     )
 
 @F.autocurry
@@ -69,6 +69,11 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
         F.flatten, tuple, 
         lambda toks: toks[:end_idx+1]
     )
+    num_toks_in_line = fp.lmap(
+        len, code_dic[proj, fidx].tok_map[beg:end]
+    )
+    #print(num_toks_in_line)
+
     #print('================')
     #print(code_dic[proj, fidx].raw)
     #print(beg, end, tokens, len(tokens))
@@ -76,7 +81,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
     #print(tok_idxs)
     #print('----------------')
 
-    tok_map = code_dic[proj, fidx].tok_map
+    #tok_map = code_dic[proj, fidx].tok_map
     #from pprint import pprint
     #pprint(tok_map)
     #exit()
@@ -85,7 +90,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
         proj, fidx, func_name, 
         beg, end, 
         abs_score, rel_score, 
-        tokens, tuple(tok_idxs)
+        tokens, tuple(tok_idxs), tuple(num_toks_in_line)
     )
 
 def x_id(match_or_code):
