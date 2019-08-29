@@ -188,9 +188,7 @@ def temp_match_view(code_dic, eA,eB, mA,mB):
         # 3. 모든 라인을 그렇게 한다.
         Atoks_list.append( fp.take(n,iterAtoks) )
         Btoks_list.append( fp.take(n,iterBtoks) )
-    #for n in mB.num_toks_in_line: Btoks_list.append( fp.take(n,iterBtoks) )
 
-    # 
     delim = '│'
     Alines = fp.lmap(delim.join, Atoks_list)
     Blines = fp.lmap(delim.join, Btoks_list)
