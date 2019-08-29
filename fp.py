@@ -5,7 +5,11 @@ import itertools as I
 tup = lambda f: lambda argtup: f(*argtup)
 go = lambda x,*fs: F.rcompose(*fs)(x)
 pipe = F.rcompose
-def take(n, seq):
+
+def inc(x): return x + 1
+def dec(x): return x - 1
+
+def take(n, seq=None):
     return F.take(n,seq) if seq \
     else lambda xs: F.take(n,xs)
 
@@ -36,6 +40,13 @@ def filter(f,*seq):
 def lfilter(f,*seq):
     return F.lfilter(f,*seq) if seq \
     else lambda *xs: F.lfilter(f,*xs)
+
+def remove(f,*seq):
+    return F.remove(f,*seq) if seq \
+    else lambda *xs: F.remove(f,*xs)
+def lremove(f,*seq):
+    return F.lremove(f,*seq) if seq \
+    else lambda *xs: F.lremove(f,*xs)
 
 def starmap(f,*seq):
     return I.starmap(f,*seq) if seq \

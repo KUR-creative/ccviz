@@ -20,8 +20,8 @@ def highlight(src, linenos='table'):
 def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
-Code = namedtuple('Code', 'proj fidx fpath text raw')
-Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens') # TODO: rm score
+Code = namedtuple('Code', 'proj fidx fpath text raw tok_map') # tok_map is 2d list
+Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens tok_idxs num_toks_in_line') # TODO: rm score
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
 def token_path(dirpath):
@@ -33,23 +33,64 @@ def token_path(dirpath):
 
 @F.autocurry
 def code(proj, fidx, fpath):
+    def load_token_map(path):
+        assert os.path.exists(path)
+        return fp.go(
+            open(path).read(),
+            json.loads,
+            fp.lmap(tuple), tuple
+        )
+
     import os
-    sep_map_path = token_path(fpath) + 'map'
-    assert os.path.exists(sep_map_path)
+    tok_map_path = token_path(fpath) + 'map'
     raw = fu.read_text(fpath)
-    return Code(proj, fidx, fpath, highlight(raw), raw)
+    print('->>', tok_map_path)
+    return Code(
+        proj, fidx, fpath, 
+        highlight(raw), raw, 
+        load_token_map(tok_map_path) # token list of lists (separated by '\n')
+    )
 
 @F.autocurry
 def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
-    file_idx, func_name, beg, end = raw_match
+    file_idx, func_name, raw_beg, end = raw_match
     fidx = file_idx - 1
+    beg  = raw_beg  - 1
 
-    #code = code_dic[proj, fidx].raw
-    #print( code.splitlines(), len(code.splitlines()) )
+    beg_idx,end_idx = fp.go(
+        tok_idxs,
+        fp.remove(lambda x: x == -1), # NOTE: 0 in raw_match, means "gap" (not that good idea)
+        fp.lmap(abs),
+        lambda xs: (min(xs), max(xs))
+    )
+
+    tokens = fp.go(
+        code_dic[proj, fidx].tok_map[beg:end],
+        F.flatten, tuple, 
+        lambda toks: toks[:end_idx+1]
+    )
+    num_toks_in_line = fp.lmap(
+        len, code_dic[proj, fidx].tok_map[beg:end]
+    )
+    #print(num_toks_in_line)
+
+    #print('================')
+    #print(code_dic[proj, fidx].raw)
+    #print(beg, end, tokens, len(tokens))
+    #print(len(tokens))
+    #print(tok_idxs)
+    #print('----------------')
+
+    #tok_map = code_dic[proj, fidx].tok_map
+    #from pprint import pprint
+    #pprint(tok_map)
     #exit()
 
     return Match(
-        proj, fidx, func_name, beg - 1, end, abs_score, rel_score, None
+        proj, fidx, func_name, 
+        beg, end, 
+        abs_score, rel_score, 
+        tokens, tuple(tok_idxs), tuple(num_toks_in_line)
     )
 
 def x_id(match_or_code):
@@ -134,8 +175,6 @@ def comp_data(gdat, car_dict):
         return None
     raw_A_ms,raw_B_ms, tok_raw_idxsA,tok_raw_idxsB \
         = F.butlast( fp.unzip(car_dict['CLONE_LIST']) )
-    tok_idxsA = fp.lmap(lambda x: x - 1, tok_raw_idxsA[0])
-    tok_idxsB = fp.lmap(lambda x: x - 1, tok_raw_idxsB[0])
     match_stats = fp.lstarmap(
         MatchStat, F.last(fp.unzip(car_dict['CLONE_LIST'])))
 
@@ -151,17 +190,18 @@ def comp_data(gdat, car_dict):
 
     abs_scores = fp.lmap(F.first, match_stats)
     rel_scores = fp.lmap(F.second, match_stats)
+
+    #print('=>',len(abs_scores), len(tok_raw_idxsA)); exit()
+    tok_idxsA = fp.lmap(fp.lmap(fp.dec), tok_raw_idxsA)
+    tok_idxsB = fp.lmap(fp.lmap(fp.dec), tok_raw_idxsB)
     match_pairs = fp.lfilter(
         fp.tup(
             lambda m,_: m.abs_score >= gdat.ABS_THRESHOLD and m.rel_score >= gdat.REL_THRESHOLD
         ),
-        zip(fp.lmap(match(code_dic, 'A'), 
-                raw_A_ms, abs_scores, rel_scores, 
-                tok_idxsA), 
-            fp.lmap(match(code_dic, 'B'), 
-                raw_B_ms, abs_scores, rel_scores, 
-                tok_idxsB))
+        zip(fp.lmap(match(code_dic, 'A'), raw_A_ms, abs_scores, rel_scores, tok_idxsA), 
+            fp.lmap(match(code_dic, 'B'), raw_B_ms, abs_scores, rel_scores, tok_idxsB))
     )
+    #print('=====>',tok_idxsA)
     match_pair_dic = F.walk_values(
         lambda pairs: sorted(pairs, key=fp.tup(
             lambda mA,mB: (mA.beg, mB.beg)

@@ -56,41 +56,41 @@
 32
 33
 34
-35</pre></div></td><td class="code"><div class="highlight"><pre><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span></span><span class="cm">/*</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * myint.c - Another handy routine for testing your tiny shell</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * usage: myint &lt;n&gt;</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * Sleeps for &lt;n&gt; seconds and sends SIGINT to itself.</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> */</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span> <span class="p">)</span> <span class="p">{</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">secs</span><span class="p">;</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Usage: %s &lt;n&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="p">}</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">secs</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">secs</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">sleep</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">kill</span><span class="p">(</span> <span class="n">pid</span><span class="p">,</span> <span class="n">SIGINT</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;kill (int) error&quot;</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="p">}</span> </span>
+35</pre></div></td><td class="code"><div class="highlight"><pre><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span></span><span class="cm">/*</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * myint.c - Another handy routine for testing your tiny shell</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * usage: myint &lt;n&gt;</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * Sleeps for &lt;n&gt; seconds and sends SIGINT to itself.</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> */</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span> <span class="p">)</span> <span class="p">{</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">secs</span><span class="p">;</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Usage: %s &lt;n&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="p">}</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">secs</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">secs</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">sleep</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">kill</span><span class="p">(</span> <span class="n">pid</span><span class="p">,</span> <span class="n">SIGINT</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;kill (int) error&quot;</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="p">}</span> </span>
 </pre></div>
 </td></tr></table></div>
         </div>
@@ -129,41 +129,41 @@
 32
 33
 34
-35</pre></div></td><td class="code"><div class="highlight"><pre><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span></span><span class="cm">/*</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * myint.c - Another handy routine for testing your tiny shell</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * usage: myint &lt;n&gt;</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * Sleeps for &lt;n&gt; seconds and sends SIGINT to itself.</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> */</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span> <span class="p">)</span> <span class="p">{</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">secs</span><span class="p">;</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Usage: %s &lt;n&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="p">}</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">secs</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">secs</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">sleep</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">kill</span><span class="p">(</span> <span class="n">pid</span><span class="p">,</span> <span class="n">SIGINT</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;kill (int) error&quot;</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="p">}</span> </span>
+35</pre></div></td><td class="code"><div class="highlight"><pre><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span></span><span class="cm">/*</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * myint.c - Another handy routine for testing your tiny shell</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * usage: myint &lt;n&gt;</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * Sleeps for &lt;n&gt; seconds and sends SIGINT to itself.</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> */</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span> <span class="p">)</span> <span class="p">{</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">secs</span><span class="p">;</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Usage: %s &lt;n&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="p">}</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">secs</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">secs</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">sleep</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">kill</span><span class="p">(</span> <span class="n">pid</span><span class="p">,</span> <span class="n">SIGINT</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;kill (int) error&quot;</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="p">}</span> </span>
 </pre></div>
 </td></tr></table></div>
         </div>
@@ -200,76 +200,76 @@
           <input class="modal-state" id="open-popup" type="checkbox"/>
           <div class="modal">
             <label class="modal_bg" for="open-popup"/>
-            <div class="modal_inner"><div class="highlight"><pre><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span></span><span class="cm">/*</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span></span><span class="cm">/*</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * myint.c - Another handy routine for testing your tiny shell</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * myint.c - Another handy routine for testing your tiny shell</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> *</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * usage: myint &lt;n&gt;</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * usage: myint &lt;n&gt;</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * Sleeps for &lt;n&gt; seconds and sends SIGINT to itself.</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> * Sleeps for &lt;n&gt; seconds and sends SIGINT to itself.</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> *</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> */</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cm"> */</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp"></span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp"></span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp"></span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp"></span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span> <span class="p">)</span> <span class="p">{</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span> <span class="p">)</span> <span class="p">{</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">secs</span><span class="p">;</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">secs</span><span class="p">;</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Usage: %s &lt;n&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Usage: %s &lt;n&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="p">}</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="p">}</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">secs</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">secs</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">secs</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">secs</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">sleep</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">sleep</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">kill</span><span class="p">(</span> <span class="n">pid</span><span class="p">,</span> <span class="n">SIGINT</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">kill</span><span class="p">(</span> <span class="n">pid</span><span class="p">,</span> <span class="n">SIGINT</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;kill (int) error&quot;</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;kill (int) error&quot;</span> <span class="p">);</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;">  <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"> </span> </span>
-<span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="p">}</span> </span>
-<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(209,166,114,0.25); width:100%; float:left;"><span class="p">}</span> </span> </span>
+            <div class="modal_inner"><div class="highlight"><pre><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span></span><span class="cm">/*</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span></span><span class="cm">/*</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * myint.c - Another handy routine for testing your tiny shell</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * myint.c - Another handy routine for testing your tiny shell</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> *</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * usage: myint &lt;n&gt;</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * usage: myint &lt;n&gt;</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * Sleeps for &lt;n&gt; seconds and sends SIGINT to itself.</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> * Sleeps for &lt;n&gt; seconds and sends SIGINT to itself.</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> *</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> *</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> */</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cm"> */</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp"></span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp"></span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp"></span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="cp">#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp"></span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span> <span class="p">)</span> <span class="p">{</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span> <span class="p">)</span> <span class="p">{</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">secs</span><span class="p">;</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">secs</span><span class="p">;</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Usage: %s &lt;n&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Usage: %s &lt;n&gt;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="p">}</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="p">}</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">secs</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">secs</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">secs</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">secs</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">sleep</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">sleep</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">kill</span><span class="p">(</span> <span class="n">pid</span><span class="p">,</span> <span class="n">SIGINT</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="k">if</span> <span class="p">(</span> <span class="n">kill</span><span class="p">(</span> <span class="n">pid</span><span class="p">,</span> <span class="n">SIGINT</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;kill (int) error&quot;</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">    <span class="n">fprintf</span><span class="p">(</span> <span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;kill (int) error&quot;</span> <span class="p">);</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;">  <span class="n">exit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"> </span> </span>
+<span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="p">}</span> </span>
+<span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"><span style="background-color:rgba(130,57,91,0.25); width:100%; float:left;"><span class="p">}</span> </span> </span>
 
 <span style="background-color:rgba(0,0,0,0.07); width:100%; float:left;"> </span></pre></div><label class="modal_close" for="open-popup"/></div>
           </div>
