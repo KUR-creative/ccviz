@@ -20,11 +20,11 @@ def highlight(src, linenos='table'):
 def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
-Code = namedtuple('Code', 'proj fidx fpath text raw tok_map') # tok_map is 2d list
+Code = namedtuple('Code', 'proj fidx fpath text raw parts_map') # parts_map: li<li<str>>
 Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens tok_idxs num_toks_in_line') # TODO: rm score
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
-def token_path(dirpath):
+def xmap_path(dirpath):
     if 'Formatted_A' in dirpath:
         old,new = 'Formatted_A','Token_A'
     elif 'Formatted_B' in dirpath:
@@ -33,7 +33,7 @@ def token_path(dirpath):
 
 @F.autocurry
 def code(proj, fidx, fpath):
-    def load_token_map(path):
+    def load_xmap(path):
         assert os.path.exists(path)
         return fp.go(
             open(path).read(),
@@ -42,13 +42,13 @@ def code(proj, fidx, fpath):
         )
 
     import os
-    tok_map_path = token_path(fpath) + 'map'
+    path = xmap_path(fpath) + 'map'
     raw = fu.read_text(fpath)
-    print('->>', tok_map_path)
+    print('->>', path)
     return Code(
         proj, fidx, fpath, 
         highlight(raw), raw, 
-        load_token_map(tok_map_path) # token list of lists (separated by '\n')
+        load_xmap(path) # token list of lists (separated by '\n')
     )
 
 @F.autocurry
@@ -65,12 +65,12 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
     )
 
     tokens = fp.go(
-        code_dic[proj, fidx].tok_map[beg:end],
+        code_dic[proj, fidx].parts_map[beg:end],
         F.flatten, tuple, 
         lambda toks: toks[:end_idx+1]
     )
     num_toks_in_line = fp.lmap(
-        len, code_dic[proj, fidx].tok_map[beg:end]
+        len, code_dic[proj, fidx].parts_map[beg:end]
     )
     #print(num_toks_in_line)
 
@@ -81,9 +81,9 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
     #print(tok_idxs)
     #print('----------------')
 
-    #tok_map = code_dic[proj, fidx].tok_map
+    #parts_map = code_dic[proj, fidx].parts_map
     #from pprint import pprint
-    #pprint(tok_map)
+    #pprint(parts_map)
     #exit()
 
     return Match(
