@@ -143,12 +143,23 @@ def len_equalize(s1, s2, padval=' '):
         )
 
 def temp_match_view(code_dic, eA,eB, mA,mB):
+    delim = '│'
+    Alines = fp.map(
+        lambda parts: delim.join(parts) if parts else ' ', 
+        mA.parts_map
+    )
+    #Bparts = F.lflatten(mB.parts_map)
+    return h('div')[
+        fp.lmap(
+            lambda a: h('pre',style='margin:4px;')[a], 
+            Alines)
+    ]
+    '''
     @F.autocurry
     def idx2tok(toks, idx):
         #print(len(toks), abs(idx), toks)
         return ' ' if idx == -1 else toks[abs(idx)]
 
-    '''
     # set space as gap to display
     #Atoks = fp.go(mA.tok_idxs, fp.map(idx2tok(mA.tokens)), tuple)
     #Btoks = fp.go(mB.tok_idxs, fp.map(idx2tok(mB.tokens)), tuple)
