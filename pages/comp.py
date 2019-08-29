@@ -1,3 +1,6 @@
+# map <F5> :wa<CR>:!rm -rf tmp-result/tmp-matching-window/arm9_11; python main.py fixture/tmp-matching-window/arm9_11/strong_link/164.125.34.91_2019-08-29-14-34-07.zip -a 10 -r 0.1 -o tm
+# map <F8> :!rm -rf tmp2/;python main.py fixture/tmp-matching-window/ms/164.125.34.91_2019-08-29-22-58-04.zip -o tmp2<CR>
+p-result/tmp-matching-window/arm9_11/strong_link<CR>
 import os,sys
 sys.path.append( os.path.abspath('..') )
 
