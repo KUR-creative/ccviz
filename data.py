@@ -1,4 +1,5 @@
 #TODO: unify A/B pair variable name style!
+from pprint import pprint
 from collections import namedtuple
 from pathlib import Path
 import json
@@ -48,8 +49,7 @@ def code(proj, fidx, fpath):
             open(mpath).readlines(),
         )
 
-        from pprint import pprint
-        pprint( fp.tmap( fp.tsplit_with, slice_idxs, raw.splitlines() ) )
+        #pprint( fp.tmap( fp.tsplit_with, slice_idxs, raw.splitlines() ) )
         return fp.tmap( 
             fp.tsplit_with, slice_idxs, raw.splitlines() 
         )
@@ -63,47 +63,96 @@ def code(proj, fidx, fpath):
         load_xmap(mpath, raw) # token list of lists (separated by '\n')
     )
 
+MATCH = '+'
+MISMATCH = '-'
+GAP = -1 # NOTE: 0 in raw_match, means "gap" (not that good idea)
+def make_parts_map(code_parts_map, notes):
+    inotes = iter(notes)
+    parts_map = []
+    for parts in code_parts_map:
+        n = 0
+        with_gap = []
+        iparts = iter(parts)
+        while n < len(parts):
+            if F.first(inotes) == GAP:
+                with_gap.append( ' ' )
+            else:
+                with_gap.append( F.first(iparts) )
+                n += 1
+        parts_map.append(tuple(with_gap))
+    #print( len(F.lflatten(parts_map)), len(notes))
+    assert len(F.lflatten(parts_map))==len(notes)
+    return tuple(parts_map)
+
+def make_notes_map(parts_map,notes): # use reduce?
+    inotes = iter(notes)
+    notes_map = []
+    for n in fp.map(len,parts_map):
+        notes_map.append(
+            tuple( F.take(n,inotes) )
+        )
+    return tuple(notes_map)
+
 @F.autocurry
 def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
-    file_idx, func_name, raw_beg, end = raw_match
+    file_idx, func_name, raw_beg, end = raw_match #NOTE: end is last idx + 1 
     fidx = file_idx - 1
     beg  = raw_beg  - 1
 
-    beg_idx,end_idx = fp.go(
+    # get beg/end idx of parts(from .car file)
+    beg_idx,end_idx = fp.go( 
         tok_idxs,
-        fp.remove(lambda x: x == -1), # NOTE: 0 in raw_match, means "gap" (not that good idea)
+        fp.remove(lambda x: x == GAP), 
         fp.lmap(abs),
-        lambda xs: (min(xs), max(xs))
+        lambda xs: (min(xs), max(xs)) # TODO: Is there 0/1 indexing problem?
     )
 
-    tokens = fp.go(
-        code_dic[proj, fidx].parts_map[beg:end],
-        F.flatten, tuple, 
-        lambda toks: toks[:end_idx+1]
-    )
-    num_toks_in_line = fp.lmap(
-        len, code_dic[proj, fidx].parts_map[beg:end]
-    )
-    #print(num_toks_in_line)
+    # get parts of source to display in matching window.
+    code_parts_map = code_dic[proj, fidx].parts_map[beg:end]
 
-    #print('================')
-    #print(code_dic[proj, fidx].raw)
-    #print(beg, end, tokens, len(tokens))
-    #print(len(tokens))
-    #print(tok_idxs)
-    #print('----------------')
+    num_parts = len(F.lflatten(code_parts_map))
 
-    #parts_map = code_dic[proj, fidx].parts_map
-    #from pprint import pprint
-    #pprint(parts_map)
-    #exit()
+    # None:out-of-matching | '+':match | '-':mismatch | 0:gap
+    notes = fp.go( 
+        tok_idxs,
+        lambda xs: [None,] * beg_idx + xs,
+        lambda xs: xs + [None,] * (num_parts - end_idx - 1),
+        fp.tmap(lambda x: F.identity(x) if x == GAP or x == None 
+                     else MATCH         if x >= 0
+                     else MISMATCH)
+    )
+    assert num_parts == len(fp.lremove(lambda x: x == GAP,notes))
+
+    parts_map = make_parts_map(code_parts_map, notes)
+    notes_map = make_notes_map(parts_map, notes)
+    assert len(parts_map) == len(notes_map)
+    for p,n in zip(parts_map,notes_map):
+        assert len(p) == len(n)
 
     return Match(
         proj, fidx, func_name, 
         beg, end, 
         abs_score, rel_score, 
-        parts_map, notes_map
+        make_parts_map(code_parts_map, notes),
+        make_notes_map(parts_map, notes)
     )
+
+    '''
+    print('-------')
+    pprint(parts_map)
+    pprint(notes_map)
+    print(notes)
+
+    #print('->cpm')
+    #pprint(code_parts_map)
+    print('--------pm--------')
+    pprint(parts_map)
+    print(notes)
+    print('n notes:', len(fp.lfilter(lambda x: x == -1, notes)))
+    print(' n pmap:', len(fp.lfilter(lambda s: s == '▣',F.lflatten(parts_map))))
+    assert(len(fp.lfilter(lambda x: x == -1, notes))
+        == len(fp.lfilter(lambda s: s == '▣',F.lflatten(parts_map))))
+    '''
 
 def match2raw(m):
     return Match(
