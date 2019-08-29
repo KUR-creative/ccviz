@@ -148,9 +148,10 @@ def temp_match_view(code_dic, eA,eB, mA,mB):
         #print(len(toks), abs(idx), toks)
         return ' ' if idx == -1 else toks[abs(idx)]
 
+    '''
     # set space as gap to display
-    Atoks = fp.go(mA.tok_idxs, fp.map(idx2tok(mA.tokens)), tuple)
-    Btoks = fp.go(mB.tok_idxs, fp.map(idx2tok(mB.tokens)), tuple)
+    #Atoks = fp.go(mA.tok_idxs, fp.map(idx2tok(mA.tokens)), tuple)
+    #Btoks = fp.go(mB.tok_idxs, fp.map(idx2tok(mB.tokens)), tuple)
 
     # pad spacees to sync length of tokens
     Atoks,Btoks = fp.go(
@@ -192,6 +193,7 @@ def temp_match_view(code_dic, eA,eB, mA,mB):
             lambda a,b: h('pre',style='margin:4px;')[a + '\n' + b], 
             Alines, Blines)
     ]
+    '''
 
     '''
         #h('pre')[delim.join(Atoks)], h('pre')[delim.join(Btoks)]

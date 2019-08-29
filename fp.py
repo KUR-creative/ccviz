@@ -94,7 +94,7 @@ def partition_with(nums_in_parts, seq):
     ret = []
     iseq = iter(seq)
     for n in nums_in_parts:
-        ret.append( fp.take(n,iseq) )
+        ret.append( take(n,iseq) )
     return ret
 '''
 
