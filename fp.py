@@ -33,6 +33,9 @@ def map(f,*seq):
 def lmap(f,*seq):
     return F.lmap(f,*seq) if seq \
     else lambda *xs: F.lmap(f,*xs)
+def tmap(f,*seq):
+    return tuple(F.map(f,*seq)) if seq \
+    else lambda *xs: tuple(F.map(f,*xs))
 
 def filter(f,*seq):
     return F.filter(f,*seq) if seq \
@@ -40,6 +43,9 @@ def filter(f,*seq):
 def lfilter(f,*seq):
     return F.lfilter(f,*seq) if seq \
     else lambda *xs: F.lfilter(f,*xs)
+def tfilter(f,*seq):
+    return tuple(F.filter(f,*seq)) if seq \
+    else lambda *xs: tuple(F.filter(f,*xs))
 
 def remove(f,*seq):
     return F.remove(f,*seq) if seq \
@@ -47,6 +53,9 @@ def remove(f,*seq):
 def lremove(f,*seq):
     return F.lremove(f,*seq) if seq \
     else lambda *xs: F.lremove(f,*xs)
+def tremove(f,*seq):
+    return tuple(F.remove(f,*seq)) if seq \
+    else lambda *xs: tuple(F.remove(f,*xs))
 
 def starmap(f,*seq):
     return I.starmap(f,*seq) if seq \
@@ -54,6 +63,9 @@ def starmap(f,*seq):
 def lstarmap(f,*seq):
     return list(I.starmap(f,*seq)) if seq \
     else lambda *xs: list(I.starmap(f,*xs))
+def tstarmap(f,*seq):
+    return tuple(I.starmap(f,*seq)) if seq \
+    else lambda *xs: tuple(I.starmap(f,*xs))
 
 def mapcat(f,*seq):
     return F.mapcat(f,*seq) if seq \
@@ -61,6 +73,9 @@ def mapcat(f,*seq):
 def lmapcat(f,*seq):
     return F.lmapcat(f,*seq) if seq \
     else lambda *xs: F.lmapcat(f,*xs)
+def tmapcat(f,*seq):
+    return tuple(F.mapcat(f,*seq)) if seq \
+    else lambda *xs: tuple(F.mapcat(f,*xs))
 
 def foreach(f,*seq):
     F.lmap(f,*seq)
