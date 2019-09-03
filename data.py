@@ -21,7 +21,7 @@ def highlight(src, linenos='table'):
 def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
-Code = namedtuple('Code', 'proj fidx fpath text raw parts_map') # parts_map: li<li<str>>
+Code = namedtuple('Code', 'proj fidx fpath text raw tokens') # parts_map: li<li<str>>
 Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score parts_map notes_map') # TODO: rm score
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
@@ -46,7 +46,7 @@ def code(proj, fidx, fpath):
                 fp.map(int),
                 fp.map(fp.dec),
             ),
-            open(mpath).readlines(),
+            open(mpath).readlines(), # TODO: close it..
         )
 
         #pprint( fp.tmap( fp.tsplit_with, slice_idxs, raw.splitlines() ) )
@@ -60,7 +60,7 @@ def code(proj, fidx, fpath):
     return Code(
         proj, fidx, fpath, 
         highlight(raw), raw, 
-        load_xmap(mpath, raw) # token list of lists (separated by '\n')
+        [0,1,2]
     )
 
 MATCH = '+'
@@ -121,9 +121,9 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
                      else MATCH         if x >= 0
                      else MISMATCH)
     )
-    print(proj, file_idx, raw_beg, end)
-    pprint(F.lflatten(code_parts_map))
-    pprint(notes)
+    #print(proj, file_idx, raw_beg, end)
+    #pprint(F.lflatten(code_parts_map))
+    #pprint(notes)
     '''
     assert num_parts == len(fp.lremove(lambda x: x == GAP,notes)),\
         'num_parts = {} != {} = len(gap-removed-notes)'.format(
