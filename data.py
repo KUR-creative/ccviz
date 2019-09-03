@@ -81,7 +81,7 @@ def make_parts_map(code_parts_map, notes):
                 n += 1
         parts_map.append(tuple(with_gap))
     #print( len(F.lflatten(parts_map)), len(notes))
-    assert len(F.lflatten(parts_map))==len(notes)
+    #assert len(F.lflatten(parts_map))==len(notes)
     return tuple(parts_map)
 
 def make_notes_map(parts_map,notes): # use reduce?
@@ -112,7 +112,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
 
     num_parts = len(F.lflatten(code_parts_map))
 
-    # None:out-of-matching | '+':match | '-':mismatch | 0:gap
+    # None:out-of-matching | '+':match | '-':mismatch | -1:gap
     notes = fp.go( 
         tok_idxs,
         lambda xs: [None,] * beg_idx + xs,
@@ -121,7 +121,15 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
                      else MATCH         if x >= 0
                      else MISMATCH)
     )
-    assert num_parts == len(fp.lremove(lambda x: x == GAP,notes))
+    print(proj, file_idx, raw_beg, end)
+    pprint(F.lflatten(code_parts_map))
+    pprint(notes)
+    '''
+    assert num_parts == len(fp.lremove(lambda x: x == GAP,notes)),\
+        'num_parts = {} != {} = len(gap-removed-notes)'.format(
+            num_parts,len(fp.lremove(lambda x: x == GAP,notes))
+        )
+    '''
 
     parts_map = make_parts_map(code_parts_map, notes)
     notes_map = make_notes_map(parts_map, notes)

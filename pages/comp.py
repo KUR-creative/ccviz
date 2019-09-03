@@ -105,6 +105,7 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
     return hu.document_str(
     [
         meta(name="viewport", content="width=device-width, initial-scale=1"),
+        meta(charset='utf-8'),
         link(rel="stylesheet", href='../css/viz1.css'), # comps/x.html
         link(rel="stylesheet", href='../css/table.css'),
         link(rel="stylesheet", href='../css/popup.css'),
@@ -163,7 +164,7 @@ def temp_match_view(code_dic, eA,eB, mA,mB):
         Aparts_map)
 
     # join to one string
-    delim = '│'
+    delim = '︴'
     Alines = fp.map(
         lambda parts: delim.join(parts) if parts else ' ', 
         Aparts_map)
@@ -186,7 +187,7 @@ def temp_match_view(code_dic, eA,eB, mA,mB):
 
 
 
-    css = 'margin:4px;border-bottom:0.1px solid black;'
+    css = 'padding:4px; margin:4px; border-bottom:0.1px solid black;'
     return h('div',style='border-top:0.1px solid black;')[
         fp.lmap( 
             lambda a,b: h('pre',style = css)[a + '\n' + b], 
