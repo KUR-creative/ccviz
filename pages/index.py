@@ -57,17 +57,6 @@ def interpret(config):
 def page(target_cars, config):
     c = interpret(config)
 
-    def lined_th(content):
-        #return h('th', style='border-bottom:1px solid black;')[content]
-        return h('th', style='border-bottom:1px solid black; margin:0px; padding:0px;')[content]
-    def tb_lined_th(content):
-        #return h('th', style='border-bottom:1px solid black; border-top:1px solid black;')[content]
-        return h('th', style='border-bottom: 1px solid black; \
-                              border-top: 1px solid black; \
-                              margin: 0px; padding:0px;')[content]
-    def lined_td(content):
-        #return h('td', style='border-bottom:1px solid black;')[content]
-        return h('td', style='border-bottom:1px solid black; margin:0px; padding:0px;')[content]
     return hu.document_str(
     [
         link(rel="stylesheet", 
@@ -78,38 +67,28 @@ def page(target_cars, config):
                  lambda p: str(p))),
     ], 
     [
-    h1('{C}lone{C2}op {Viz}ualization', 
-        style='text-align: center; margin-top: 10%; font-size: 4em'),
-    div(style='text-align: center;',
-        children= [
-            h('table',style='border-collapse: collapse; \
-                             border-pacing: 0px; \
-                             margin-left: auto; \
-                             margin-right: auto;\
-                             margin-bottom: 20px;')[
-                h('tbody', style='border-top: 1px solid black;', children=[
-                    #fp.lmap( h('tr'),
-                    h('tr')[tb_lined_th('Property'), tb_lined_th('Value')],
+    h1('{C}lone{C2}op {Viz}ualization'),
+    div(children= 
+        [h('table')[ h('tbody', children=[
+            h('tr')[h('th','Property'), h('th','Value')],
 
-                    h('tr')[h('td')['Source'], 
-                            h('td')['{}({})'.format( config['NAME_A'], c.source_type )], ], 
-                    h('tr')[h('td')['Target'],
-                            h('td')['{}({})'.format( config['NAME_B'], c.target_type )], ], 
-                    h('tr')[lined_td('Search Type'), lined_td(c.search_type),], 
+            h('tr')[h('td')['Source'], 
+                    h('td')['{}({})'.format( config['NAME_A'], c.source_type )], ], 
+            h('tr')[h('td')['Target'],
+                    h('td')['{}({})'.format( config['NAME_B'], c.target_type )], ], 
+            h('tr')[h('td',class_='bline')['Search Type'], 
+                    h('td',class_='bline')[c.search_type],], 
 
-                    h('tr')[h('td')['Token Type'], h('td')[', '.join(c.token_types)],], 
-                    h('tr')[lined_td('Depth level'), lined_td(', '.join(c.depth_levels)),], 
+            h('tr')[h('td')['Token Type'], h('td')[', '.join(c.token_types)],], 
+            h('tr')[h('td',class_='bline')['Depth level'], 
+                    h('td',class_='bline')[', '.join(c.depth_levels)]], 
 
-                    h('tr')[
-                        h('td')['Alignment Type'], h('td')[c.alignment_score_type],], 
-                    h('tr')[
-                        h('td')['Absolute Score Threshold'], 
-                        h('td')[c.abs_threshold],], 
-                    h('tr')[
-                        lined_td('Relative Score Threshold'), 
-                        lined_td(c.rel_threshold),], 
-                ])
-            ]
+            h('tr')[h('td')['Alignment Type'], h('td')[c.alignment_score_type],], 
+            h('tr')[h('td')['Absolute Score Threshold'], 
+                    h('td')[c.abs_threshold],], 
+            h('tr')[h('td',class_='bline')['Relative Score Threshold'], 
+                    h('td',class_='bline')[c.rel_threshold]], 
+        ])]
         ] + fp.lmap(
             fp.pipe(
                 lambda p: Path(p).stem,
