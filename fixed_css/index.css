@@ -34,7 +34,6 @@ a:hover, a:visited, a:link, a:active {
 /*********** config table ***********/
 h1 { /* Big Title of this program */
   text-align: center; 
-  margin-top: 10%; 
   font-size: 4.7em;
 }
 
