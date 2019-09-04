@@ -35,10 +35,21 @@ def xmap_path(dirpath):
 
 @F.autocurry
 def code(proj, fidx, fpath):
-    def load_xmap(mpath, raw):
+    def tokens(mpath, raw):
         import os
         assert os.path.exists(mpath)
 
+        lines = fp.go(
+            raw,
+            F.curry(F.partition_by)(lambda s: s == '\n'), 
+            fp.map(''.join),
+            F.curry(F.chunks)(2), 
+            fp.lmap(''.join),
+        )
+        #pprint(lines)
+
+        with open(mpath) as mfile:
+            xmap_lines = mfile.readlines()
         slice_idxs = fp.map( #TODO: change to map and pipe
             fp.pipe(
                 lambda s: s.strip(),
@@ -46,12 +57,11 @@ def code(proj, fidx, fpath):
                 fp.map(int),
                 fp.map(fp.dec),
             ),
-            open(mpath).readlines(), # TODO: close it..
+            xmap_lines
         )
 
-        #pprint( fp.tmap( fp.tsplit_with, slice_idxs, raw.splitlines() ) )
-        return fp.tmap( 
-            fp.tsplit_with, slice_idxs, raw.splitlines() 
+        return fp.tmapcat( 
+            fp.tsplit_with, slice_idxs, lines
         )
 
     mpath = xmap_path(fpath) + 'map'
@@ -60,7 +70,7 @@ def code(proj, fidx, fpath):
     return Code(
         proj, fidx, fpath, 
         highlight(raw), raw, 
-        [0,1,2]
+        tokens(mpath, raw)
     )
 
 MATCH = '+'
