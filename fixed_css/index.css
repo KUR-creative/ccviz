@@ -1,0 +1,71 @@
+a:hover, a:visited, a:link, a:active {
+  text-decoration: none;
+  font-size: 1.3em
+}
+
+.btn {
+  display: inline-block;
+  width: 14%;
+
+  background-color: #87CEEB;
+  border-radius: 5px;
+  color: black; 
+  margin: 5px;
+
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+
+  font-family: "Times New Roman"
+}
+
+.btn:hover {
+  display: inline-block;
+  width: 14%;
+
+  background-color: #4169E1; 
+  border-radius: 5px;
+  color: white;
+  margin: 5px;
+
+  font-family: "Times New Roman"
+}
+
+/*********** config table ***********/
+h1 { /* Big Title of this program */
+  text-align: center; 
+  margin-top: 10%; 
+  font-size: 4em;
+}
+div { /* has table and buttons */
+  text-align: center;
+}
+
+/*********** config table ***********/
+table {
+  border-collapse: collapse; 
+  border-pacing: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
+tbody {
+  border-top: 1px solid black;
+}
+
+th {
+  border-bottom: 2px solid black;
+  border-top: 2px solid black;
+  margin: 0px; 
+  padding: 0px;
+}
+
+.bline {
+  border-bottom:1px solid black; 
+  margin:0px; padding:0px;
+}
+
+.prop {
+  color: DarkBlue;
+}
