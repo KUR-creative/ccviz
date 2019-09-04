@@ -5,14 +5,18 @@ import data
 import file_utils as fu
 
 def test_code__no_empty_line__no_head_spacing(tmp_path):
+    # given
     raw_code = '#include "firm.h"\n#include "memory.h"\n#include "cache.h"'
-    tmp_srcpath = tmp_path/'Formatted_A'/'A'/'src.c' 
-    tmp_mappath = tmp_path/'Token_A'/'A'/'src.cmap' 
+    tmp_srcpath = tmp_path/'Formatted_A'/'A'/'ExHx.c' 
+    tmp_mappath = tmp_path/'Token_A'/'A'/'ExHx.cmap' 
 
     fu.write_text(tmp_srcpath, raw_code)
     fu.write_text(tmp_mappath, '1 10 \n1 10\n1 10\n') 
 
+    # when
     code = data.code('A', 0, str(tmp_srcpath))
+
+    # then
     assert code.raw == raw_code
     assert code.tokens == (
         '#include ', '"firm.h"\n',
@@ -20,6 +24,35 @@ def test_code__no_empty_line__no_head_spacing(tmp_path):
         '#include ', '"cache.h"'
     )
 
-#def test_code__no_empty_line__head_spacing
-#def test_code__empty_line__no_head_spacing
-#def test_code__empty_line__head_spacing
+def test_code__no_empty_line__head_spacing(tmp_path):
+    # given
+    raw_code =('void main( Firm * firm, bool isNand ) {\n'
+             + '  u32 argc;\n'
+             + '  char * argv[2];\n'
+             + '  struct fb fbs[2] = {\n'
+             + '    {\n') # TODO: last '\n' have to do not affect result
+    tmp_srcpath = tmp_path/'Formatted_A'/'A'/'ExHo.c' 
+    tmp_mappath = tmp_path/'Token_A'/'A'/'ExHo.cmap' 
+
+    fu.write_text(tmp_srcpath, raw_code)
+    fu.write_text(
+        tmp_mappath, 
+        '1 12 17 19 25 30 38 \n'
+      + '3 7 \n'
+      + '3 8 10 \n'
+      + '3 10 13 20 22 \n'
+      + '5\n'
+    )
+
+    # when
+    code = data.code('A', 0, str(tmp_srcpath))
+
+    # then
+    assert code.raw == raw_code
+    assert code.tokens == (
+        'void main( ','Firm ','* ','firm, ','bool ','isNand )',' {\n',
+        '  u32 ','argc;\n',
+        '  char ','* ','argv[2];\n',
+        '  struct ','fb ','fbs[2] ','= ','{\n',
+        '    {\n'
+    )
