@@ -103,7 +103,7 @@ def page(target_cars, config):
         )
     )
     ]).format(
-        C  ='<span style="color: #d73a4a;">C</span>',
-        C2 ='<span style="color: #d73a4a;">C</span>',
-        Viz='<span style="color: #d73a4a;">Viz</span>'
+        C  ='<span class=ccviz>C</span>',
+        C2 ='<span class=ccviz>C</span>',
+        Viz='<span class=ccviz>Viz</span>'
     )

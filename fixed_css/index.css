@@ -37,8 +37,13 @@ h1 { /* Big Title of this program */
   margin-top: 10%; 
   font-size: 4.2em;
 }
+
 div { /* has table and buttons */
   text-align: center;
+}
+
+.ccviz {
+  color: #d73a4a;
 }
 
 /*********** config table ***********/
