@@ -56,6 +56,9 @@ def code(proj, fidx, fpath):
                 lambda s: s.split(),
                 fp.map(int),
                 fp.map(fp.dec),
+                # Make tokens from the beginning of the line
+                list, # TODO: or tuple?
+                lambda xs: [0] + xs[1:] if xs else xs,
             ),
             xmap_lines
         )
