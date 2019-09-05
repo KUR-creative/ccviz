@@ -4,46 +4,45 @@
 import data
 import file_utils as fu
 
+def case_for_code(tmp_path, src, xmap):
+    tmp_srcpath = tmp_path/'Formatted_A'/'A'/'src.c' 
+    tmp_mappath = tmp_path/'Token_A'/'A'/'src.cmap' 
+    fu.write_text(tmp_srcpath, src) 
+    fu.write_text(tmp_mappath, xmap)
+    return data.code('A', 0, str(tmp_srcpath))
+
 def test_code__no_empty_line__no_head_spacing(tmp_path):
-    # given
-    tmp_srcpath = tmp_path/'Formatted_A'/'A'/'ExHx.c' 
-    tmp_mappath = tmp_path/'Token_A'/'A'/'ExHx.cmap' 
-    fu.write_text(tmp_srcpath, 
+    assert case_for_code(
+        tmp_path,
+      # code.x
         '#include "firm.h"\n'
       + '#include "memory.h"\n' 
-      + '#include "cache.h"')
-    fu.write_text(tmp_mappath, 
+      + '#include "cache.h"',
+      # code.xmap
         '1 10 \n'
       + '1 10 \n'
-      + '1 10 \n') 
-    # when
-    code = data.code('A', 0, str(tmp_srcpath))
-    # then
-    assert code.tokens == (
+      + '1 10 \n').tokens \
+    == ( # result tokens
         '#include ', '"firm.h"\n',
         '#include ', '"memory.h"\n',
         '#include ', '"cache.h"')
 
 def test_code__no_empty_line__head_spacing(tmp_path):
-    # given
-    tmp_srcpath = tmp_path/'Formatted_A'/'A'/'ExHo.c' 
-    tmp_mappath = tmp_path/'Token_A'/'A'/'ExHo.cmap' 
-    fu.write_text(tmp_srcpath, 
+    assert case_for_code(
+        tmp_path,
+      # code.x
         'void main( Firm * firm, bool isNand ) {\n'
       + '  u32 argc;\n'
       + '  char * argv[2];\n'
       + '  struct fb fbs[2] = {\n'
-      + '    {\n') # TODO: last '\n' have to do not affect result?
-    fu.write_text(tmp_mappath, 
+      + '    {\n', # TODO: last '\n' have to do not affect result?
+      # code.xmap
         '1 12 17 19 25 30 38 \n'
       + '3 7 \n'
       + '3 8 10 \n'
       + '3 10 13 20 22 \n'
-      + '5\n')
-    # when
-    code = data.code('A', 0, str(tmp_srcpath))
-    # then
-    assert code.tokens == (
+      + '5\n').tokens \
+    == ( # result tokens
         'void main( ','Firm ','* ','firm, ','bool ','isNand )',' {\n',
         '  u32 ','argc;\n',
         '  char ','* ','argv[2];\n',
@@ -51,25 +50,21 @@ def test_code__no_empty_line__head_spacing(tmp_path):
         '    {\n')
 
 def test_code__multiple_empty_line__head_spacing(tmp_path):
-    # given
-    tmp_srcpath = tmp_path/'Formatted_A'/'A'/'EoHo.h' 
-    tmp_mappath = tmp_path/'Token_A'/'A'/'EoHo.hmap' 
-    fu.write_text(tmp_srcpath, 
+    assert case_for_code(
+        tmp_path,
+      # code.x
         '  } else argc = 1;\n'
       + '\n'
       + '\n'
       + '  launchFirm( firm, argc, argv );\n'
-      + '}\n')
-    fu.write_text(tmp_mappath, 
+      + '}\n',
+      # code.xmap
         '3 5 10 15 17 \n'
       + '\n'
       + '\n'
       + '3 15 21 27 \n'
-      + '1 \n')
-    # when
-    code = data.code('A', 0, str(tmp_srcpath))
-    # then
-    assert code.tokens == (
+      + '1 \n').tokens \
+    == ( # result tokens
         '  } ','else ','argc ','= ','1;\n\n\n',
 
 
@@ -78,27 +73,23 @@ def test_code__multiple_empty_line__head_spacing(tmp_path):
 
 def test_code__begin_with_empty_lines__then_no_token_for_starting_empty_line(tmp_path):
     # NOTE: difference of prev case is '\n' in first line
-    # given
-    tmp_srcpath = tmp_path/'Formatted_A'/'A'/'EmHo.h' 
-    tmp_mappath = tmp_path/'Token_A'/'A'/'EmHo.hmap' 
-    fu.write_text(tmp_srcpath, 
+    assert case_for_code(
+        tmp_path,
+      # code.x
         '\n\n\n'
       + '  } else argc = 1;\n'
       + '\n'
       + '\n'
       + '  launchFirm( firm, argc, argv );\n'
-      + '}\n')
-    fu.write_text(tmp_mappath, 
+      + '}\n',
         '\n\n\n'
+      # code.xmap
       + '3 5 10 15 17 \n'
       + '\n'
       + '\n'
       + '3 15 21 27 \n'
-      + '1 \n')
-    # when
-    code = data.code('A', 0, str(tmp_srcpath))
-    # then
-    assert code.tokens == (
+      + '1 \n').tokens \
+    == ( # result tokens
         '  } ','else ','argc ','= ','1;\n\n\n',
 
 
