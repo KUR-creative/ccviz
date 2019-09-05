@@ -21,6 +21,7 @@ Code = namedtuple('Code', 'proj fidx fpath text raw xmap')
 Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens notes') # TODO: rm score
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
+#--------------------------------------------------------------------------------------
 def highlight(src, linenos='table'):
     return pygments.highlight(
         src, CppLexer(), HtmlFormatter(linenos=linenos)
@@ -47,35 +48,7 @@ def code(proj, fidx, fpath):
         raw, xmap
     )
 
-'''
-def make_parts_map(code_parts_map, notes):
-    inotes = iter(notes)
-    parts_map = []
-    for parts in code_parts_map:
-        n = 0
-        with_gap = []
-        iparts = iter(parts)
-        while n < len(parts):
-            if F.first(inotes) == GAP:
-                with_gap.append( ' ' )
-            else:
-                with_gap.append( F.first(iparts) )
-                n += 1
-        parts_map.append(tuple(with_gap))
-    #print( len(F.lflatten(parts_map)), len(notes))
-    #assert len(F.lflatten(parts_map))==len(notes)
-    return tuple(parts_map)
-
-def make_notes_map(parts_map,notes): # use reduce?
-    inotes = iter(notes)
-    notes_map = []
-    for n in fp.map(len,parts_map):
-        notes_map.append(
-            tuple( F.take(n,inotes) )
-        )
-    return tuple(notes_map)
-'''
-
+#--------------------------------------------------------------------------------------
 def tokens(code_str, xmap_str):
     lines = fp.go(
         code_str,
@@ -113,7 +86,6 @@ def tokens(code_str, xmap_str):
 MATCH = '+'
 MISMATCH = '-'
 GAP = -1 # NOTE: 0 in raw_match, means "gap" (not that good idea)
-    # maybe useless-> None:out-of-matching | '+':match | '-':mismatch | -1:gap
 
 def slice_nl(s, beg, end):
     return '\n'.join( s.split('\n')[beg:end] )
@@ -166,6 +138,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     toks = fp.tmap(
         lambda idx: code_tokens[idx] if idx >= 0 else '', # '' for GAP
         padded_tok_idxs)
+    # None:out-of-matching | '+':match | '-':mismatch | -1:gap
     notes =((None,) * beg_idx 
           + fp.tmap(lambda i: MATCH if i >= 0 
                       else    GAP   if i == GAP
@@ -188,39 +161,6 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
         toks, notes
     )
 
-    '''
-        fp.tmap(lambda x: F.identity(x) if x == GAP or x == None 
-                     else MATCH         if x >= 0
-                     else MISMATCH)
-
-    assert num_parts == len(fp.lremove(lambda x: x == GAP,notes)),\
-        'num_parts = {} != {} = len(gap-removed-notes)'.format(
-            num_parts,len(fp.lremove(lambda x: x == GAP,notes))
-        )
-
-    parts_map = make_parts_map(code_parts_map, notes)
-    notes_map = make_notes_map(parts_map, notes)
-    assert len(parts_map) == len(notes_map)
-    for p,n in zip(parts_map,notes_map):
-        assert len(p) == len(n)
-
-
-    print('-------')
-    pprint(parts_map)
-    pprint(notes_map)
-    print(notes)
-
-    #print('->cpm')
-    #pprint(code_parts_map)
-    print('--------pm--------')
-    pprint(parts_map)
-    print(notes)
-    print('n notes:', len(fp.lfilter(lambda x: x == -1, notes)))
-    print(' n pmap:', len(fp.lfilter(lambda s: s == '▣',F.lflatten(parts_map))))
-    assert(len(fp.lfilter(lambda x: x == -1, notes))
-        == len(fp.lfilter(lambda s: s == '▣',F.lflatten(parts_map))))
-    '''
-
 def match2raw(m):
     return Match(
         m.proj, m.fidx + 1, 
@@ -229,6 +169,7 @@ def match2raw(m):
         m.tokens, m.notes
     )
 
+#--------------------------------------------------------------------------------------
 def x_id(match_or_code):
     return (match_or_code.proj, match_or_code.fidx)
 def ab_fidx(codeA_codeB): 
