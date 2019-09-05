@@ -1,6 +1,6 @@
 # map <F5> :wa<CR>:!pytest -vv data_test.py<CR>
-# map <F7> :wa<CR>:!rm -rf tmp-result/tmp-matching-window/arm9_11; python main.py fixture/tmp-matching-window/arm9_11/strong_link/164.125.34.91_2019-08-30-12-34-29.zip -a 10 -r 0.1 -o tmp-result/tmp-matching-window/arm9_11/strong_link<CR>
-# map <F8> :wa<CR>:!rm -rf tmp2/;python main.py fixture/tmp-matching-window/ms/164.125.34.91_2019-08-30-12-40-03.zip -o tmp-result/tmp-matching-window/ms<CR>
+# map <F7> :wa<CR>:!rm -rf tmp2/;python main.py fixture/tmp-matching-window/ms/164.125.34.91_2019-08-30-12-40-03.zip -o tmp-result/tmp-matching-window/ms<CR>
+# map <F8> :wa<CR>:!rm -rf tmp-result/tmp-matching-window/arm9_11; python main.py fixture/tmp-matching-window/arm9_11/strong_link/164.125.34.91_2019-08-30-12-34-29.zip -a 10 -r 0.1 -o tmp-result/tmp-matching-window/arm9_11/strong_link<CR>
 import data
 import file_utils as fu
 
@@ -72,7 +72,7 @@ def test_code__multiple_empty_line__head_spacing(tmp_path):
         '}\n')
 
 def test_code__begin_with_empty_lines__then_no_token_for_starting_empty_line(tmp_path):
-    # NOTE: difference of prev case is '\n' in first line
+    # NOTE: difference between this and prev case is '\n' in first line
     assert case_for_code(
         tmp_path,
       # code.x

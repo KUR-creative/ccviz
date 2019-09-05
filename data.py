@@ -49,7 +49,7 @@ def code(proj, fidx, fpath):
             F.curry(F.chunks)(2), 
             fp.lmap(''.join),
         )
-        pprint(lines)
+        #pprint(lines)
 
         with open(mpath) as mfile:
             xmap_lines = mfile.readlines()
@@ -66,9 +66,9 @@ def code(proj, fidx, fpath):
             fp.remove(fp.is_empty)
         )
 
-        from itertools import tee
-        slice_idxs,chk = tee(slice_idxs)
-        pprint(list(chk))
+        #from itertools import tee
+        #slice_idxs,chk = tee(slice_idxs)
+        #pprint(list(chk))
 
         return fp.tmapcat( 
             fp.tsplit_with, slice_idxs, lines
@@ -83,9 +83,7 @@ def code(proj, fidx, fpath):
         tokens(mpath, raw)
     )
 
-MATCH = '+'
-MISMATCH = '-'
-GAP = -1 # NOTE: 0 in raw_match, means "gap" (not that good idea)
+'''
 def make_parts_map(code_parts_map, notes):
     inotes = iter(notes)
     parts_map = []
@@ -112,6 +110,11 @@ def make_notes_map(parts_map,notes): # use reduce?
             tuple( F.take(n,inotes) )
         )
     return tuple(notes_map)
+'''
+
+MATCH = '+'
+MISMATCH = '-'
+GAP = -1 # NOTE: 0 in raw_match, means "gap" (not that good idea)
 
 @F.autocurry
 def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
@@ -124,8 +127,11 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
         tok_idxs,
         fp.remove(lambda x: x == GAP), 
         fp.lmap(abs),
-        lambda xs: (min(xs), max(xs)) # TODO: Is there 0/1 indexing problem?
-    )
+        lambda xs: (min(xs), max(xs)) 
+    )# TODO: Is there 0/1 indexing problem? Test it!
+
+    code = code_dic[proj,fidx]
+    #assert len(code.tokens) == 
 
     # get parts of source to display in matching window.
     code_parts_map = code_dic[proj, fidx].parts_map[beg:end]
