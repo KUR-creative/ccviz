@@ -140,7 +140,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
 
     num_toks = len(code.tokens)
     padded_tok_idxs = fp.lmap(
-        abs, [*range(beg_idx), *tok_idxs, *range(end, num_toks)]
+        abs, [*range(beg_idx), *tok_idxs, *range(end_idx + 1, num_toks)]
     )
 
     tokens = fp.tmap(lambda i: code.tokens[i], padded_tok_idxs)
