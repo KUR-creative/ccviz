@@ -21,10 +21,6 @@ def highlight(src, linenos='table'):
 def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
-Code = namedtuple('Code', 'proj fidx fpath text raw tokens') # parts_map: li<li<str>>
-Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score parts_map notes_map') # TODO: rm score
-MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
-
 def xmap_path(dirpath):
     old,new = (
         ('Formatted_A','Token_A') if 'Formatted_A' in dirpath else 
@@ -141,6 +137,16 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     print(tok_idxs)
     print(padded_tok_idxs)
 
+    tokens = ()
+    notes = ()
+
+    return Match(
+        proj, fidx, func_name, 
+        beg, end, 
+        abs_score, rel_score, 
+        tokens, notes
+    )
+
     '''
         fp.tmap(lambda x: F.identity(x) if x == GAP or x == None 
                      else MATCH         if x >= 0
@@ -150,7 +156,6 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
         'num_parts = {} != {} = len(gap-removed-notes)'.format(
             num_parts,len(fp.lremove(lambda x: x == GAP,notes))
         )
-    '''
 
     parts_map = make_parts_map(code_parts_map, notes)
     notes_map = make_notes_map(parts_map, notes)
@@ -158,15 +163,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     for p,n in zip(parts_map,notes_map):
         assert len(p) == len(n)
 
-    return Match(
-        proj, fidx, func_name, 
-        beg, end, 
-        abs_score, rel_score, 
-        make_parts_map(code_parts_map, notes),
-        make_notes_map(parts_map, notes)
-    )
 
-    '''
     print('-------')
     pprint(parts_map)
     pprint(notes_map)
@@ -188,7 +185,7 @@ def match2raw(m):
         m.proj, m.fidx + 1, 
         m.func_name, m.beg + 1, m.end, 
         m.abs_score, m.rel_score, 
-        m.parts_map, m.notes_map
+        m.tokens, m.notes
     )
 
 def x_id(match_or_code):
