@@ -115,12 +115,15 @@ def make_notes_map(parts_map,notes): # use reduce?
 MATCH = '+'
 MISMATCH = '-'
 GAP = -1 # NOTE: 0 in raw_match, means "gap" (not that good idea)
+    # maybe useless-> None:out-of-matching | '+':match | '-':mismatch | -1:gap
 
 @F.autocurry
-def match(code_dic, proj, raw_match, abs_score, rel_score, tok_idxs):
+def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     file_idx, func_name, raw_beg, end = raw_match #NOTE: end is last idx + 1 
     fidx = file_idx - 1
     beg  = raw_beg  - 1
+    tok_idxs = fp.lmap(fp.dec, raw_tok_idxs)
+    print(tok_idxs)
 
     # get beg/end idx of parts(from .car file)
     beg_idx,end_idx = fp.go( 
@@ -276,8 +279,6 @@ def comp_data(gdat, car_dict):
 
     if fp.is_empty(car_dict['CLONE_LIST']):
         return None
-    raw_A_ms,raw_B_ms, tok_raw_idxsA,tok_raw_idxsB \
-        = F.butlast( fp.unzip(car_dict['CLONE_LIST']) )
     match_stats = fp.lstarmap(
         MatchStat, F.last(fp.unzip(car_dict['CLONE_LIST'])))
 
@@ -295,14 +296,18 @@ def comp_data(gdat, car_dict):
     rel_scores = fp.lmap(F.second, match_stats)
 
     #print('=>',len(abs_scores), len(tok_raw_idxsA)); exit()
-    tok_idxsA = fp.lmap(fp.lmap(fp.dec), tok_raw_idxsA)
-    tok_idxsB = fp.lmap(fp.lmap(fp.dec), tok_raw_idxsB)
+    raw_A_ms,raw_B_ms, raw_tok_idxsA,raw_tok_idxsB \
+        = F.butlast( fp.unzip(car_dict['CLONE_LIST']) )
     match_pairs = fp.lfilter(
         fp.tup(
             lambda m,_: m.abs_score >= gdat.ABS_THRESHOLD and m.rel_score >= gdat.REL_THRESHOLD
         ),
-        zip(fp.lmap(match(code_dic, 'A'), raw_A_ms, abs_scores, rel_scores, tok_idxsA), 
-            fp.lmap(match(code_dic, 'B'), raw_B_ms, abs_scores, rel_scores, tok_idxsB))
+        zip(fp.lmap(
+                match(code_dic, 'A'), 
+                raw_A_ms, abs_scores, rel_scores, raw_tok_idxsA), 
+            fp.lmap(
+                match(code_dic, 'B'), 
+                raw_B_ms, abs_scores, rel_scores, raw_tok_idxsB))
     )
     #print('=====>',tok_idxsA)
     match_pair_dic = F.walk_values(
