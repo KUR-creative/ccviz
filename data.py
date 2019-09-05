@@ -125,7 +125,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     file_idx, func_name, raw_beg, end = raw_match #NOTE: end is last idx + 1 
     fidx = file_idx - 1
     beg  = raw_beg  - 1
-    tok_idxs = fp.lmap(fp.dec, raw_tok_idxs)
+    tok_idxs = fp.lmap(fp.dec, raw_tok_idxs) # -1 is GAP, (-) is mismatch.
 
     # get beg/end idx of parts(from .car file)
     beg_idx,end_idx = fp.go( 
@@ -139,13 +139,16 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     code = code_dic[proj,fidx]
 
     num_toks = len(code.tokens)
-    padded_tok_idxs = [*range(beg_idx), *tok_idxs, *range(end, num_toks)]
+    padded_tok_idxs = fp.lmap(
+        abs, [*range(beg_idx), *tok_idxs, *range(end, num_toks)]
+    )
+
+    tokens = fp.tmap(lambda i: code.tokens[i], padded_tok_idxs)
+    notes = ()
 
     print(tok_idxs)
     print(padded_tok_idxs)
-
-    tokens = ()
-    notes = ()
+    print(tokens)
 
     return Match(
         proj, fidx, func_name, 
