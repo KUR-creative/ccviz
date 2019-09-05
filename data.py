@@ -17,7 +17,7 @@ import html_utils as hu
 #       then Rename tokens -> parts, and use name 'tokens' 
 #       for *tokens* from tokenizer. 
 #       Currently, 'tokens' is parts of source code.
-Code = namedtuple('Code', 'proj fidx fpath text raw tokens')
+Code = namedtuple('Code', 'proj fidx fpath text raw xmap')
 Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens notes') # TODO: rm score
 MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
@@ -72,13 +72,13 @@ def xmap_path(dirpath):
 
 @F.autocurry
 def code(proj, fidx, fpath):
-    mpath = xmap_path(fpath)
-    raw = fu.read_text(fpath)
-    print('->>', mpath)
+    raw =  fu.read_text(fpath)
+    xmap = fu.read_text(xmap_path(fpath))
+    print('->>', fpath)
     return Code(
         proj, fidx, fpath, 
-        highlight(raw), raw, 
-        tokens(mpath, raw)
+        highlight(raw), 
+        raw, xmap
     )
 
 '''
@@ -133,17 +133,19 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     # get tokens of source to display in matching window.
     code = code_dic[proj,fidx]
 
+    '''
     num_toks = len(code.tokens)
     padded_tok_idxs = fp.lmap(
         abs, [*range(beg_idx), *tok_idxs, *range(end_idx + 1, num_toks)]
     )
 
     tokens = fp.tmap(lambda i: code.tokens[i], padded_tok_idxs)
-    notes = ()
 
     print(tok_idxs)
     print(padded_tok_idxs)
     print(tokens)
+    '''
+    notes = ()
 
     return Match(
         proj, fidx, func_name, 
