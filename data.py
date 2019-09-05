@@ -123,7 +123,6 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     fidx = file_idx - 1
     beg  = raw_beg  - 1
     tok_idxs = fp.lmap(fp.dec, raw_tok_idxs)
-    print(tok_idxs)
 
     # get beg/end idx of parts(from .car file)
     beg_idx,end_idx = fp.go( 
@@ -133,27 +132,20 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
         lambda xs: (min(xs), max(xs)) 
     )# TODO: Is there 0/1 indexing problem? Test it!
 
+    # get tokens of source to display in matching window.
     code = code_dic[proj,fidx]
-    #assert len(code.tokens) == 
 
-    # get parts of source to display in matching window.
-    code_parts_map = code_dic[proj, fidx].parts_map[beg:end]
+    num_toks = len(code.tokens)
+    padded_tok_idxs = [*range(beg_idx), *tok_idxs, *range(end, num_toks)]
 
-    num_parts = len(F.lflatten(code_parts_map))
+    print(tok_idxs)
+    print(padded_tok_idxs)
 
-    # None:out-of-matching | '+':match | '-':mismatch | -1:gap
-    notes = fp.go( 
-        tok_idxs,
-        lambda xs: [None,] * beg_idx + xs,
-        lambda xs: xs + [None,] * (num_parts - end_idx - 1),
+    '''
         fp.tmap(lambda x: F.identity(x) if x == GAP or x == None 
                      else MATCH         if x >= 0
                      else MISMATCH)
-    )
-    #print(proj, file_idx, raw_beg, end)
-    #pprint(F.lflatten(code_parts_map))
-    #pprint(notes)
-    '''
+
     assert num_parts == len(fp.lremove(lambda x: x == GAP,notes)),\
         'num_parts = {} != {} = len(gap-removed-notes)'.format(
             num_parts,len(fp.lremove(lambda x: x == GAP,notes))
