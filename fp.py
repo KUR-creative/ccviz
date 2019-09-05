@@ -116,6 +116,28 @@ class A():
     def __init__(self,x): self.x = x
     def m(self,x): return x
 
+def cut_with_bound(pred, xs):
+    chunk = []
+    for x in xs:
+        chunk.append(x)
+        if pred(x):
+            yield chunk
+            chunk = []
+    if chunk: #remaining elements
+        yield chunk
+
+assert list(cut_with_bound(lambda x: x == 0, [1,2,0, 3,4,0, 0, 0])) \
+    == [[1,2,0], [3,4,0], [0], [0]] 
+assert list(cut_with_bound(lambda x: x == 0, [])) \
+    == []
+assert list(cut_with_bound(lambda x: x == 0, [1,2,0,3,4])) == [[1,2,0],[3,4]], \
+    '{} != {}'.format(list(cut_with_bound(lambda x: x == 0, [1,2,0,3,4])), [[1,2,0],[3,4]])
+assert list(cut_with_bound(lambda x: x == 0, [1,2,3,4])) == [[1,2,3,4]], \
+    '{} != {}'.format(list(cut_with_bound(lambda x: x == 0, [1,2,3,4])), [[1,2,3,4]])
+assert list(cut_with_bound(lambda x: x == 0, [0, 1,2,3,4,0])) == [[0], [1,2,3,4,0]], \
+    '{} != {}'.format(list(cut_with_bound(lambda x: x == 0, [0, 1,2,3,4,0])), [[0], [1,2,3,4,0]])
+
+
 if __name__ == '__main__':
     print( lmap(tup(pow))( [(2,5),(3,2),(10,3)] ) )
     print( list(starmap(pow)([(2,5),(3,2),(10,3)] ) ))
