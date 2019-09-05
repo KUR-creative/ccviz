@@ -136,6 +136,7 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
         source1=srcA, source2=srcB, match=temp_match  
     )) #{match} in table TODO:(remove it)
 
+'''
 def len_equalize(s1, s2, padval=' '): 
     #print(s1,s2)
     slen = max(len(s1), len(s2))
@@ -146,7 +147,25 @@ def len_equalize(s1, s2, padval=' '):
             s1 + (padval,) * (slen - len(s1)),
             s2 + (padval,) * (slen - len(s2))
         )
+'''
 
+def sync_tok(a, b):
+    '''
+    Sync length of s1, s2. 
+    If a has some \n, then it add same number of \n to b.
+    ''' 
+    def sync_tok_no_nl(a, b):
+        slen = max(len(a), len(b))
+        return a.ljust(slen,' '), b.ljust(slen,' ')
+    if '\n' in a:
+        sA,nlsA = fp.map(''.join, F.lsplit_by(lambda s: s != '\n',a))
+        sB,nlsB = fp.map(''.join, F.lsplit_by(lambda s: s != '\n',b))
+        a,b = sync_tok_no_nl(sA,sB)
+        print(*fp.lmap(repr,[sA,nlsA, sB,nlsB]))
+        print(repr(a),repr(b))
+        return a + nlsA, b + nlsA
+    else:
+        return sync_tok_no_nl(a, b)
 
 def temp_match_view(code_dic, mA,mB):
     '''
