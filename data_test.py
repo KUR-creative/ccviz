@@ -88,12 +88,10 @@ def test_code__multiple_empty_line__head_spacing(tmp_path):
         '}\n'
     )
 
-import pytest
-@pytest.mark.skip(reason='not now')
-def test_code__begin_with_empty_line__then_no_token_for_starting_empty_line(tmp_path):
+def test_code__begin_with_empty_lines__then_no_token_for_starting_empty_line(tmp_path):
     # NOTE: difference of prev case is '\n' in first line
     # given
-    raw_code =('\n'
+    raw_code =('\n\n\n'
              + '  } else argc = 1;\n'
              + '\n'
              + '\n'
@@ -105,7 +103,7 @@ def test_code__begin_with_empty_line__then_no_token_for_starting_empty_line(tmp_
     fu.write_text(tmp_srcpath, raw_code)
     fu.write_text(
         tmp_mappath, 
-        '\n'
+        '\n\n\n'
       + '3 5 10 15 17 \n'
       + '\n'
       + '\n'
@@ -129,6 +127,6 @@ def test_code__begin_with_empty_line__then_no_token_for_starting_empty_line(tmp_
         '  } ','else ','argc ','= ','1;\n\n\n',
 
 
-        '  launchFirm( ','firm, ','argc, ','argv );\n'
+        '  launchFirm( ','firm, ','argc, ','argv );\n',
         '}\n'
     )
