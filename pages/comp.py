@@ -147,7 +147,8 @@ def len_equalize(s1, s2, padval=' '):
             s2 + (padval,) * (slen - len(s2))
         )
 
-def temp_match_view(code_dic, eA,eB, mA,mB):
+
+def temp_match_view(code_dic, mA,mB):
     '''
     _,flatBparts = len_equalize(
         tuple(F.flatten(mA.parts_map)), 
@@ -299,7 +300,7 @@ def page(gdat, comp_data):
         Ainfo = h('h2')[ 'A: ' + Path(A_srcpaths[mA.fidx]).name ]
         Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
         table_info = h('h2')[ 'Result Table' ]
-        temp_match = temp_match_view(code_dic, eA,eB, mA,mB)
+        temp_match = temp_match_view(code_dic, mA,mB)
         comp_htmls.append(gen_comp_html(
             Ainfo,Binfo,table_info, eA,eB, 
             comp_table(match_pair_dic, match_stat_dic, mA,mB, gdat), 
