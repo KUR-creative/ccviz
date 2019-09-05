@@ -4,16 +4,15 @@
 import data
 import file_utils as fu
 
-def case_for_code(tmp_path, src, xmap):
-    tmp_srcpath = tmp_path/'Formatted_A'/'A'/'src.c' 
-    tmp_mappath = tmp_path/'Token_A'/'A'/'src.cmap' 
-    fu.write_text(tmp_srcpath, src) 
-    fu.write_text(tmp_mappath, xmap)
-    return data.code('A', 0, str(tmp_srcpath))
+def case_for_code(src, xmap):
+    #tmp_srcpath = tmp_path/'Formatted_A'/'A'/'src.c' 
+    #tmp_mappath = tmp_path/'Token_A'/'A'/'src.cmap' 
+    #fu.write_text(tmp_srcpath, src) 
+    #fu.write_text(tmp_mappath, xmap)
+    return data.tokens(src,xmap)
 
-def test_code__no_empty_line__no_head_spacing(tmp_path):
+def test_tokens__no_empty_line__no_head_spacing():
     assert case_for_code(
-        tmp_path,
       # code.x
         '#include "firm.h"\n'
       + '#include "memory.h"\n' 
@@ -21,15 +20,14 @@ def test_code__no_empty_line__no_head_spacing(tmp_path):
       # code.xmap
         '1 10 \n'
       + '1 10 \n'
-      + '1 10 \n').tokens \
+      + '1 10 \n') \
     == ( # result tokens
         '#include ', '"firm.h"\n',
         '#include ', '"memory.h"\n',
         '#include ', '"cache.h"')
 
-def test_code__no_empty_line__head_spacing(tmp_path):
+def test_tokens__no_empty_line__head_spacing():
     assert case_for_code(
-        tmp_path,
       # code.x
         'void main( Firm * firm, bool isNand ) {\n'
       + '  u32 argc;\n'
@@ -41,7 +39,7 @@ def test_code__no_empty_line__head_spacing(tmp_path):
       + '3 7 \n'
       + '3 8 10 \n'
       + '3 10 13 20 22 \n'
-      + '5\n').tokens \
+      + '5\n') \
     == ( # result tokens
         'void main( ','Firm ','* ','firm, ','bool ','isNand )',' {\n',
         '  u32 ','argc;\n',
@@ -49,9 +47,8 @@ def test_code__no_empty_line__head_spacing(tmp_path):
         '  struct ','fb ','fbs[2] ','= ','{\n',
         '    {\n')
 
-def test_code__multiple_empty_line__head_spacing(tmp_path):
+def test_tokens__multiple_empty_line__head_spacing():
     assert case_for_code(
-        tmp_path,
       # code.x
         '  } else argc = 1;\n'
       + '\n'
@@ -63,7 +60,7 @@ def test_code__multiple_empty_line__head_spacing(tmp_path):
       + '\n'
       + '\n'
       + '3 15 21 27 \n'
-      + '1 \n').tokens \
+      + '1 \n') \
     == ( # result tokens
         '  } ','else ','argc ','= ','1;\n\n\n',
 
@@ -71,10 +68,9 @@ def test_code__multiple_empty_line__head_spacing(tmp_path):
         '  launchFirm( ','firm, ','argc, ','argv );\n',
         '}\n')
 
-def test_code__begin_with_empty_lines__then_no_token_for_starting_empty_line(tmp_path):
+def test_tokens__begin_with_empty_lines__then_no_token_for_starting_empty_line():
     # NOTE: difference between this and prev case is '\n' in first line
     assert case_for_code(
-        tmp_path,
       # code.x
         '\n\n\n'
       + '  } else argc = 1;\n'
@@ -88,7 +84,7 @@ def test_code__begin_with_empty_lines__then_no_token_for_starting_empty_line(tmp
       + '\n'
       + '\n'
       + '3 15 21 27 \n'
-      + '1 \n').tokens \
+      + '1 \n') \
     == ( # result tokens
         '  } ','else ','argc ','= ','1;\n\n\n',
 
