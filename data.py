@@ -118,12 +118,24 @@ GAP = -1 # NOTE: 0 in raw_match, means "gap" (not that good idea)
 def slice_nl(s, beg, end):
     return '\n'.join( s.split('\n')[beg:end] )
 
+def is_consecutive(li):
+    return sorted(li) == list(range(min(li), max(li)+1))
+
 @F.autocurry
 def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
+    '''
+    code, beg, end -> code_tokens
+    code_tokens, tok_idxs -> padded_tok_idxs, Match.notej
+    code_tokens, padded_tok_idxs -> Match.tokens
+    '''
+
     file_idx, func_name, raw_beg, end = raw_match #NOTE: end is last idx + 1 
     fidx = file_idx - 1
     beg  = raw_beg  - 1
-    tok_idxs = fp.lmap(fp.dec, raw_tok_idxs) # -1 is GAP, (-) is mismatch.
+    tok_idxs = fp.lmap( # -1 is GAP, (-) is mismatch.
+        lambda x: x - 1 if x >= 0 else x + 1, 
+        raw_tok_idxs
+    ) 
 
     # get beg/end idx of parts(from .car file)
     beg_idx,end_idx = fp.go( 
@@ -135,19 +147,23 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
 
     # get tokens of source to display in matching window.
     code = code_dic[proj,fidx]
-    toks = tokens(
+    code_tokens = tokens(
         slice_nl(code.raw,  beg,end),
         slice_nl(code.xmap, beg,end)
     )
 
-    num_toks = len(toks)
+    num_toks = len(code_tokens)
     padded_tok_idxs = fp.lmap(
-        abs, [*range(beg_idx), *tok_idxs, *range(end_idx + 1, num_toks)]
+        lambda idx: abs(idx) if idx != GAP else idx, 
+        [*range(beg_idx), *tok_idxs, *range(end_idx + 1, num_toks)]
     )
 
-    print(tok_idxs)
-    print(padded_tok_idxs)
-    print(toks)
+    #print('tidx',len(tok_idxs), tok_idxs)
+    #print('pti ', len(padded_tok_idxs), padded_tok_idxs)
+    #print([*range(beg_idx)], tok_idxs, [*range(end_idx + 1, num_toks)])
+    assert is_consecutive(fp.lremove(lambda x: x == -1, padded_tok_idxs))
+
+    toks = ()
     notes = ()
 
     return Match(
