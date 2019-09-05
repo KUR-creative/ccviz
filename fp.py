@@ -77,6 +77,10 @@ def tmapcat(f,*seq):
     return tuple(F.mapcat(f,*seq)) if seq \
     else lambda *xs: tuple(F.mapcat(f,*xs))
 
+def walk(f,*seq):
+    return F.walk(f,*seq) if seq \
+    else lambda *xs: F.walk(f,*xs)
+
 def split_with(sep_idxs, li):
     ''' 
     If sep_idxs is empty, then it returns empty generator. 
