@@ -1,4 +1,3 @@
-#TODO: unify A/B pair variable name style!
 from pprint import pprint
 from collections import namedtuple
 from pathlib import Path
@@ -13,6 +12,14 @@ from pygments.formatters import HtmlFormatter
 import fp
 import file_utils as fu
 import html_utils as hu
+
+# NOTE: If we need visualize *tokens* from tokenizer,
+#       then Rename tokens -> parts, and use name 'tokens' 
+#       for *tokens* from tokenizer. 
+#       Currently, 'tokens' is parts of source code.
+Code = namedtuple('Code', 'proj fidx fpath text raw tokens')
+Match = namedtuple('Match', 'proj fidx func_name beg end abs_score rel_score tokens notes') # TODO: rm score
+MatchStat = namedtuple('MatchStat', 'abs_score rel_score c1 c2 c3 c4 gap mismatch') 
 
 def highlight(src, linenos='table'):
     return pygments.highlight(
