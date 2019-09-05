@@ -42,7 +42,10 @@ def code(proj, fidx, fpath):
         lines = fp.go(
             raw,
             F.curry(F.partition_by)(lambda s: s == '\n'), 
-            fp.map(''.join),
+            fp.lmap(''.join), 
+            # Ignore newlines in beginning of source code
+            lambda xs: F.rest(xs) if '\n' in xs[0] else xs,
+            # join ['source line', '\n\n\n']
             F.curry(F.chunks)(2), 
             fp.lmap(''.join),
         )
@@ -56,9 +59,8 @@ def code(proj, fidx, fpath):
                 lambda s: s.strip(),
                 lambda s: s.split(),
                 fp.map(int),
-                fp.map(fp.dec),
+                fp.lmap(fp.dec), # TODO: list or tuple?
                 # Make tokens from the beginning of the line
-                list, # TODO: or tuple?
                 lambda xs: [0] + xs[1:] if xs else xs,
             )),
             fp.remove(fp.is_empty)
