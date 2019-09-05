@@ -125,7 +125,7 @@ def is_consecutive(li):
 def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     '''
     code, beg, end -> code_tokens
-    code_tokens, tok_idxs -> padded_tok_idxs, Match.notej
+    code_tokens, tok_idxs -> padded_tok_idxs, Match.notes
     code_tokens, padded_tok_idxs -> Match.tokens
     '''
 
@@ -164,7 +164,20 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     assert is_consecutive(fp.lremove(lambda x: x == -1, padded_tok_idxs))
 
     toks = ()
-    notes = ()
+    notes =((None,) * beg_idx 
+          + fp.tmap(lambda i: MATCH if i >= 0 
+                      else    GAP   if i == GAP
+                      else    MISMATCH, 
+                    tok_idxs)
+          + (None,) * (num_toks - (end_idx + 1)))
+
+    #print(code.fpath)
+    #print('num_toks',num_toks,'end_idx',end_idx,'num_toks - end_idx',num_toks - end_idx)
+    #pprint(code_tokens)
+    #print(notes)
+
+    assert len(padded_tok_idxs) == len(notes), \
+        '{} != {}'.format(len(padded_tok_idxs), len(notes))
 
     return Match(
         proj, fidx, func_name, 
