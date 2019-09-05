@@ -28,14 +28,6 @@ def highlight(src, linenos='table'):
 def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
-def xmap_path(dirpath):
-    old,new = (
-        ('Formatted_A','Token_A') if 'Formatted_A' in dirpath else 
-        ('Formatted_B','Token_B') if 'Formatted_B' in dirpath else 
-        (None,None)
-    )
-    return fu.replace1(old, new, dirpath)
-
 def tokens(code_str, xmap_str):
     lines = fp.go(
         code_str,
@@ -70,9 +62,17 @@ def tokens(code_str, xmap_str):
         fp.tsplit_with, slice_idxs, lines
     )
 
+def xmap_path(dirpath):
+    old,new = (
+        ('Formatted_A','Token_A') if 'Formatted_A' in dirpath else 
+        ('Formatted_B','Token_B') if 'Formatted_B' in dirpath else 
+        (None,None)
+    )
+    return fu.replace1(old, new, dirpath) + 'map'
+
 @F.autocurry
 def code(proj, fidx, fpath):
-    mpath = xmap_path(fpath) + 'map'
+    mpath = xmap_path(fpath)
     raw = fu.read_text(fpath)
     print('->>', mpath)
     return Code(
