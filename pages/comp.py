@@ -161,13 +161,21 @@ def sync_tok(a, b):
         sA,nlsA = fp.map(''.join, F.lsplit_by(lambda s: s != '\n',a))
         sB,nlsB = fp.map(''.join, F.lsplit_by(lambda s: s != '\n',b))
         a,b = sync_tok_no_nl(sA,sB)
-        print(*fp.lmap(repr,[sA,nlsA, sB,nlsB]))
-        print(repr(a),repr(b))
+        #print(*fp.lmap(repr,[sA,nlsA, sB,nlsB]))
+        #print(repr(a),repr(b))
         return a + nlsA, b + nlsA
     else:
         return sync_tok_no_nl(a, b)
 
 def temp_match_view(code_dic, mA,mB):
+    assert len(mA.tokens) == len(mA.tokens), \
+        '{} != {}'.format(len(mA.tokens), len(mA.tokens))
+    toksB = fp.walk(fp.walk(lambda s: s.replace('\n','')), mB.tokens)
+    toksA,toksB = fp.unzip( fp.map(sync_tok, mA.tokens,toksB) )
+    #print(toksA)
+    #print(toksB)
+    #for a,b in zip(toksA,toksB): print(repr(a)); print(repr(b))
+
     '''
     _,flatBparts = len_equalize(
         tuple(F.flatten(mA.parts_map)), 
