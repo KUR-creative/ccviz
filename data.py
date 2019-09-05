@@ -163,7 +163,9 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     #print([*range(beg_idx)], tok_idxs, [*range(end_idx + 1, num_toks)])
     assert is_consecutive(fp.lremove(lambda x: x == -1, padded_tok_idxs))
 
-    toks = ()
+    toks = fp.tmap(
+        lambda idx: code_tokens[idx] if idx >= 0 else '', # '' for GAP
+        padded_tok_idxs)
     notes =((None,) * beg_idx 
           + fp.tmap(lambda i: MATCH if i >= 0 
                       else    GAP   if i == GAP
@@ -174,8 +176,8 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     #print(code.fpath)
     #print('num_toks',num_toks,'end_idx',end_idx,'num_toks - end_idx',num_toks - end_idx)
     #pprint(code_tokens)
+    #print(toks)
     #print(notes)
-
     assert len(padded_tok_idxs) == len(notes), \
         '{} != {}'.format(len(padded_tok_idxs), len(notes))
 
