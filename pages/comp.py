@@ -148,6 +148,7 @@ def len_equalize(s1, s2, padval=' '):
         )
 
 def temp_match_view(code_dic, eA,eB, mA,mB):
+    '''
     _,flatBparts = len_equalize(
         tuple(F.flatten(mA.parts_map)), 
         tuple(F.flatten(mB.parts_map))
@@ -172,7 +173,6 @@ def temp_match_view(code_dic, eA,eB, mA,mB):
         lambda parts: delim.join(parts) if parts else ' ', 
         Bparts_map)
 
-    '''
     # colorize
     def color(x):
         return('green' if x == data.MATCH
@@ -183,7 +183,6 @@ def temp_match_view(code_dic, eA,eB, mA,mB):
     #print(Acolors)
     fp.map(lambda s: s.split(delim), Alines)
     coloredAlines = fp.go(
-    '''
 
 
 
@@ -194,6 +193,7 @@ def temp_match_view(code_dic, eA,eB, mA,mB):
             Alines, Blines)
             #coloredAlines, coloredBlines)
     ]
+    '''
     '''
     @F.autocurry
     def idx2tok(toks, idx):
