@@ -41,8 +41,7 @@ def test_code__no_empty_line__head_spacing(tmp_path):
       + '3 7 \n'
       + '3 8 10 \n'
       + '3 10 13 20 22 \n'
-      + '5\n'
-    )
+      + '5\n')
 
     # when
     code = data.code('A', 0, str(tmp_srcpath))
@@ -55,4 +54,81 @@ def test_code__no_empty_line__head_spacing(tmp_path):
         '  char ','* ','argv[2];\n',
         '  struct ','fb ','fbs[2] ','= ','{\n',
         '    {\n'
+    )
+
+def test_code__multiple_empty_line__head_spacing(tmp_path):
+    # given
+    raw_code =('  } else argc = 1;\n'
+             + '\n'
+             + '\n'
+             + '  launchFirm( firm, argc, argv );\n'
+             + '}\n')
+    tmp_srcpath = tmp_path/'Formatted_A'/'A'/'EoHo.h' 
+    tmp_mappath = tmp_path/'Token_A'/'A'/'EoHo.hmap' 
+
+    fu.write_text(tmp_srcpath, raw_code)
+    fu.write_text(
+        tmp_mappath, 
+        '3 5 10 15 17 \n'
+      + '\n'
+      + '\n'
+      + '3 15 21 27 \n'
+      + '1 \n')
+
+    # when
+    code = data.code('A', 0, str(tmp_srcpath))
+
+    # then
+    assert code.raw == raw_code
+    assert code.tokens == (
+        '  } ','else ','argc ','= ','1;\n\n\n',
+
+
+        '  launchFirm( ','firm, ','argc, ','argv );\n',
+        '}\n'
+    )
+
+import pytest
+@pytest.mark.skip(reason='not now')
+def test_code__begin_with_empty_line__then_no_token_for_starting_empty_line(tmp_path):
+    # NOTE: difference of prev case is '\n' in first line
+    # given
+    raw_code =('\n'
+             + '  } else argc = 1;\n'
+             + '\n'
+             + '\n'
+             + '  launchFirm( firm, argc, argv );\n'
+             + '}\n')
+    tmp_srcpath = tmp_path/'Formatted_A'/'A'/'EoHo.h' 
+    tmp_mappath = tmp_path/'Token_A'/'A'/'EoHo.hmap' 
+
+    fu.write_text(tmp_srcpath, raw_code)
+    fu.write_text(
+        tmp_mappath, 
+        '\n'
+      + '3 5 10 15 17 \n'
+      + '\n'
+      + '\n'
+      + '3 15 21 27 \n'
+      + '1 \n')
+
+    # when
+    code = data.code('A', 0, str(tmp_srcpath))
+
+    # then
+    assert code.raw == raw_code
+    print(code.tokens)
+    print((
+        '  } ','else ','argc ','= ','1;\n\n\n',
+
+
+        '  launchFirm( ','firm, ','argc, ','argv );\n'
+        '}\n'
+    ))
+    assert code.tokens == (
+        '  } ','else ','argc ','= ','1;\n\n\n',
+
+
+        '  launchFirm( ','firm, ','argc, ','argv );\n'
+        '}\n'
     )

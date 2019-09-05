@@ -46,12 +46,13 @@ def code(proj, fidx, fpath):
             F.curry(F.chunks)(2), 
             fp.lmap(''.join),
         )
-        #pprint(lines)
+        pprint(lines)
 
         with open(mpath) as mfile:
             xmap_lines = mfile.readlines()
-        slice_idxs = fp.map( #TODO: change to map and pipe
-            fp.pipe(
+        slice_idxs = fp.go( #TODO: change to map and pipe
+            xmap_lines,
+            fp.map(fp.pipe(
                 lambda s: s.strip(),
                 lambda s: s.split(),
                 fp.map(int),
@@ -59,9 +60,13 @@ def code(proj, fidx, fpath):
                 # Make tokens from the beginning of the line
                 list, # TODO: or tuple?
                 lambda xs: [0] + xs[1:] if xs else xs,
-            ),
-            xmap_lines
+            )),
+            fp.remove(fp.is_empty)
         )
+
+        from itertools import tee
+        slice_idxs,chk = tee(slice_idxs)
+        pprint(list(chk))
 
         return fp.tmapcat( 
             fp.tsplit_with, slice_idxs, lines
