@@ -36,47 +36,42 @@ def xmap_path(dirpath):
     )
     return fu.replace1(old, new, dirpath)
 
+def tokens(code_str, xmap_str):
+    lines = fp.go(
+        code_str,
+        F.curry(F.partition_by)(lambda s: s == '\n'), 
+        fp.lmap(''.join), 
+        # Ignore newlines in beginning of source code
+        lambda xs: F.rest(xs) if '\n' in xs[0] else xs,
+        # join ['source line', '\n\n\n']
+        F.curry(F.chunks)(2), 
+        fp.lmap(''.join),
+    )
+    #pprint(lines)
+
+    slice_idxs = fp.go( #TODO: change to map and pipe
+        xmap_str.splitlines(),
+        fp.map(fp.pipe(
+            lambda s: s.strip(),
+            lambda s: s.split(),
+            fp.map(int),
+            fp.lmap(fp.dec), # TODO: list or tuple?
+            # Make tokens from the beginning of the line
+            lambda xs: [0] + xs[1:] if xs else xs,
+        )),
+        fp.remove(fp.is_empty)
+    )
+
+    #from itertools import tee
+    #slice_idxs,chk = tee(slice_idxs)
+    #pprint(list(chk))
+
+    return fp.tmapcat( 
+        fp.tsplit_with, slice_idxs, lines
+    )
+
 @F.autocurry
 def code(proj, fidx, fpath):
-    def tokens(mpath, raw):
-        import os
-        assert os.path.exists(mpath)
-
-        lines = fp.go(
-            raw,
-            F.curry(F.partition_by)(lambda s: s == '\n'), 
-            fp.lmap(''.join), 
-            # Ignore newlines in beginning of source code
-            lambda xs: F.rest(xs) if '\n' in xs[0] else xs,
-            # join ['source line', '\n\n\n']
-            F.curry(F.chunks)(2), 
-            fp.lmap(''.join),
-        )
-        #pprint(lines)
-
-        with open(mpath) as mfile:
-            xmap_lines = mfile.readlines()
-        slice_idxs = fp.go( #TODO: change to map and pipe
-            xmap_lines,
-            fp.map(fp.pipe(
-                lambda s: s.strip(),
-                lambda s: s.split(),
-                fp.map(int),
-                fp.lmap(fp.dec), # TODO: list or tuple?
-                # Make tokens from the beginning of the line
-                lambda xs: [0] + xs[1:] if xs else xs,
-            )),
-            fp.remove(fp.is_empty)
-        )
-
-        #from itertools import tee
-        #slice_idxs,chk = tee(slice_idxs)
-        #pprint(list(chk))
-
-        return fp.tmapcat( 
-            fp.tsplit_with, slice_idxs, lines
-        )
-
     mpath = xmap_path(fpath) + 'map'
     raw = fu.read_text(fpath)
     print('->>', mpath)
