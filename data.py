@@ -115,6 +115,9 @@ MISMATCH = '-'
 GAP = -1 # NOTE: 0 in raw_match, means "gap" (not that good idea)
     # maybe useless-> None:out-of-matching | '+':match | '-':mismatch | -1:gap
 
+def slice_nl(s, beg, end):
+    return '\n'.join( s.split('\n')[beg:end] )
+
 @F.autocurry
 def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     file_idx, func_name, raw_beg, end = raw_match #NOTE: end is last idx + 1 
@@ -132,26 +135,26 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
 
     # get tokens of source to display in matching window.
     code = code_dic[proj,fidx]
+    toks = tokens(
+        slice_nl(code.raw,  beg,end),
+        slice_nl(code.xmap, beg,end)
+    )
 
-    '''
-    num_toks = len(code.tokens)
+    num_toks = len(toks)
     padded_tok_idxs = fp.lmap(
         abs, [*range(beg_idx), *tok_idxs, *range(end_idx + 1, num_toks)]
     )
 
-    tokens = fp.tmap(lambda i: code.tokens[i], padded_tok_idxs)
-
     print(tok_idxs)
     print(padded_tok_idxs)
-    print(tokens)
-    '''
+    print(toks)
     notes = ()
 
     return Match(
         proj, fidx, func_name, 
         beg, end, 
         abs_score, rel_score, 
-        tokens, notes
+        toks, notes
     )
 
     '''
