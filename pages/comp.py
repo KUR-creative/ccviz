@@ -223,14 +223,7 @@ def temp_match_view(code_dic, mA,mB):
         fp.map(sync_toknote, toknotesA,toknotesB)
     )
 
-    pprint(toknotesA)
-    # generate splitted nl toknotes
-    xsA1 = fp.lmapcat(split_nls, toknotesA) 
-    pprint(xsA1)
-    # cut by nl
-    xsA2 = list(fp.cut_with_bound(fp.tup(lambda tok,_: tok == '\n'), xsA1))
-    pprint(xsA2)
-
+    # Generate pres and spans
     color_css = {
         consts.MATCH     : 'background-color: lightgreen',
         consts.MISMATCH  : 'background-color: crimson',
@@ -241,11 +234,15 @@ def temp_match_view(code_dic, mA,mB):
         token,note = tn
         return span(token,style=color_css[note])
 
-    # map to span
-    xsA3 = fp.walk(fp.walk(toknote2span), xsA2)
-    pprint(xsA3)
-    #for (tA,nA),(tB,nB) in zip(toknotesA,toknotesB): print(repr(tA)); print(repr(tB))
+    gen_spans = fp.pipe(
+        fp.lmapcat(split_nls),
+        fp.cut_with_bound(fp.tup(lambda tok,_: tok == '\n')),
+        fp.walk(fp.walk(toknote2span)),
+        list,
+    )
 
+    spans_map = gen_spans(toknotesA)
+    pprint(spans_map)
 
 def page(gdat, comp_data):
     emphasized_AB = comp_data.emphasized_AB
