@@ -138,7 +138,9 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
         source1=srcA, source2=srcB, match=temp_match  
     )) #{match} in table TODO:(remove it)
 
+#--------------------------------------------------------------------------------------
 def sync_li2(src_li, dst_li, modify_left=True, padval=(' ',consts.NOT_MATCH)):
+    ''' Sync src_li and dst_li in reserving type of src_li '''
     ltype = type(src_li)
     slen = len(src_li)
     dlen = len(dst_li)
@@ -149,10 +151,6 @@ def sync_li2(src_li, dst_li, modify_left=True, padval=(' ',consts.NOT_MATCH)):
     else:
         return(ltype([padval]) * dx + src_li if modify_left
           else src_li + ltype([padval]) * dx)
-
-def is_in_match(toknote):
-    token, note = toknote
-    return note is not consts.NOT_MATCH
 
 def sync_toknotes(tnsA, tnsB): # NOTE: return B. Don't get confused!
     '''
@@ -165,15 +163,19 @@ def sync_toknotes(tnsA, tnsB): # NOTE: return B. Don't get confused!
     Pad gaps and drop to sync tnsA and tnsB toknotes.
     Return modified tnsB. (no side-effect)
     '''
-    import itertools as I
+    def is_in_match(toknote):
+        token, note = toknote
+        return note is not consts.NOT_MATCH
     def hmt(tns):
         head, rest = F.lsplit_by(F.complement(is_in_match), tns)
-        match,rest = F.lsplit_by(              is_in_match, rest)
-        tail, rest = F.lsplit_by(F.complement(is_in_match), rest)
+        match,rest = F.lsplit_by(             is_in_match, rest)
+        tail, rest = F.lsplit_by(F.complement(is_in_match),rest)
         return head, match, tail
+
     headA,matchA,tailA = hmt(tnsA)
     headB,matchB,tailB = hmt(tnsB)
     assert len(matchA) == len(matchB)
+
     return ( sync_li2(headB, headA, modify_left=True) 
            + matchB 
            + sync_li2(tailB, tailA, modify_left=False) ) 
@@ -196,13 +198,8 @@ def sync_tok(a, b):
     else:
         return sync_tok_no_nl(a, b)
 
-def split_nls(toknote, padnote=consts.NOT_MATCH):
-    token, note = toknote
-    not_nls, nls = F.lsplit_by(lambda s: '\n' not in s, token)
-    no_nl_tn = (''.join(not_nls), note)
-    return [no_nl_tn] + fp.lmap(lambda c: (c,padnote), nls)
-
-def temp_match_view(code_dic, mA,mB):
+def synced_toknotesAB(mA, mB):
+    ''' Return Synchronized matching informations '''
     # Sync A,B toknotes (modify B)
     toknotesA = list(zip( mA.tokens,mA.notes ))
 
@@ -224,7 +221,15 @@ def temp_match_view(code_dic, mA,mB):
         fp.map(sync_toknote, toknotesA,toknotesB)
     )
 
-    # Generate pres and spans
+def split_nls(toknote, padnote=consts.NOT_MATCH):
+    ''' ('text\n\n', Note) -> [('text',Note), ('\n',None), ('\n',None)] '''
+    token, note = toknote
+    not_nls, nls = F.lsplit_by(lambda s: '\n' not in s, token)
+    no_nl_tn = (''.join(not_nls), note)
+    return [no_nl_tn] + fp.lmap(lambda c: (c,padnote), nls)
+
+def match_view(toknotesA, toknotesB):
+    ''' Generate html tags from synced matching informations (toknotesA,toknotesB) '''
     def toknote2span(tn):
         token,note = tn
         return span(token, class_=consts.color_class[note])
@@ -244,6 +249,7 @@ def temp_match_view(code_dic, mA,mB):
         list(F.interleave(spans_presA,spans_presB))
     )
 
+#--------------------------------------------------------------------------------------
 def page(gdat, comp_data):
     emphasized_AB = comp_data.emphasized_AB
     unique_match_pairs = comp_data.unique_match_pairs
@@ -260,13 +266,17 @@ def page(gdat, comp_data):
                                 desc='   generate htmls'):
         rA = code_dic[mA.proj, mA.fidx].raw
         rB = code_dic[mB.proj, mB.fidx].raw
+
         Ainfo = h('h2')[ 'A: ' + Path(A_srcpaths[mA.fidx]).name ]
         Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
+
         table_info = h('h2')[ 'Result Table' ]
-        temp_match = temp_match_view(code_dic, mA,mB)
+        mview = match_view( *synced_toknotesAB(mA,mB) )
+
         comp_htmls.append(gen_comp_html(
             Ainfo,Binfo,table_info, eA,eB, 
             comp_table(match_pair_dic, match_stat_dic, mA,mB, gdat), 
-            temp_match
+            mview
         )) 
+
     return comp_htmls
