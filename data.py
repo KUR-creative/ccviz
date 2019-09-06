@@ -135,13 +135,12 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     toks = fp.tmap(
         lambda idx: code_tokens[idx] if idx >= 0 else '', # '' for consts.GAP
         padded_tok_idxs)
-    # None:out-of-matching | '+':match | '-':mismatch | -1:gap
-    notes =((None,) * beg_idx 
+    notes =((consts.NOT_MATCH,) * beg_idx 
           + fp.tmap(lambda i: consts.MATCH if i >= 0 
                       else    consts.GAP   if i == consts.GAP
                       else    consts.MISMATCH, 
                     tok_idxs)
-          + (None,) * (num_toks - (end_idx + 1)))
+          + (consts.NOT_MATCH,) * (num_toks - (end_idx + 1)))
 
     #print(code.fpath)
     #print('num_toks',num_toks,'end_idx',end_idx,'num_toks - end_idx',num_toks - end_idx)
