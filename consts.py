@@ -12,6 +12,14 @@ MISMATCH  = '-'
 GAP       = -1 # NOTE: 0 in raw_match, means "gap" (not that good idea)
 NOT_MATCH = None
 
+color_class = {
+    MATCH     : 'match',
+    MISMATCH  : 'mismatch',
+    GAP       : 'gap',
+    NOT_MATCH : 'not_match',
+}
+LINE_A = 'line_a'
+LINE_B = 'line_b'
 
 def args():
     parser = argparse.ArgumentParser(description='CloneCop Visalization program')

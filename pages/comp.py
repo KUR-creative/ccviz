@@ -1,3 +1,4 @@
+# map <F6> :wa<CR>:rm -rf tmp-result/tmp-matching-window/complex; python main.py fixture/tmp-matching-window/complex/164.125.34.92_2019-09-06-11-55-17.zip -r 0.1 -a 10 -o tmp-result/tmp-matching-window/complex<CR>
 # map <F5> :wa<CR>:!rm -rf tmp-result/tmp-matching-window/arm9_11; python main.py fixture/tmp-matching-window/arm9_11/strong_link/164.125.34.91_2019-08-30-12-34-29.zip -a 10 -r 0.1 -o tmp-result/tmp-matching-window/arm9_11/strong_link<CR>
 # map <F8> :!rm -rf tmp2/;python main.py fixture/tmp-matching-window/ms/164.125.34.91_2019-08-30-12-40-03.zip -o tmp-result/tmp-matching-window/ms<CR>
 from pprint import pprint
@@ -224,15 +225,9 @@ def temp_match_view(code_dic, mA,mB):
     )
 
     # Generate pres and spans
-    color_css = {
-        consts.MATCH     : 'background-color: lightgreen; margin:1px;',
-        consts.MISMATCH  : 'background-color: rgba(255,0,0,0.5); margin:1px;',
-        consts.GAP       : 'background-color: rgba(255,0,0,0.5); margin:1px;',
-        consts.NOT_MATCH : 'background-color: transparent; margin:1px;',
-    }
     def toknote2span(tn):
         token,note = tn
-        return span(token, style=color_css[note])
+        return span(token, class_=consts.color_class[note])
 
     spans_seq = fp.pipe(
         fp.lmapcat(split_nls),
@@ -241,12 +236,10 @@ def temp_match_view(code_dic, mA,mB):
         list,
     )
 
-    spans_presA = fp.walk(pre, spans_seq(toknotesA))
-    spans_presB = fp.walk(pre, spans_seq(toknotesB))
+    classed_pre = lambda c: lambda s: pre(s, class_=c)
+    spans_presA = fp.walk(classed_pre(consts.LINE_A), spans_seq(toknotesA))
+    spans_presB = fp.walk(classed_pre(consts.LINE_B), spans_seq(toknotesB))
 
-    #matched_lines = zip( spans_presA,spans_presB )
-    #pprint(list(matched_lines))
-    pprint(spans_presA)
     return div(
         list(F.interleave(spans_presA,spans_presB))
     )

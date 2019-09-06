@@ -52,3 +52,13 @@ body {
 /* Handle on hover */
 /*-------------------------------------*/
 
+/*-------------------------------------*/
+/* for matching window */
+
+.match     { background-color: lightgreen; margin:1px; }
+.mismatch  { background-color: rgba(255,0,0,0.5); margin:1px; }
+.gap       { background-color: rgba(255,0,0,0.5); margin:1px; }
+.not_match { background-color: transparent; margin:1px; }
+
+.line_a { margin-top: 9px; margin-bottom: 2px }
+.line_b { margin-top: 2px; margin-bottom: 9px }
