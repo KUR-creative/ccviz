@@ -17,3 +17,8 @@ def test_sync_tok__pad_last_newline_chars__if_a_has_last_newline_chars2():
     assert len(a) == len(b)
     assert a == ' 123-219  \n\n\n'
     assert b == '123xa     \n\n\n'
+
+
+from pages.comp import sync_list2
+def test_sync_lists__len_src_greater_than_len_dst():
+    assert sync_list2([1,2,3], [1,2], modify_left=True, 0) == [2,3]

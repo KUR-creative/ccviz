@@ -149,6 +149,14 @@ def len_equalize(s1, s2, padval=' '):
         )
 '''
 
+def sync_list2(src_li, dst_li, modify_left=True, pad_val=(' ',None)):
+    if len(src_li) > len(dst_li):
+        return 1
+    elif len(src_li) < len(dst_li):
+        return 1
+    else:
+        return src_li
+
 def sync_tok(a, b):
     '''
     Sync length of s1, s2. 
