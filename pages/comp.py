@@ -208,7 +208,7 @@ def sync_tok(a, b):
         return sync_tok_no_nl(a, b)
 
 def temp_match_view(code_dic, mA,mB):
-    # sync of A,B toknotes (modify B)
+    # Sync A,B toknotes (modify B)
     toknotesA = list(zip( mA.tokens,mA.notes ))
 
     toksB_no_nl = fp.walk(
@@ -219,12 +219,21 @@ def temp_match_view(code_dic, mA,mB):
     assert len(toknotesA) == len(toknotesB), \
         '{} != {}'.format(len(toknotesA), len(toknotesB))
 
-    # sync lengths of A,B tokens (modify both)
+    # Sync A,B tokens (modify both)
+    def sync_toknote(tnA,tnB):
+        tokA,noteA = tnA
+        tokB,noteB = tnB
+        synced_tokA, synced_tokB = sync_tok(tokA,tokB)
+        return ((synced_tokA,noteA), (synced_tokB,noteB))
+    toknotesA,toknotesB = fp.unzip(
+        fp.map(sync_toknote, toknotesA,toknotesB)
+    )
+
+    for (tA,nA),(tB,nB) in zip(toknotesA,toknotesB): print(repr(tA)); print(repr(tB))
     #toksB = fp.walk(fp.walk(lambda s: s.replace('\n','')), mB.tokens)
     #toksA,toksB = fp.unzip( fp.map(sync_tok, mA.tokens,toksB) )
     #print(toksA)
     #print(toksB)
-    #for a,b in zip(toksA,toksB): print(repr(a)); print(repr(b))
 
     '''
     _,flatBparts = len_equalize(
