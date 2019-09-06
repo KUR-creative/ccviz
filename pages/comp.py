@@ -161,6 +161,34 @@ def sync_li2(src_li, dst_li, modify_left=True, padval=(' ',None)):
         return(ltype([padval]) * dx + src_li if modify_left
           else src_li + ltype([padval]) * dx)
 
+def is_in_match(toknote):
+    token, note = toknote
+    return note is not None
+
+def sync_toknotes(tnsA, tnsB):
+    '''
+    Sync tnsB to tnsA.
+
+    tnsA: |N|dst-matched|NNN|
+    tnsB:   |src-matched|NNNNNNN|
+     ret: |g|src-matched|NNN|  
+
+    Pad gaps and drop to sync tnsA and tnsB toknotes.
+    Return modified tnsB. (no side-effect)
+    '''
+    import itertools as I
+    def hmt(tns):
+        head, rest = F.lsplit_by(F.complement(is_in_match), tns)
+        match,rest = F.lsplit_by(              is_in_match, rest)
+        tail, rest = F.lsplit_by(F.complement(is_in_match), rest)
+        return head, match, tail
+    headA,matchA,tailA = hmt(tnsA)
+    headB,matchB,tailB = hmt(tnsB)
+    assert len(matchA) == len(matchB)
+    return ( sync_li2(headB, headA, modify_left=True) 
+           + matchB 
+           + sync_li2(tailB, tailA, modify_left=False) ) 
+
 def sync_tok(a, b):
     '''
     Sync length of s1, s2. 
@@ -179,19 +207,17 @@ def sync_tok(a, b):
     else:
         return sync_tok_no_nl(a, b)
 
-def is_in_match(toknote):
-    token, note = toknote
-    return note is not None
-
 def temp_match_view(code_dic, mA,mB):
+    # sync lengths of A,B toknotes (modify B)
     toknotesA = list(zip( mA.tokens,mA.notes ))
-    toknotesB = list(zip( mB.tokens,mB.notes ))
+    toknotesB = sync_toknotes(
+        toknotesA, list(zip( mB.tokens,mB.notes ))
+    )
 
-    assert len(fp.lfilter(is_in_match, toknotesA)) \
-        == len(fp.lfilter(is_in_match, toknotesB))
     assert len(toknotesA) == len(toknotesB), \
         '{} != {}'.format(len(toknotesA), len(toknotesB))
 
+    # sync lengths of A,B tokens (modify both)
     #print('B toks len',len(mB.tokens))
     #print('A toks len',len(mA.tokens))
     toksB = fp.walk(fp.walk(lambda s: s.replace('\n','')), mB.tokens)
