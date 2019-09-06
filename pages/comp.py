@@ -5,7 +5,7 @@ import os,sys
 sys.path.append( os.path.abspath('..') )
 
 from tqdm import tqdm
-from hyperpython import h, div, link, meta
+from hyperpython import h, div, link, meta, span
 from pathlib import Path
 
 import funcy as F
@@ -231,7 +231,19 @@ def temp_match_view(code_dic, mA,mB):
     xsA2 = list(fp.cut_with_bound(fp.tup(lambda tok,_: tok == '\n'), xsA1))
     pprint(xsA2)
 
-    color = {}
+    color_css = {
+        consts.MATCH     : 'background-color: lightgreen',
+        consts.MISMATCH  : 'background-color: crimson',
+        consts.GAP       : 'background-color: lightskyblue',
+        consts.NOT_MATCH : 'background-color: transparent',
+    }
+    def toknote2span(tn):
+        token,note = tn
+        return span(token,style=color_css[note])
+
+    # map to span
+    xsA3 = fp.walk(fp.walk(toknote2span), xsA2)
+    pprint(xsA3)
     #for (tA,nA),(tB,nB) in zip(toknotesA,toknotesB): print(repr(tA)); print(repr(tB))
 
 
