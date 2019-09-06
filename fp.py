@@ -116,6 +116,7 @@ class A():
     def __init__(self,x): self.x = x
     def m(self,x): return x
 
+@F.autocurry
 def cut_with_bound(pred, xs):
     chunk = []
     for x in xs:
