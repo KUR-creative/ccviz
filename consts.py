@@ -7,6 +7,12 @@ import funcy as F
 import fp
 import file_utils as fu
 
+MATCH     = '+'
+MISMATCH  = '-'
+GAP       = -1 # NOTE: 0 in raw_match, means "gap" (not that good idea)
+NOT_MATCH = None
+
+
 def args():
     parser = argparse.ArgumentParser(description='CloneCop Visalization program')
 

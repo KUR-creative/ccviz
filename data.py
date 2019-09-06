@@ -10,6 +10,7 @@ from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
 
 import fp
+import consts
 import file_utils as fu
 import html_utils as hu
 
@@ -83,10 +84,6 @@ def tokens(code_str, xmap_str):
         fp.tsplit_with, slice_idxs, lines
     )
 
-MATCH = '+'
-MISMATCH = '-'
-GAP = -1 # NOTE: 0 in raw_match, means "gap" (not that good idea)
-
 def slice_nl(s, beg, end):
     return '\n'.join( s.split('\n')[beg:end] )
 
@@ -104,7 +101,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     file_idx, func_name, raw_beg, end = raw_match #NOTE: end is last idx + 1 
     fidx = file_idx - 1
     beg  = raw_beg  - 1
-    tok_idxs = fp.lmap( # -1 is GAP, (-) is mismatch.
+    tok_idxs = fp.lmap( # -1 is consts.GAP, (-) is mismatch.
         lambda x: x - 1 if x >= 0 else x + 1, 
         raw_tok_idxs
     ) 
@@ -112,7 +109,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     # get beg/end idx of parts(from .car file)
     beg_idx,end_idx = fp.go( 
         tok_idxs,
-        fp.remove(lambda x: x == GAP), 
+        fp.remove(lambda x: x == consts.GAP), 
         fp.lmap(abs),
         lambda xs: (min(xs), max(xs)) 
     )# TODO: Is there 0/1 indexing problem? Test it!
@@ -126,7 +123,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
 
     num_toks = len(code_tokens)
     padded_tok_idxs = fp.lmap(
-        lambda idx: abs(idx) if idx != GAP else idx, 
+        lambda idx: abs(idx) if idx != consts.GAP else idx, 
         [*range(beg_idx), *tok_idxs, *range(end_idx + 1, num_toks)]
     )
 
@@ -136,13 +133,13 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     assert is_consecutive(fp.lremove(lambda x: x == -1, padded_tok_idxs))
 
     toks = fp.tmap(
-        lambda idx: code_tokens[idx] if idx >= 0 else '', # '' for GAP
+        lambda idx: code_tokens[idx] if idx >= 0 else '', # '' for consts.GAP
         padded_tok_idxs)
     # None:out-of-matching | '+':match | '-':mismatch | -1:gap
     notes =((None,) * beg_idx 
-          + fp.tmap(lambda i: MATCH if i >= 0 
-                      else    GAP   if i == GAP
-                      else    MISMATCH, 
+          + fp.tmap(lambda i: consts.MATCH if i >= 0 
+                      else    consts.GAP   if i == consts.GAP
+                      else    consts.MISMATCH, 
                     tok_idxs)
           + (None,) * (num_toks - (end_idx + 1)))
 
