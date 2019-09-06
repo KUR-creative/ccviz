@@ -149,13 +149,17 @@ def len_equalize(s1, s2, padval=' '):
         )
 '''
 
-def sync_list2(src_li, dst_li, modify_left=True, pad_val=(' ',None)):
-    if len(src_li) > len(dst_li):
-        return 1
-    elif len(src_li) < len(dst_li):
-        return 1
+def sync_li2(src_li, dst_li, modify_left=True, padval=(' ',None)):
+    ltype = type(src_li)
+    slen = len(src_li)
+    dlen = len(dst_li)
+    dx = abs(dlen - slen)
+    if slen > dlen:
+        return(src_li[dx:] if modify_left 
+          else src_li[:slen - dx])
     else:
-        return src_li
+        return(ltype([padval]) * dx + src_li if modify_left
+          else src_li + ltype([padval]) * dx)
 
 def sync_tok(a, b):
     '''
