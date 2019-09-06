@@ -207,6 +207,12 @@ def sync_tok(a, b):
     else:
         return sync_tok_no_nl(a, b)
 
+def split_nls(toknote, padnote=None):
+    token, note = toknote
+    not_nls, nls = F.lsplit_by(lambda s: '\n' not in s, token)
+    no_nl_tn = (''.join(not_nls), note)
+    return [no_nl_tn] + fp.lmap(lambda c: (c,padnote), nls)
+
 def temp_match_view(code_dic, mA,mB):
     # Sync A,B toknotes (modify B)
     toknotesA = list(zip( mA.tokens,mA.notes ))
@@ -229,11 +235,7 @@ def temp_match_view(code_dic, mA,mB):
         fp.map(sync_toknote, toknotesA,toknotesB)
     )
 
-    for (tA,nA),(tB,nB) in zip(toknotesA,toknotesB): print(repr(tA)); print(repr(tB))
-    #toksB = fp.walk(fp.walk(lambda s: s.replace('\n','')), mB.tokens)
-    #toksA,toksB = fp.unzip( fp.map(sync_tok, mA.tokens,toksB) )
-    #print(toksA)
-    #print(toksB)
+    #for (tA,nA),(tB,nB) in zip(toknotesA,toknotesB): print(repr(tA)); print(repr(tB))
 
     '''
     _,flatBparts = len_equalize(
