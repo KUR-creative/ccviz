@@ -175,9 +175,21 @@ def sync_tok(a, b):
     else:
         return sync_tok_no_nl(a, b)
 
+def is_in_match(toknote):
+    token, note = toknote
+    return note is not None
+
 def temp_match_view(code_dic, mA,mB):
-    assert len(mA.tokens) == len(mA.tokens), \
-        '{} != {}'.format(len(mA.tokens), len(mA.tokens))
+    toknotesA = list(zip( mA.tokens,mA.notes ))
+    toknotesB = list(zip( mB.tokens,mB.notes ))
+
+    assert len(fp.lfilter(is_in_match, toknotesA)) \
+        == len(fp.lfilter(is_in_match, toknotesB))
+    assert len(toknotesA) == len(toknotesB), \
+        '{} != {}'.format(len(toknotesA), len(toknotesB))
+
+    #print('B toks len',len(mB.tokens))
+    #print('A toks len',len(mA.tokens))
     toksB = fp.walk(fp.walk(lambda s: s.replace('\n','')), mB.tokens)
     toksA,toksB = fp.unzip( fp.map(sync_tok, mA.tokens,toksB) )
     #print(toksA)
