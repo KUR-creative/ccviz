@@ -217,7 +217,8 @@ def synced_toknotesAB(mA, mB):
         tokB,noteB = tnB
         synced_tokA, synced_tokB = sync_tok(tokA, tokB)
         return ((synced_tokA,noteA), (synced_tokB,noteB))
-    toknotesA,toknotesB = fp.unzip(
+
+    return fp.unzip(
         fp.map(sync_toknote, toknotesA,toknotesB)
     )
 
