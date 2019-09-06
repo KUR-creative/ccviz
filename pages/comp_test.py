@@ -19,6 +19,12 @@ def test_sync_tok__pad_last_newline_chars__if_a_has_last_newline_chars2():
     assert b == '123xa     \n\n\n'
 
 
-from pages.comp import sync_list2
+from pages.comp import sync_li2
 def test_sync_lists__len_src_greater_than_len_dst():
-    assert sync_list2([1,2,3], [1,2], modify_left=True, 0) == [2,3]
+    assert sync_li2([1,2,3], [1,2], modify_left=True)  == [2,3]
+    assert sync_li2([1,2,3], [1,2], modify_left=False) == [1,2]
+def test_sync_lists__len_src_smaller_than_len_dst():
+    assert sync_li2([1,2], [1,2,3,4],   modify_left=True,  padval=0) == [0,0,1,2]
+    assert sync_li2((1,2), [1,2,3,4,5], modify_left=False, padval=0) == (1,2,0,0,0)
+def test_sync_lists__len_src_is_same_to_len_dst():
+    assert sync_li2([1,2], [1,2],  modify_left=True, padval=0) == [1,2]
