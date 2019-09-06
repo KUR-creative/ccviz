@@ -5,7 +5,7 @@ import os,sys
 sys.path.append( os.path.abspath('..') )
 
 from tqdm import tqdm
-from hyperpython import h, div, link, meta, span
+from hyperpython import h, div, link, meta, pre, span
 from pathlib import Path
 
 import funcy as F
@@ -225,10 +225,10 @@ def temp_match_view(code_dic, mA,mB):
 
     # Generate pres and spans
     color_css = {
-        consts.MATCH     : 'background-color: lightgreen',
-        consts.MISMATCH  : 'background-color: crimson',
-        consts.GAP       : 'background-color: lightskyblue',
-        consts.NOT_MATCH : 'background-color: transparent',
+        consts.MATCH     : 'background-color: lightgreen; margin:1px;',
+        consts.MISMATCH  : 'background-color: rgba(255,0,0,0.5); margin:1px;',
+        consts.GAP       : 'background-color: rgba(255,0,0,0.5); margin:1px;',
+        consts.NOT_MATCH : 'background-color: transparent; margin:1px;',
     }
     def toknote2span(tn):
         token,note = tn
@@ -241,8 +241,15 @@ def temp_match_view(code_dic, mA,mB):
         list,
     )
 
-    spans_seqA = spans_seq(toknotesA)
-    pprint(spans_seqA)
+    spans_presA = fp.walk(pre, spans_seq(toknotesA))
+    spans_presB = fp.walk(pre, spans_seq(toknotesB))
+
+    #matched_lines = zip( spans_presA,spans_presB )
+    #pprint(list(matched_lines))
+    pprint(spans_presA)
+    return div(
+        list(F.interleave(spans_presA,spans_presB))
+    )
 
 def page(gdat, comp_data):
     emphasized_AB = comp_data.emphasized_AB
