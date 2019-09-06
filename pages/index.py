@@ -70,26 +70,26 @@ def page(target_cars, config):
     h1('{C}lone{C2}op {Viz}ualization'),
     div(children= 
         [h('table')[ h('tbody', children=[
-            h('tr')[h('th',class_='prop')['Property'], h('th','Value')],
+            h('tr')[h('th')['Property'], h('th',class_='var')['Value']],
 
-            h('tr')[h('td',class_='prop')['Source'], 
-                    h('td')['{}({})'.format( config['NAME_A'], c.source_type )]], 
-            h('tr')[h('td',class_='prop')['Target'],
-                    h('td')['{}({})'.format( config['NAME_B'], c.target_type )]], 
-            h('tr')[h('td',class_='bline prop')['Search Type'], 
-                    h('td',class_='bline')[c.search_type]], 
+            h('tr')[h('td')['Source'], 
+                    h('td',class_='var')['{}({})'.format( config['NAME_A'], c.source_type )]], 
+            h('tr')[h('td')['Target'],
+                    h('td',class_='var')['{}({})'.format( config['NAME_B'], c.target_type )]], 
+            h('tr')[h('td',class_='bline')['Search Type'], 
+                    h('td',class_='bline var')[c.search_type]], 
 
-            h('tr')[h('td',class_='prop')['Token Type'], 
-                    h('td')[', '.join(c.token_types)]], 
-            h('tr')[h('td',class_='bline prop')['Depth level'], 
-                    h('td',class_='bline')[', '.join(c.depth_levels)]], 
+            h('tr')[h('td')['Token Type'], 
+                    h('td',class_='var')[', '.join(c.token_types)]], 
+            h('tr')[h('td',class_='bline')['Depth level'], 
+                    h('td',class_='bline var')[', '.join(c.depth_levels)]], 
 
-            h('tr')[h('td',class_='prop')['Alignment Type'], 
-                    h('td')[c.alignment_score_type]], 
-            h('tr')[h('td',class_='prop')['Absolute Score Threshold'], 
-                    h('td')[c.abs_threshold]], 
-            h('tr')[h('td',class_='bline prop')['Relative Score Threshold'], 
-                    h('td',class_='bline')[c.rel_threshold]], 
+            h('tr')[h('td')['Alignment Type'], 
+                    h('td',class_='var')[c.alignment_score_type]], 
+            h('tr')[h('td')['Absolute Score Threshold'], 
+                    h('td',class_='var')[c.abs_threshold]], 
+            h('tr')[h('td',class_='bline')['Relative Score Threshold'], 
+                    h('td',class_='bline var')[c.rel_threshold]], 
         ])]
         ] + fp.lmap(
             fp.pipe(
