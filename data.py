@@ -153,6 +153,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     #print(notes)
     assert len(padded_tok_idxs) == len(notes), \
         '{} != {}'.format(len(padded_tok_idxs), len(notes))
+    assert len(notes) == len(toks)
 
     return Match(
         proj, fidx, func_name, 
