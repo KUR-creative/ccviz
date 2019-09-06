@@ -12,6 +12,7 @@ import funcy as F
 
 import fp
 import data
+import consts
 import html_utils as hu
 
 def popup_btn(match_id, content):
@@ -149,7 +150,7 @@ def len_equalize(s1, s2, padval=' '):
         )
 '''
 
-def sync_li2(src_li, dst_li, modify_left=True, padval=(' ',None)):
+def sync_li2(src_li, dst_li, modify_left=True, padval=(' ',consts.NOT_MATCH)):
     ltype = type(src_li)
     slen = len(src_li)
     dlen = len(dst_li)
@@ -163,7 +164,7 @@ def sync_li2(src_li, dst_li, modify_left=True, padval=(' ',None)):
 
 def is_in_match(toknote):
     token, note = toknote
-    return note is not None
+    return note is not consts.NOT_MATCH
 
 def sync_toknotes(tnsA, tnsB): # NOTE: return B. Don't get confused!
     '''
@@ -207,7 +208,7 @@ def sync_tok(a, b):
     else:
         return sync_tok_no_nl(a, b)
 
-def split_nls(toknote, padnote=None):
+def split_nls(toknote, padnote=consts.NOT_MATCH):
     token, note = toknote
     not_nls, nls = F.lsplit_by(lambda s: '\n' not in s, token)
     no_nl_tn = (''.join(not_nls), note)
