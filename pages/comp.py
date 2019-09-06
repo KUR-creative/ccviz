@@ -234,15 +234,15 @@ def temp_match_view(code_dic, mA,mB):
         token,note = tn
         return span(token,style=color_css[note])
 
-    gen_spans = fp.pipe(
+    spans_seq = fp.pipe(
         fp.lmapcat(split_nls),
         fp.cut_with_bound(fp.tup(lambda tok,_: tok == '\n')),
         fp.walk(fp.walk(toknote2span)),
         list,
     )
 
-    spans_map = gen_spans(toknotesA)
-    pprint(spans_map)
+    spans_seqA = spans_seq(toknotesA)
+    pprint(spans_seqA)
 
 def page(gdat, comp_data):
     emphasized_AB = comp_data.emphasized_AB
