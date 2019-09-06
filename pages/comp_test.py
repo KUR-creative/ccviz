@@ -1,5 +1,5 @@
 # map <F5> :wa<CR>:!pytest -vv pages/comp_test.py<CR>
-from pages.comp import sync_tok, sync_li2
+from pages.comp import sync_tok, sync_li2, split_nls
 
 def test_sync_tok__pad_space():
     a,b = sync_tok('123', 'abc ')
@@ -31,3 +31,13 @@ def test_sync_li2__len_src_is_same_to_len_dst():
     assert sync_li2([1,2], [1,2], modify_left=True, padval=0) == [1,2]
     assert sync_li2([],    [],    modify_left=True, padval=0) == []
 
+
+def test_split_nls_no_nl():
+    assert split_nls(('asdwec',-1)) == [('asdwec',-1)]
+def test_split_nls_1_nl():
+    assert split_nls(('asdwec\n',-1)) == [('asdwec',-1), ('\n',None)]
+def test_split_nls_N_nl():
+    assert split_nls(('asec\n\n',-1)) == [('asec',-1), ('\n',None), ('\n',None)]
+    assert split_nls(('asdwec\n\n\n',-1)) == [('asdwec',-1), ('\n',None), ('\n',None), ('\n',None)]
+def test_split_nls_1_nl_with_padnote():
+    assert split_nls(('asdwec\n',-1),'padnote') == [('asdwec',-1), ('\n','padnote')]
