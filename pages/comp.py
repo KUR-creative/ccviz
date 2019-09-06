@@ -217,7 +217,7 @@ def temp_match_view(code_dic, mA,mB):
     def sync_toknote(tnA,tnB):
         tokA,noteA = tnA
         tokB,noteB = tnB
-        synced_tokA, synced_tokB = sync_tok(tokA,tokB)
+        synced_tokA, synced_tokB = sync_tok(tokA, tokB)
         return ((synced_tokA,noteA), (synced_tokB,noteB))
     toknotesA,toknotesB = fp.unzip(
         fp.map(sync_toknote, toknotesA,toknotesB)
@@ -232,7 +232,7 @@ def temp_match_view(code_dic, mA,mB):
     }
     def toknote2span(tn):
         token,note = tn
-        return span(token,style=color_css[note])
+        return span(token, style=color_css[note])
 
     spans_seq = fp.pipe(
         fp.lmapcat(split_nls),
