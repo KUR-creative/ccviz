@@ -40,6 +40,11 @@ def interpret(config):
              '2' if config.get('DEPTH_LV2') else None]
         ),
 
+        alignment_type \
+         = ('Global'      if config.get('RANGE_Global')     == '1' else
+            'Local'       if config.get('RANGE_Local')      == '1' else
+            'Semi-Global' if config.get('RANGE_Semiglobal') == '1' else None),
+
         alignment_score_type \
          = ('Strong Link' if config['SCORE'] == '1' else
             'Medium Link' if config['SCORE'] == '2' else
@@ -86,6 +91,8 @@ def page(target_cars, config):
                         h('td',class_='bline var')[', '.join(c.depth_levels)]], 
 
                 h('tr')[h('td')['Alignment Type'], 
+                        h('td',class_='var')[c.alignment_type]], 
+                h('tr')[h('td')['Score Weight'], 
                         h('td',class_='var')[c.alignment_score_type]], 
                 h('tr')[h('td')['Absolute Score Threshold'], 
                         h('td',class_='var')[c.abs_threshold]], 
