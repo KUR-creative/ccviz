@@ -5,10 +5,6 @@ import data
 import file_utils as fu
 
 def case_for_code(src, xmap):
-    #tmp_srcpath = tmp_path/'Formatted_A'/'A'/'src.c' 
-    #tmp_mappath = tmp_path/'Token_A'/'A'/'src.cmap' 
-    #fu.write_text(tmp_srcpath, src) 
-    #fu.write_text(tmp_mappath, xmap)
     return data.tokens(src,xmap)
 
 def test_tokens__no_empty_line__no_head_spacing():

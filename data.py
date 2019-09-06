@@ -34,7 +34,7 @@ def xmap_path(dirpath):
     old,new = (
         ('Formatted_A','Token_A') if 'Formatted_A' in dirpath else 
         ('Formatted_B','Token_B') if 'Formatted_B' in dirpath else 
-        (None,None)
+        (None,None) # to crash program!
     )
     return fu.replace1(old, new, dirpath) + 'map'
 
@@ -263,7 +263,6 @@ def comp_data(gdat, car_dict):
     abs_scores = fp.lmap(F.first, match_stats)
     rel_scores = fp.lmap(F.second, match_stats)
 
-    #print('=>',len(abs_scores), len(tok_raw_idxsA)); exit()
     raw_A_ms,raw_B_ms, raw_tok_idxsA,raw_tok_idxsB \
         = F.butlast( fp.unzip(car_dict['CLONE_LIST']) )
     match_pairs = fp.lfilter(
@@ -277,7 +276,6 @@ def comp_data(gdat, car_dict):
                 match(code_dic, 'B'), 
                 raw_B_ms, abs_scores, rel_scores, raw_tok_idxsB))
     )
-    #print('=====>',tok_idxsA)
     match_pair_dic = F.walk_values(
         lambda pairs: sorted(pairs, key=fp.tup(
             lambda mA,mB: (mA.beg, mB.beg)
@@ -317,7 +315,4 @@ def comp_data(gdat, car_dict):
         html_paths = html_paths,
         code_dic = code_dic
     )
-    #print('----------------------')
-    #print(code_dic['A',0].raw)
-    #print('----------------------')
     return namedtuple('Data', dic.keys())(**dic)
