@@ -45,27 +45,23 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         h('th')['miss']
     ]
     match_pairs = match_pair_dic[matchA.fidx, matchB.fidx]
-    #-----------------------------------------------------
 
+    #-----------------------------------------------------
     range_infos = fp.go(
         match_pairs,
-        fp.map(fp.lmap(data.match2raw)), 
+        fp.map( fp.lmap(data.match2raw) ), 
         fp.starmap(
             lambda rA,rB: 
             ('{} ~ {}'.format(rA.beg,rA.end), 
-             '{} ~ {}'.format(rB.beg,rB.end))
-        ),
+             '{} ~ {}'.format(rB.beg,rB.end))),
         fp.map(fp.lmap(
-            lambda s: h('td', class_='center_cell')[s]
-        )),
-    )
+            lambda s: h('td', class_='center_cell')[s])))
 
     #-----------------------------------------------------
     match_stats = fp.go(
         match_pairs,
         fp.starmap(
-            lambda mA,mB: match_stat_dic[mA,mB]
-        ), 
+            lambda mA,mB: match_stat_dic[mA,mB]), 
         fp.map(
             lambda stat:
             data.MatchStat( #TODO: extract one function
@@ -76,17 +72,14 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
                 c3 = stat.c3, 
                 c4 = stat.c4, 
                 gap = stat.gap, 
-                mismatch = stat.mismatch
-            )
-        ),
+                mismatch = stat.mismatch)),
         fp.map(fp.lmap(
-            lambda s: h('td')[s]
-        )),
-    )
+            lambda s: h('td')[s])))
+
     #-----------------------------------------------------
-    rows = fp.lstarmap(
+    rows = fp.lmap(
         lambda i,s: h('tr')[i + s],
-        zip(range_infos, match_stats)
+        range_infos, match_stats
     )
 
     match_id = 'open-popup'
