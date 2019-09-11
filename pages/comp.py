@@ -38,9 +38,9 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         h('th')['abs' ],
         h('th')['rel' ],
         h('th')['match'],
-        #h('th')['M1'  ], h('th')['M2'  ], h('th')['M3'  ], h('th')['M4'  ],
         h('th')['gap' ],
-        h('th')['miss']
+        h('th')['miss'],
+        h('th')['view'],
     ]
     match_pairs = match_pair_dic[matchA.fidx, matchB.fidx]
 
@@ -54,7 +54,6 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         fp.map(fp.lmap(
             lambda s: h('td', class_='center_cell')[s])))
 
-    #-----------------------------------------------------
     match_stats = fp.go(
         match_pairs,
         fp.starmap( lambda mA,mB: match_stat_dic[mA,mB] ), 
@@ -67,12 +66,53 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         fp.map(fp.lmap( lambda s: h('td')[s] )))
 
     #-----------------------------------------------------
-    rows = fp.lmap(
-        lambda i,s: h('tr')[i + s],
-        range_infos, match_stats
+    popup_ids = fp.lmap(
+        lambda i: 'popup-' + str(i),
+        range(len(match_pairs))
     )
 
-    match_id = 'open-popup'
+    rows = fp.lmap(
+        lambda info, stat, id: 
+        h('tr')[info, stat, 
+            h('td')[ 
+                popup_btn(id, 'go'), 
+                popup_window(id, 'ppap') 
+            ]
+        ],
+        range_infos, match_stats, popup_ids
+    )
+
+    '''
+    try:
+        rows[-2] = h('tr')[
+            h('td', class_='center_cell')['69 ~ 72'],
+            h('td', class_='center_cell')['11 ~ 13'],
+            h('td')[104],
+            h('td')[0.63],
+            h('td')[26],
+            h('td')[2],
+            h('td')[
+                popup_btn('op1', 'go'),
+                popup_window('op1', 'ppap')
+            ]
+        ]
+    except:
+        pass
+
+    rows[-1] = h('tr')[
+        h('td', class_='center_cell')['69 ~ 72'],
+        h('td', class_='center_cell')['11 ~ 13'],
+        h('td')[104],
+        h('td')[0.63],
+        h('td')[26],
+        h('td')[2],
+        h('td')[
+            popup_btn(match_id, 'go'),
+            popup_window(match_id, '{match}')
+        ]
+    ]
+    '''
+
     return [
         h('p',style='text-align: center; margin:3px;')[ 
             'absolute score threshold(abs) = {}'.format(gdat.ABS_THRESHOLD),
@@ -81,8 +121,6 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
             'relative score threshold(rel) = {}'.format(gdat.REL_THRESHOLD),
         ],
         h('table', class_='comp_table', children=[header] + rows),
-        popup_btn(match_id, 'go'),
-        popup_window(match_id, '{match}'),
     ]
 
 def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
