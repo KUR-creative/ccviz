@@ -72,14 +72,16 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
     )
 
     rows = fp.lmap(
-        lambda info, stat, id: 
+        lambda info, stat, id, mAmB: 
         h('tr')[info, stat, 
             h('td')[ 
                 popup_btn(id, 'go'), 
-                popup_window(id, 'ppap') 
+                popup_window(
+                    id, match_view( *synced_toknotesAB(*mAmB) ) 
+                )
             ]
         ],
-        range_infos, match_stats, popup_ids
+        range_infos, match_stats, popup_ids, match_pairs
     )
 
     '''
@@ -123,7 +125,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         h('table', class_='comp_table', children=[header] + rows),
     ]
 
-def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
+def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table):
     ''' combine srcA, srcB into one html string '''
     return hu.document_str(
     [
@@ -155,10 +157,15 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
             ]
         ]
     ]
-    ).format_map(dict(
-        source1=srcA, source2=srcB, match=temp_match  
-    )) #{match} in table TODO:(remove it)
-
+    ) \
+    .replace('{','{{').replace('}','}}') \
+    .replace('{{source1}}','{source1}') \
+    .replace('{{source2}}','{source2}') \
+    .format_map(dict(
+        source1=srcA, source2=srcB
+    ))
+    # If str has just single curly braces(typical c codes), 
+    # then format_map raises `ValueError: unexpected '{' in field name`
 #--------------------------------------------------------------------------------------
 def sync_li2(src_li, dst_li, modify_left=True, padval=(' ',consts.NOT_MATCH)):
     ''' Sync src_li and dst_li in reserving type of src_li '''
@@ -267,9 +274,7 @@ def match_view(toknotesA, toknotesB):
     spans_presA = fp.walk(classed_pre(consts.LINE_A), spans_seq(toknotesA))
     spans_presB = fp.walk(classed_pre(consts.LINE_B), spans_seq(toknotesB))
 
-    return div(
-        list(F.interleave(spans_presA,spans_presB))
-    )
+    return list(F.interleave(spans_presA,spans_presB))
 
 #--------------------------------------------------------------------------------------
 def page(gdat, comp_data):
@@ -293,12 +298,10 @@ def page(gdat, comp_data):
         Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
 
         table_info = h('h2')[ 'Result Table' ]
-        mview = match_view( *synced_toknotesAB(mA,mB) )
 
         comp_htmls.append(gen_comp_html(
             Ainfo,Binfo,table_info, eA,eB, 
-            comp_table(match_pair_dic, match_stat_dic, mA,mB, gdat), 
-            mview
+            comp_table(match_pair_dic, match_stat_dic, mA,mB, gdat)
         )) 
 
     return comp_htmls
