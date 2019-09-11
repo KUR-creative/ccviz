@@ -37,10 +37,8 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         h('th', class_='center_cell')['B' ],
         h('th')['abs' ],
         h('th')['rel' ],
-        h('th')['M1'  ],
-        h('th')['M2'  ],
-        h('th')['M3'  ],
-        h('th')['M4'  ],
+        h('th')['match'],
+        #h('th')['M1'  ], h('th')['M2'  ], h('th')['M3'  ], h('th')['M4'  ],
         h('th')['gap' ],
         h('th')['miss']
     ]
@@ -50,8 +48,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
     range_infos = fp.go(
         match_pairs,
         fp.map( fp.lmap(data.match2raw) ), 
-        fp.starmap(
-            lambda rA,rB: 
+        fp.starmap( lambda rA,rB: 
             ('{} ~ {}'.format(rA.beg,rA.end), 
              '{} ~ {}'.format(rB.beg,rB.end))),
         fp.map(fp.lmap(
@@ -60,21 +57,14 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
     #-----------------------------------------------------
     match_stats = fp.go(
         match_pairs,
-        fp.starmap(
-            lambda mA,mB: match_stat_dic[mA,mB]), 
-        fp.map(
-            lambda stat:
-            data.MatchStat( #TODO: extract one function
-                abs_score = stat.abs_score, 
-                rel_score = '%1.2f' % stat.rel_score,
-                c1 = stat.c1, 
-                c2 = stat.c2, 
-                c3 = stat.c3, 
-                c4 = stat.c4, 
-                gap = stat.gap, 
-                mismatch = stat.mismatch)),
-        fp.map(fp.lmap(
-            lambda s: h('td')[s])))
+        fp.starmap( lambda mA,mB: match_stat_dic[mA,mB] ), 
+        fp.map( lambda stat:
+            (stat.abs_score,
+             '%1.2f' % stat.rel_score, 
+             stat.c1 + stat.c2 + stat.c3 + stat.c4,
+             stat.gap,
+             stat.mismatch)),
+        fp.map(fp.lmap( lambda s: h('td')[s] )))
 
     #-----------------------------------------------------
     rows = fp.lmap(
