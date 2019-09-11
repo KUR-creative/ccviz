@@ -62,3 +62,5 @@ body {
 
 .line_a { margin-top: 9px; margin-bottom: 2px }
 .line_b { margin-top: 2px; margin-bottom: 9px }
+
+.modal_inner { text-align: left; }

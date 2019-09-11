@@ -1,6 +1,6 @@
 # map <F6> :wa<CR>:rm -rf tmp-result/tmp-matching-window/complex; python main.py fixture/tmp-matching-window/complex/164.125.34.92_2019-09-06-11-55-17.zip -r 0.1 -a 10 -o tmp-result/tmp-matching-window/complex<CR>
 # map <F5> :wa<CR>:!rm -rf tmp-result/tmp-matching-window/arm9_11; python main.py fixture/tmp-matching-window/arm9_11/strong_link/164.125.34.91_2019-08-30-12-34-29.zip -a 10 -r 0.1 -o tmp-result/tmp-matching-window/arm9_11/strong_link<CR>
-# map <F8> :!rm -rf tmp2/;python main.py fixture/tmp-matching-window/ms/164.125.34.91_2019-08-30-12-40-03.zip -o tmp-result/tmp-matching-window/ms<CR>
+# map <F8> :wa<CR>:!rm -rf tmp-result/tmp-matching-window/ms;python main.py fixture/tmp-matching-window/ms/164.125.34.91_2019-08-30-12-40-03.zip -o tmp-result/tmp-matching-window/ms<CR>
 from pprint import pprint
 import os,sys
 sys.path.append( os.path.abspath('..') )
@@ -37,59 +37,84 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         h('th', class_='center_cell')['B' ],
         h('th')['abs' ],
         h('th')['rel' ],
-        h('th')['M1'  ],
-        h('th')['M2'  ],
-        h('th')['M3'  ],
-        h('th')['M4'  ],
+        h('th')['match'],
         h('th')['gap' ],
-        h('th')['miss']
+        h('th')['miss'],
+        h('th')['view'],
     ]
     match_pairs = match_pair_dic[matchA.fidx, matchB.fidx]
-    #-----------------------------------------------------
 
+    #-----------------------------------------------------
     range_infos = fp.go(
         match_pairs,
-        fp.map(fp.lmap(data.match2raw)), 
-        fp.starmap(
-            lambda rA,rB: 
+        fp.map( fp.lmap(data.match2raw) ), 
+        fp.starmap( lambda rA,rB: 
             ('{} ~ {}'.format(rA.beg,rA.end), 
-             '{} ~ {}'.format(rB.beg,rB.end))
-        ),
+             '{} ~ {}'.format(rB.beg,rB.end))),
         fp.map(fp.lmap(
-            lambda s: h('td', class_='center_cell')[s]
-        )),
-    )
+            lambda s: h('td', class_='center_cell')[s])))
 
-    #-----------------------------------------------------
     match_stats = fp.go(
         match_pairs,
-        fp.starmap(
-            lambda mA,mB: match_stat_dic[mA,mB]
-        ), 
-        fp.map(
-            lambda stat:
-            data.MatchStat( #TODO: extract one function
-                abs_score = stat.abs_score, 
-                rel_score = '%1.2f' % stat.rel_score,
-                c1 = stat.c1, 
-                c2 = stat.c2, 
-                c3 = stat.c3, 
-                c4 = stat.c4, 
-                gap = stat.gap, 
-                mismatch = stat.mismatch
-            )
-        ),
-        fp.map(fp.lmap(
-            lambda s: h('td')[s]
-        )),
-    )
+        fp.starmap( lambda mA,mB: match_stat_dic[mA,mB] ), 
+        fp.map( lambda stat:
+            (stat.abs_score,
+             '%1.2f' % stat.rel_score, 
+             stat.c1 + stat.c2 + stat.c3 + stat.c4,
+             stat.gap,
+             stat.mismatch)),
+        fp.map(fp.lmap( lambda s: h('td')[s] )))
+
     #-----------------------------------------------------
-    rows = fp.lstarmap(
-        lambda i,s: h('tr')[i + s],
-        zip(range_infos, match_stats)
+    popup_ids = fp.lmap(
+        lambda i: 'popup-' + str(i),
+        range(len(match_pairs))
     )
 
-    match_id = 'open-popup'
+    rows = fp.lmap(
+        lambda info, stat, id, mAmB: 
+        h('tr')[info, stat, 
+            h('td')[ 
+                popup_btn(id, 'go'), 
+                popup_window(
+                    id, match_view( *synced_toknotesAB(*mAmB) ) 
+                )
+            ]
+        ],
+        range_infos, match_stats, popup_ids, match_pairs
+    )
+
+    '''
+    try:
+        rows[-2] = h('tr')[
+            h('td', class_='center_cell')['69 ~ 72'],
+            h('td', class_='center_cell')['11 ~ 13'],
+            h('td')[104],
+            h('td')[0.63],
+            h('td')[26],
+            h('td')[2],
+            h('td')[
+                popup_btn('op1', 'go'),
+                popup_window('op1', 'ppap')
+            ]
+        ]
+    except:
+        pass
+
+    rows[-1] = h('tr')[
+        h('td', class_='center_cell')['69 ~ 72'],
+        h('td', class_='center_cell')['11 ~ 13'],
+        h('td')[104],
+        h('td')[0.63],
+        h('td')[26],
+        h('td')[2],
+        h('td')[
+            popup_btn(match_id, 'go'),
+            popup_window(match_id, '{match}')
+        ]
+    ]
+    '''
+
     return [
         h('p',style='text-align: center; margin:3px;')[ 
             'absolute score threshold(abs) = {}'.format(gdat.ABS_THRESHOLD),
@@ -98,11 +123,9 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
             'relative score threshold(rel) = {}'.format(gdat.REL_THRESHOLD),
         ],
         h('table', class_='comp_table', children=[header] + rows),
-        popup_btn(match_id, 'go'),
-        popup_window(match_id, '{match}'),
     ]
 
-def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
+def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table):
     ''' combine srcA, srcB into one html string '''
     return hu.document_str(
     [
@@ -134,10 +157,15 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table, temp_match):
             ]
         ]
     ]
-    ).format_map(dict(
-        source1=srcA, source2=srcB, match=temp_match  
-    )) #{match} in table TODO:(remove it)
-
+    ) \
+    .replace('{','{{').replace('}','}}') \
+    .replace('{{source1}}','{source1}') \
+    .replace('{{source2}}','{source2}') \
+    .format_map(dict(
+        source1=srcA, source2=srcB
+    ))
+    # If str has just single curly braces(typical c codes), 
+    # then format_map raises `ValueError: unexpected '{' in field name`
 #--------------------------------------------------------------------------------------
 def sync_li2(src_li, dst_li, modify_left=True, padval=(' ',consts.NOT_MATCH)):
     ''' Sync src_li and dst_li in reserving type of src_li '''
@@ -246,9 +274,7 @@ def match_view(toknotesA, toknotesB):
     spans_presA = fp.walk(classed_pre(consts.LINE_A), spans_seq(toknotesA))
     spans_presB = fp.walk(classed_pre(consts.LINE_B), spans_seq(toknotesB))
 
-    return div(
-        list(F.interleave(spans_presA,spans_presB))
-    )
+    return list(F.interleave(spans_presA,spans_presB))
 
 #--------------------------------------------------------------------------------------
 def page(gdat, comp_data):
@@ -272,12 +298,10 @@ def page(gdat, comp_data):
         Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
 
         table_info = h('h2')[ 'Result Table' ]
-        mview = match_view( *synced_toknotesAB(mA,mB) )
 
         comp_htmls.append(gen_comp_html(
             Ainfo,Binfo,table_info, eA,eB, 
-            comp_table(match_pair_dic, match_stat_dic, mA,mB, gdat), 
-            mview
+            comp_table(match_pair_dic, match_stat_dic, mA,mB, gdat)
         )) 
 
     return comp_htmls

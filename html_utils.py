@@ -5,7 +5,7 @@ from hyperpython import h
 import funcy as F
 import fp
 
-def document_str(head_tags,body_tags,is_pretty=True):
+def document_str(head_tags,body_tags,is_pretty=False):
     doc = h('html')[
         h('head')[head_tags], 
         h('body')[body_tags]
