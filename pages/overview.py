@@ -10,13 +10,14 @@ import html_utils as hu
 def match_link(href, content):
     return h('a',href=href)[content]
 
-def link_row(match_pair_dic, name_pair, match_pair, href, content):
+def link_row(match_pair_dic, no, name_pair, match_pair, href, content):
     a,b = match_pair
     match_pairs = match_pair_dic[a.fidx, b.fidx]
     num_matches = len(match_pairs)
     score_sum = sum(m.abs_score for m,_ in match_pairs)
     a_name,b_name = name_pair
     return h('tr')[ 
+        h('td',class_='center_cell')[no], 
         h('td',class_='center_cell')[a_name], 
         h('td',class_='center_cell')[b_name], 
         h('td')[num_matches],
@@ -50,7 +51,7 @@ def page(comp_data):
                     h('table',class_='overview_table')[
                         h('tr', children=
                             [h('th',class_='center_cell')[s] for s in [
-                                'A 파일','B 파일'
+                                'no', 'A 파일','B 파일'
                             ]] + [h('th',s) for s in [
                                 '매치수','점수총합','평균점수',
                             ]] + [h('th',class_='center_cell')[
@@ -59,6 +60,7 @@ def page(comp_data):
                         ),
                         fp.lmap(
                             F.partial(link_row, match_pair_dic), 
+                            range(1, len(match_name_pairs) + 1),
                             match_name_pairs, unique_match_pairs,
                             html_paths, html_paths
                         ),
