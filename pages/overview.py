@@ -7,8 +7,8 @@ from hyperpython import h, h1, h2, p, div, link
 import fp
 import html_utils as hu
 
-def match_link(href, content):
-    return h('a',href=href)[content]
+def match_link(href, content, class_=None):
+    return h('a', class_=class_, href=href)[content]
 
 def link_row(match_pair_dic, no, name_pair, match_pair, href, content):
     a,b = match_pair
@@ -23,7 +23,9 @@ def link_row(match_pair_dic, no, name_pair, match_pair, href, content):
         h('td')[num_matches],
         h('td')[score_sum],
         h('td')['{:.1f}'.format(score_sum / num_matches)],
-        h('td',class_='center_cell')[match_link(href,content)],
+        h('td',class_='center_cell')[
+            match_link(href, 'go', class_='btn')
+        ],
     ]
 
 def page(comp_data):
@@ -37,6 +39,7 @@ def page(comp_data):
             link(rel="stylesheet", href="css/overview.css"),
             link(rel="stylesheet", href='css/table.css'),
             link(rel="stylesheet", href='css/common.css'),
+            link(rel="stylesheet", href='css/popup.css'),
         ], 
         [
             h1('overview', style='text-align: center; font-size: 3em;'),
@@ -59,7 +62,7 @@ def page(comp_data):
                             range(1, len(match_name_pairs) + 1),
                             match_name_pairs, unique_match_pairs,
                             html_paths, html_paths
-                        ,
+                        ),
                     ],
                     p(' '),
                 ],
