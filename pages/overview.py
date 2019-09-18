@@ -7,8 +7,8 @@ from hyperpython import h, h1, h2, p, div, link
 import fp
 import html_utils as hu
 
-def match_link(href, content):
-    return h('a',href=href)[content]
+def match_link(href, content, class_=None):
+    return h('a', class_=class_, href=href)[content]
 
 def link_row(match_pair_dic, no, name_pair, match_pair, href, content):
     a,b = match_pair
@@ -23,7 +23,9 @@ def link_row(match_pair_dic, no, name_pair, match_pair, href, content):
         h('td')[num_matches],
         h('td')[score_sum],
         h('td')['{:.1f}'.format(score_sum / num_matches)],
-        h('td',class_='center_cell')[match_link(href,content)],
+        h('td',class_='center_cell')[
+            match_link(href, 'go', class_='btn')
+        ],
     ]
 
 def page(comp_data):
@@ -36,26 +38,24 @@ def page(comp_data):
         [
             link(rel="stylesheet", href="css/overview.css"),
             link(rel="stylesheet", href='css/table.css'),
+            link(rel="stylesheet", href='css/common.css'),
+            link(rel="stylesheet", href='css/popup.css'),
         ], 
         [
             h1('overview', style='text-align: center; font-size: 3em;'),
             div(class_='row')[
-                div(class_='column left')[
-                    h2('Result Matrix'),
-                    p('Matrix will be included'),
-                ],
-                div(class_='column right')[
-                    h2('Result Overview'),
-                    p('테이블의 헤더를 클릭하여 정렬할 수 있습니다.'),
+                div(class_='over_div')[
+                    p('테이블의 헤더를 클릭하여 정렬할 수 있습니다.',class_='center_text'),
 
                     h('table',class_='overview_table')[
                         h('tr', children=
                             [h('th',class_='center_cell')[s] for s in [
-                                'no', 'A 파일','B 파일'
+                                '순번', 'A 파일','B 파일'
+
                             ]] + [h('th',s) for s in [
                                 '매치수','점수총합','평균점수',
                             ]] + [h('th',class_='center_cell')[
-                                '비교 화면 보기'
+                                '보기'
                             ]]
                         ),
                         fp.lmap(
@@ -65,6 +65,7 @@ def page(comp_data):
                             html_paths, html_paths
                         ),
                     ],
+                    p(' '),
                 ],
             ],
             h('script', src='js/sort_table.js')[' '],
