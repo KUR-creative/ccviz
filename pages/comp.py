@@ -85,7 +85,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
                 )
             ]
         ],
-        range(1, len(match_pairs)), range_infos, match_stats, popup_ids, match_pairs
+        range(1, len(match_pairs) + 1), range_infos, match_stats, popup_ids, match_pairs
     )
 
     '''
