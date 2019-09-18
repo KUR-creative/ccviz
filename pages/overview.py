@@ -40,13 +40,8 @@ def page(comp_data):
         [
             h1('overview', style='text-align: center; font-size: 3em;'),
             div(class_='row')[
-                div(class_='column left')[
-                    h2('Result Matrix'),
-                    p('Matrix will be included'),
-                ],
-                div(class_='column right')[
-                    h2('Result Overview'),
-                    p('테이블의 헤더를 클릭하여 정렬할 수 있습니다.'),
+                div(class_='over_div')[
+                    p('테이블의 헤더를 클릭하여 정렬할 수 있습니다.',class_='center_text'),
 
                     h('table',class_='overview_table')[
                         h('tr', children=
