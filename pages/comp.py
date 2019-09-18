@@ -33,6 +33,7 @@ def popup_window(match_id, content):
 
 def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
     header = h('tr')[
+        h('th', class_='center_cell')['no'], 
         h('th', class_='center_cell')['A' ],
         h('th', class_='center_cell')['B' ],
         h('th')['abs' ],
@@ -72,8 +73,11 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
     )
 
     rows = fp.lmap(
-        lambda info, stat, id, mAmB: 
-        h('tr')[info, stat, 
+        lambda no, info, stat, id, mAmB: 
+        h('tr', class_='center_cell')[
+            h('td', class_='center_cell')[no], 
+            info, 
+            stat, 
             h('td')[ 
                 popup_btn(id, 'go'), 
                 popup_window(
@@ -81,7 +85,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
                 )
             ]
         ],
-        range_infos, match_stats, popup_ids, match_pairs
+        range(1, len(match_pairs)), range_infos, match_stats, popup_ids, match_pairs
     )
 
     '''
