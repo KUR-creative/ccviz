@@ -21,6 +21,9 @@ color_class = {
 LINE_A = 'line_a'
 LINE_B = 'line_b'
 
+ABS_DEFAULT = 10
+REL_DEFAULT = 0.1
+
 def args():
     parser = argparse.ArgumentParser(description='CloneCop Visalization program')
 
@@ -29,12 +32,12 @@ def args():
         help="Output directory name. If specified directory isn't exists, then create it.")
     parser.add_argument('-a', '--absolute_score_threshold',
         help=("Only matches with absolute score higher than threshold are visualized. "
-             +"default threshold = 100"),
-        type=int, default=100)
+             +"default threshold = {}".format(ABS_DEFAULT)),
+        type=int, default=ABS_DEFAULT)
     parser.add_argument('-r', '--relative_score_threshold',
         help=("Only matches with relative score higher than threshold are visualized. "
-             +"default threshold = 0.5"),
-        type=float, default=0.5)
+             +"default threshold = {}".format(REL_DEFAULT)),
+        type=float, default=REL_DEFAULT)
     return parser.parse_args()
 
 def consts(args):
