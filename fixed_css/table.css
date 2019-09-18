@@ -9,6 +9,8 @@
   border-collapse: collapse;
   width: 97%;
   margin-left: 10px;
+  border-bottom: 2px solid #bbb;
+  padding-bottom: 5px;
 }
 
 .overview_table .center_cell, .comp_table .center_cell {

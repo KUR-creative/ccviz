@@ -36,6 +36,7 @@ def page(comp_data):
         [
             link(rel="stylesheet", href="css/overview.css"),
             link(rel="stylesheet", href='css/table.css'),
+            link(rel="stylesheet", href='css/common.css'),
         ], 
         [
             h1('overview', style='text-align: center; font-size: 3em;'),
@@ -58,8 +59,9 @@ def page(comp_data):
                             range(1, len(match_name_pairs) + 1),
                             match_name_pairs, unique_match_pairs,
                             html_paths, html_paths
-                        ),
+                        ,
                     ],
+                    p(' '),
                 ],
             ],
             h('script', src='js/sort_table.js')[' '],
