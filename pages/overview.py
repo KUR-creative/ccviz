@@ -50,11 +50,11 @@ def page(comp_data):
                     h('table',class_='overview_table')[
                         h('tr', children=
                             [h('th',class_='center_cell')[s] for s in [
-                                'no', 'A 파일','B 파일'
+                                '순번', 'A 파일','B 파일'
                             ]] + [h('th',s) for s in [
                                 '매치수','점수총합','평균점수',
                             ]] + [h('th',class_='center_cell')[
-                                '비교 화면 보기'
+                                '보기'
                             ]]
                         ),
                         fp.lmap(
