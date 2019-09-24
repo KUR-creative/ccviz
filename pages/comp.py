@@ -72,20 +72,23 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         range(len(match_pairs))
     )
 
-    rows = fp.lmap(
-        lambda no, info, stat, id, mAmB: 
-        h('tr', class_='center_cell')[
-            h('td', class_='center_cell')[no], 
-            info, 
-            stat, 
-            h('td')[ 
-                popup_btn(id, 'go'), 
-                popup_window(
-                    id, match_view( *synced_toknotesAB(*mAmB) ) 
-                )
-            ]
+    popup_tds = fp.lmap(
+        lambda id, mAmB: 
+        h('td')[ 
+            popup_btn(id, 'go'), 
+            popup_window(
+                id, [h('h1','test ppap')] + match_view( *synced_toknotesAB(*mAmB) ) 
+            )
         ],
-        range(1, len(match_pairs) + 1), range_infos, match_stats, popup_ids, match_pairs
+        popup_ids, match_pairs
+    )
+
+    rows = fp.lmap(
+        lambda no, info, stat, popup_td: 
+        h('tr', class_='center_cell')[
+            h('td', class_='center_cell')[no], info, stat, popup_td
+        ],
+        range(1, len(match_pairs) + 1), range_infos, match_stats, popup_tds
     )
 
     '''
