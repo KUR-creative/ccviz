@@ -98,37 +98,6 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         range(1, len(match_pairs) + 1), range_infos, match_stats, popup_tds
     )
 
-    '''
-    try:
-        rows[-2] = h('tr')[
-            h('td', class_='center_cell')['69 ~ 72'],
-            h('td', class_='center_cell')['11 ~ 13'],
-            h('td')[104],
-            h('td')[0.63],
-            h('td')[26],
-            h('td')[2],
-            h('td')[
-                popup_btn('op1', 'go'),
-                popup_window('op1', 'ppap')
-            ]
-        ]
-    except:
-        pass
-
-    rows[-1] = h('tr')[
-        h('td', class_='center_cell')['69 ~ 72'],
-        h('td', class_='center_cell')['11 ~ 13'],
-        h('td')[104],
-        h('td')[0.63],
-        h('td')[26],
-        h('td')[2],
-        h('td')[
-            popup_btn(match_id, 'go'),
-            popup_window(match_id, '{match}')
-        ]
-    ]
-    '''
-
     return [
         h('p',style='text-align: center; margin:3px;')[ 
             'absolute score threshold(abs) = {}'.format(gdat.ABS_THRESHOLD),
@@ -158,14 +127,9 @@ def gen_comp_html(nameA,nameB, srcA,srcB, table):
                 div(class_='column')[ h('h2')['Result Table']],
             ],
             div(class_='row')[
-                div(class_='column')[
-                    div('{source1}'),
-                ],
-                div(class_='column')[
-                    div('{source2}'),
-                ],
-                div(class_='column')[
-                    table,
+                div(class_='column')[ div('{source1}'), ],
+                div(class_='column')[ div('{source2}'), ],
+                div(class_='column')[ table,
                     h('script', src='../js/sort_table.js')[' '],
                 ],
             ]
@@ -175,9 +139,7 @@ def gen_comp_html(nameA,nameB, srcA,srcB, table):
     .replace('{','{{').replace('}','}}') \
     .replace('{{source1}}','{source1}') \
     .replace('{{source2}}','{source2}') \
-    .format_map(dict(
-        source1=srcA, source2=srcB
-    ))
+    .format_map(dict( source1=srcA, source2=srcB ))
     # If str has just single curly braces(typical c codes), 
     # then format_map raises `ValueError: unexpected '{' in field name`
 #--------------------------------------------------------------------------------------
