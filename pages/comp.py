@@ -139,7 +139,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         h('table', class_='comp_table', children=[header] + rows),
     ]
 
-def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table):
+def gen_comp_html(nameA,nameB, srcA,srcB, table):
     ''' combine srcA, srcB into one html string '''
     return hu.document_str(
     [
@@ -153,9 +153,9 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table):
     [
         div(class_='all')[
             div(class_='header_row')[
-                div(class_='column')[ Ainfo ],
-                div(class_='column')[ Binfo ],
-                div(class_='column')[ table_info ],
+                div(class_='column')[ h('h2')['A: ' + nameA] ],
+                div(class_='column')[ h('h2')['B: ' + nameB] ],
+                div(class_='column')[ h('h2')['Result Table']],
             ],
             div(class_='row')[
                 div(class_='column')[
@@ -307,13 +307,9 @@ def page(gdat, comp_data):
     for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs), 
                                 total=len(unique_match_pairs),
                                 desc='   generate htmls'):
-        Ainfo = h('h2')[ 'A: ' + Path(A_srcpaths[mA.fidx]).name ]
-        Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
-
-        table_info = h('h2')[ 'Result Table' ]
-
         comp_htmls.append(gen_comp_html(
-            Ainfo,Binfo,table_info, eA,eB, 
+            Path(A_srcpaths[mA.fidx]).name, Path(B_srcpaths[mB.fidx]).name,
+            eA,eB, 
             comp_table(match_pair_dic, match_stat_dic, mA,mB, gdat)
         )) 
 
