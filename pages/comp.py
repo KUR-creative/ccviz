@@ -248,6 +248,8 @@ def synced_toknotesAB(mA, mB):
         tokA,noteA = tnA
         tokB,noteB = tnB
         synced_tokA, synced_tokB = sync_tok(tokA, tokB)
+        if noteA == consts.GAP or noteB == consts.GAP:
+            noteA = noteB = consts.GAP
         return ((synced_tokA,noteA), (synced_tokB,noteB))
 
     return fp.unzip(
