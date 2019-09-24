@@ -52,45 +52,57 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
         fp.lstarmap( lambda rA,rB: 
             ('{} ~ {}'.format(rA.beg,rA.end), 
              '{} ~ {}'.format(rB.beg,rB.end))))
-    range_info_tds = fp.go(
-        range_infos,
-        fp.map(fp.lmap(
-            lambda s: h('td', class_='center_cell')[s])))
-
     match_stats = fp.go(
         match_pairs,
         fp.starmap( lambda mA,mB: match_stat_dic[mA,mB] ), 
-        fp.map( lambda stat:
+        fp.lmap( lambda stat:
             (stat.abs_score,
              '%1.2f' % stat.rel_score, 
              stat.c1 + stat.c2 + stat.c3 + stat.c4,
              stat.gap,
-             stat.mismatch)),
-        fp.map(fp.lmap( lambda s: h('td')[s] )))
+             stat.mismatch)))
 
     #-----------------------------------------------------
     popup_ids = fp.lmap(
         lambda i: 'popup-' + str(i),
         range(len(match_pairs)))
 
+    range_info_tds = fp.go(
+        range_infos,
+        fp.map(fp.lmap(
+            lambda s: h('td', class_='center_cell')[s])))
+
+    match_stat_tds = fp.lmap(
+        fp.lmap(lambda s: h('td')[s]), match_stats)
+
+    match_summaries = fp.lstarmap(
+        lambda abs_score, rel_score, num_match, num_gap, num_mismatch:
+        [
+            'Absolute Score = {}'.format(abs_score),
+            'Relative Score = {}'.format(rel_score),
+            'Number of Matches = {}'.format(num_match),
+            'Number of Gaps = {}'.format(num_gap),
+            'Number of Mismatches = {}'.format(num_mismatch),
+        ],
+        match_stats)
     match_window_title = fp.tup(
         lambda range_strA,range_strB:
         '[ {} : {} ] vs [ {} : {} ]'.format(
             nameA,range_strA, nameB,range_strB))
-
     popup_tds = fp.lmap(
-        lambda id, mAmB, rArB: 
+        lambda id, summary, mAmB, rArB: 
         h('td')[ 
             popup_btn(id, 'go'), 
             popup_window(
                 id, 
                 [
                     h('h2', match_window_title(rArB)),
+                    fp.lmap(lambda s: h('p',style="margin:3px;")[s], summary),
                     *match_view( *synced_toknotesAB(*mAmB) ) 
                 ]
             )
         ],
-        popup_ids, match_pairs, range_infos
+        popup_ids, match_summaries, match_pairs, range_infos
     )
 
     rows = fp.lmap(
@@ -98,7 +110,7 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
         h('tr', class_='center_cell')[
             h('td', class_='center_cell')[no], info, stat, popup_td
         ],
-        range(1, len(match_pairs) + 1), range_info_tds, match_stats, popup_tds
+        range(1, len(match_pairs) + 1), range_info_tds, match_stat_tds, popup_tds
     )
 
     return [
