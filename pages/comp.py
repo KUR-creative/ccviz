@@ -72,6 +72,13 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         range(len(match_pairs))
     )
 
+    '''
+    match_window_title = fp.tup(
+        lambda mA,mB:
+        h('h2', '[ {} ] vs [ {} ]'.format(mA.
+    )
+    '''
+
     popup_tds = fp.lmap(
         lambda id, mAmB: 
         h('td')[ 
@@ -300,9 +307,6 @@ def page(gdat, comp_data):
     for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs), 
                                 total=len(unique_match_pairs),
                                 desc='   generate htmls'):
-        rA = code_dic[mA.proj, mA.fidx].raw
-        rB = code_dic[mB.proj, mB.fidx].raw
-
         Ainfo = h('h2')[ 'A: ' + Path(A_srcpaths[mA.fidx]).name ]
         Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
 
