@@ -31,7 +31,7 @@ def popup_window(match_id, content):
         ]
     ]
 
-def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
+def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat):
     header = h('tr')[
         h('th', class_='center_cell')['no'], 
         h('th', class_='center_cell')['A' ],
@@ -49,9 +49,11 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
     range_infos = fp.go(
         match_pairs,
         fp.map( fp.lmap(data.match2raw) ), 
-        fp.starmap( lambda rA,rB: 
+        fp.lstarmap( lambda rA,rB: 
             ('{} ~ {}'.format(rA.beg,rA.end), 
-             '{} ~ {}'.format(rB.beg,rB.end))),
+             '{} ~ {}'.format(rB.beg,rB.end))))
+    range_info_tds = fp.go(
+        range_infos,
         fp.map(fp.lmap(
             lambda s: h('td', class_='center_cell')[s])))
 
@@ -69,25 +71,26 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
     #-----------------------------------------------------
     popup_ids = fp.lmap(
         lambda i: 'popup-' + str(i),
-        range(len(match_pairs))
-    )
+        range(len(match_pairs)))
 
-    '''
     match_window_title = fp.tup(
-        lambda mA,mB:
-        h('h2', '[ {} ] vs [ {} ]'.format(mA.
-    )
-    '''
+        lambda range_strA,range_strB:
+        '[ {} : {} ] vs [ {} : {} ]'.format(
+            nameA,range_strA, nameB,range_strB))
 
     popup_tds = fp.lmap(
-        lambda id, mAmB: 
+        lambda id, mAmB, rArB: 
         h('td')[ 
             popup_btn(id, 'go'), 
             popup_window(
-                id, [h('h1','test ppap')] + match_view( *synced_toknotesAB(*mAmB) ) 
+                id, 
+                [
+                    h('h2', match_window_title(rArB)),
+                    *match_view( *synced_toknotesAB(*mAmB) ) 
+                ]
             )
         ],
-        popup_ids, match_pairs
+        popup_ids, match_pairs, range_infos
     )
 
     rows = fp.lmap(
@@ -95,7 +98,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         h('tr', class_='center_cell')[
             h('td', class_='center_cell')[no], info, stat, popup_td
         ],
-        range(1, len(match_pairs) + 1), range_infos, match_stats, popup_tds
+        range(1, len(match_pairs) + 1), range_info_tds, match_stats, popup_tds
     )
 
     return [
@@ -269,10 +272,11 @@ def page(gdat, comp_data):
     for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs), 
                                 total=len(unique_match_pairs),
                                 desc='   generate htmls'):
+        nameA = Path(A_srcpaths[mA.fidx]).name
+        nameB = Path(B_srcpaths[mB.fidx]).name
         comp_htmls.append(gen_comp_html(
-            Path(A_srcpaths[mA.fidx]).name, Path(B_srcpaths[mB.fidx]).name,
-            eA,eB, 
-            comp_table(match_pair_dic, match_stat_dic, mA,mB, gdat)
+            nameA,nameB, eA,eB, 
+            comp_table(match_pair_dic, match_stat_dic, nameA,nameB, mA,mB, gdat)
         )) 
 
     return comp_htmls
