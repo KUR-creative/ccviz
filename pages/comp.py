@@ -75,34 +75,33 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
     match_stat_tds = fp.lmap(
         fp.lmap(lambda s: h('td')[s]), match_stats)
 
-    match_summaries = fp.lstarmap(
-        lambda abs_score, rel_score, num_match, num_gap, num_mismatch:
-        [
-            'Absolute Score = {}'.format(abs_score),
-            'Relative Score = {}'.format(rel_score),
-            'Number of Matches = {}'.format(num_match),
-            'Number of Gaps = {}'.format(num_gap),
-            'Number of Mismatches = {}'.format(num_mismatch),
-        ],
-        match_stats)
+    def summary_table(stat):
+        abs_score, rel_score, n_match, n_gap, n_mismatch = stat
+        return h('table', class_='inner_table')[
+            h('tr')[h('td', 'Absolute Score'      ), h('td', abs_score) ],
+            h('tr')[h('td', 'Relative Score'      ), h('td', rel_score) ],
+            h('tr')[h('td', 'Number of Matches'   ), h('td', n_match,   class_='num_match')],
+            h('tr')[h('td', 'Number of Gaps'      ), h('td', n_gap,     class_='num_gap') ],
+            h('tr')[h('td', 'Number of Mismatches'), h('td', n_mismatch,class_='num_mismatch')  ],
+        ]
     match_window_title = fp.tup(
         lambda range_strA,range_strB:
         '[ {} : {} ] vs [ {} : {} ]'.format(
             nameA,range_strA, nameB,range_strB))
     popup_tds = fp.lmap(
-        lambda id, summary, mAmB, rArB: 
+        lambda id, stat, mAmB, rArB: 
         h('td')[ 
             popup_btn(id, 'go'), 
             popup_window(
                 id, 
                 [
                     h('h2', match_window_title(rArB)),
-                    fp.lmap(lambda s: h('p',style="margin:3px;")[s], summary),
+                    summary_table(stat),
                     *match_view( *synced_toknotesAB(*mAmB) ) 
                 ]
             )
         ],
-        popup_ids, match_summaries, match_pairs, range_infos
+        popup_ids, match_stats, match_pairs, range_infos
     )
 
     rows = fp.lmap(
