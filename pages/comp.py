@@ -84,7 +84,7 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
             h('tr')[h('td', 'Number of Gaps'      ), h('td', n_gap,     class_='num_gap') ],
             h('tr')[h('td', 'Number of Mismatches'), h('td', n_mismatch,class_='num_mismatch')  ],
         ]
-    match_window_title = fp.tup(
+    inner_title = fp.tup(
         lambda range_strA,range_strB:
         '[ {} : {} ] vs [ {} : {} ]'.format(
             nameA,range_strA, nameB,range_strB))
@@ -95,7 +95,7 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
             popup_window(
                 id, 
                 [
-                    h('h2', match_window_title(rArB)),
+                    h('h2', inner_title(rArB)),
                     summary_table(stat),
                     *match_view( *synced_toknotesAB(*mAmB) ) 
                 ]
