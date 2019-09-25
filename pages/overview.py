@@ -31,6 +31,13 @@ def link_row(match_pair_dic, no, name_pair, match_pair, href, content):
 
 def target_depth(path):
     return Path(path).stem.split('-')
+def table_header():
+    return h('tr', children=[
+        *[h('th',class_='center_cell')[s] for s in [ '순번', 'A 파일','B 파일' ]],
+        *[h('th',s) for s in [ '매치수','점수총합','평균점수', ]],
+        *[h('th',class_='center_cell')[ '보기' ]],
+    ])
+#def table_body(
 def page(car_path, comp_data):
     match_pair_dic = comp_data.match_pair_dic
     match_name_pairs = comp_data.match_name_pairs
@@ -57,22 +64,19 @@ def page(car_path, comp_data):
                     p('테이블의 헤더를 클릭하여 정렬할 수 있습니다.',class_='center_text'),
 
                     h('table',class_='overview_table')[
-                        h('tr', children=
-                            [h('th',class_='center_cell')[s] for s in [
-                                '순번', 'A 파일','B 파일'
-
-                            ]] + [h('th',s) for s in [
-                                '매치수','점수총합','평균점수',
-                            ]] + [h('th',class_='center_cell')[
-                                '보기'
-                            ]]
-                        ),
-                        fp.lmap(
-                            F.partial(link_row, match_pair_dic), 
-                            range(1, len(match_name_pairs) + 1),
-                            match_name_pairs, unique_match_pairs,
-                            html_paths, html_paths
-                        ),
+                        table_header(),
+                        #sorted(
+                            fp.lmap(
+                                F.partial(link_row, match_pair_dic), 
+                                range(1, len(match_name_pairs) + 1),
+                                match_name_pairs, unique_match_pairs,
+                                html_paths, html_paths
+                            ),
+                        #   key=fp.tup(
+                        #       lambda no, fnameA, fnameB, n_match, score, mean_score, _:
+                        #       (score, fnameA, fnameB)
+                        #   )
+                        #),
                     ],
                     p(' '),
                 ],
