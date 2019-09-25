@@ -101,7 +101,7 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
                 [
                     h('h2', inner_title(rArB)),
                     summary_table(stat),
-                    code_view(match_view( *synced_toknotesAB(*mAmB) ))
+                    code_view(compare_view( *synced_toknotesAB(*mAmB) ))
                 ]
             )
         ],
@@ -253,7 +253,7 @@ def split_nls(toknote, padnote=consts.NOT_MATCH):
     no_nl_tn = (''.join(not_nls), note)
     return [no_nl_tn] + fp.lmap(lambda c: (c,padnote), nls)
 
-def match_view(toknotesA, toknotesB):
+def compare_view(toknotesA, toknotesB):
     ''' Generate html tags from synced matching informations (toknotesA,toknotesB) '''
     def toknote2span(tn):
         token,note = tn
