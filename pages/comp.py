@@ -192,6 +192,7 @@ def sync_toknotes(tnsA, tnsB): # NOTE: return B. Don't get confused!
     tnsB:   |src-matched|NNNNNNN|
      ret: |g|src-matched|NNN|  
 
+    N is None, g is gap.
     Pad gaps and drop to sync tnsA and tnsB toknotes.
     Return modified tnsB. (no side-effect)
     '''
