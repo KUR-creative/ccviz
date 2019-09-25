@@ -88,6 +88,10 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
         lambda range_strA,range_strB:
         '[ {} : {} ] vs [ {} : {} ]'.format(
             nameA,range_strA, nameB,range_strB))
+    def code_view(compare_view):
+        return div(class_='inner_code')[
+            compare_view
+        ]
     popup_tds = fp.lmap(
         lambda id, stat, mAmB, rArB: 
         h('td')[ 
@@ -97,7 +101,7 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
                 [
                     h('h2', inner_title(rArB)),
                     summary_table(stat),
-                    *match_view( *synced_toknotesAB(*mAmB) ) 
+                    code_view(match_view( *synced_toknotesAB(*mAmB) ))
                 ]
             )
         ],
