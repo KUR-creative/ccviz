@@ -88,10 +88,20 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
         lambda range_strA,range_strB:
         '[ {} : {} ] vs [ {} : {} ]'.format(
             nameA,range_strA, nameB,range_strB))
-    def code_view(compare_view):
-        return div(class_='inner_code')[
-            compare_view
-        ]
+    def code_view(rArB, compare_view): #TODO:refactor rArB!
+        begA,endA = fp.map(int, rArB[0].split('~'))
+        begB,endB = fp.map(int, rArB[1].split('~'))
+        linesA = fp.lmap(lambda l: pre(class_='line_a')[l], range(begA,endA+1))
+        #linesB = fp.lmap(lambda l: pre(class_='line_b')[l], range(begB,endB+1))
+        linesB = fp.lmap(lambda x: pre(class_='line_b')[' - '], linesA)
+        return h('table')[ h('tbody')[ h('tr')[
+            h('td',style='text-align:left; border-bottom:0px;')[ 
+                list(F.interleave(linesA,linesB))
+            ],
+            h('td',style='text-align:left; border-bottom:0px;')[ 
+                div(class_='inner_code')[ compare_view ] 
+            ]
+        ]]]
     popup_tds = fp.lmap(
         lambda id, stat, mAmB, rArB: 
         h('td')[ 
@@ -101,7 +111,7 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
                 [
                     h('h2', inner_title(rArB)),
                     summary_table(stat),
-                    code_view(compare_view( *synced_toknotesAB(*mAmB) ))
+                    code_view(rArB, compare_view( *synced_toknotesAB(*mAmB) ))
                 ]
             )
         ],
