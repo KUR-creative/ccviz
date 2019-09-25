@@ -54,7 +54,7 @@ def main(args=None):
         if comp_data:
             fu.write_text (
                 Path(OUTPUT_DIR,'overview.html'), 
-                pages.overview.page(comp_data)
+                pages.overview.page(TARGET_CAR, comp_data)
             )
 
             # Generate comp/X_X.html
