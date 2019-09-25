@@ -31,7 +31,7 @@ def popup_window(match_id, content):
         ]
     ]
 
-def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
+def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat):
     header = h('tr')[
         h('th', class_='center_cell')['no'], 
         h('th', class_='center_cell')['A' ],
@@ -49,75 +49,87 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
     range_infos = fp.go(
         match_pairs,
         fp.map( fp.lmap(data.match2raw) ), 
-        fp.starmap( lambda rA,rB: 
+        fp.lstarmap( lambda rA,rB: 
             ('{} ~ {}'.format(rA.beg,rA.end), 
-             '{} ~ {}'.format(rB.beg,rB.end))),
-        fp.map(fp.lmap(
-            lambda s: h('td', class_='center_cell')[s])))
-
+             '{} ~ {}'.format(rB.beg,rB.end))))
     match_stats = fp.go(
         match_pairs,
         fp.starmap( lambda mA,mB: match_stat_dic[mA,mB] ), 
-        fp.map( lambda stat:
+        fp.lmap( lambda stat:
             (stat.abs_score,
              '%1.2f' % stat.rel_score, 
              stat.c1 + stat.c2 + stat.c3 + stat.c4,
              stat.gap,
-             stat.mismatch)),
-        fp.map(fp.lmap( lambda s: h('td')[s] )))
+             stat.mismatch)))
 
     #-----------------------------------------------------
     popup_ids = fp.lmap(
         lambda i: 'popup-' + str(i),
-        range(len(match_pairs))
+        range(len(match_pairs)))
+
+    range_info_tds = fp.go(
+        range_infos,
+        fp.map(fp.lmap(
+            lambda s: h('td', class_='center_cell')[s])))
+
+    match_stat_tds = fp.lmap(
+        fp.lmap(lambda s: h('td')[s]), match_stats)
+
+    def summary_table(stat):
+        abs_score, rel_score, n_match, n_gap, n_mismatch = stat
+        return h('table', class_='inner_table')[
+            h('tr')[h('td', 'Absolute Score',       class_='center_cell'), 
+                    h('td', abs_score) ],
+            h('tr')[h('td', 'Relative Score',       class_='center_cell'), 
+                    h('td', rel_score) ],
+            h('tr')[h('td', 'Number of Matches',    class_='center_cell'),
+                    h('td', n_match,                class_='num_match')],
+            h('tr')[h('td', 'Number of Gaps',       class_='center_cell'), 
+                    h('td', n_gap,                  class_='num_gap') ],
+            h('tr')[h('td', 'Number of Mismatches', class_='center_cell'), 
+                    h('td', n_mismatch,             class_='num_mismatch')],
+        ]
+    inner_title = fp.tup(
+        lambda range_strA,range_strB:
+        '[ {} : {} ] x [ {} : {} ]'.format(
+            nameA,range_strA, nameB,range_strB))
+    def code_view(rArB, compare_view): #TODO:refactor rArB!
+        begA,endA = fp.map(int, rArB[0].split('~'))
+        begB,endB = fp.map(int, rArB[1].split('~'))
+        linesA = fp.lmap(lambda l: pre(class_='line_a')[l], range(begA,endA+1))
+        #linesB = fp.lmap(lambda l: pre(class_='line_b')[l], range(begB,endB+1))
+        linesB = fp.lmap(lambda x: pre(class_='line_b')[' - '], linesA)
+        return h('table')[ h('tbody')[ h('tr')[
+            h('td',style='text-align:left; border-bottom:0px;')[ 
+                list(F.interleave(linesA,linesB))
+            ],
+            h('td',style='text-align:left; border-bottom:0px;')[ 
+                div(class_='inner_code')[ compare_view ] 
+            ]
+        ]]]
+    popup_tds = fp.lmap(
+        lambda id, stat, mAmB, rArB: 
+        h('td')[ 
+            popup_btn(id, 'go'), 
+            popup_window(
+                id, 
+                [
+                    h('h2', inner_title(rArB)),
+                    summary_table(stat),
+                    code_view(rArB, compare_view( *synced_toknotesAB(*mAmB) ))
+                ]
+            )
+        ],
+        popup_ids, match_stats, match_pairs, range_infos
     )
 
     rows = fp.lmap(
-        lambda no, info, stat, id, mAmB: 
+        lambda no, info, stat, popup_td: 
         h('tr', class_='center_cell')[
-            h('td', class_='center_cell')[no], 
-            info, 
-            stat, 
-            h('td')[ 
-                popup_btn(id, 'go'), 
-                popup_window(
-                    id, match_view( *synced_toknotesAB(*mAmB) ) 
-                )
-            ]
+            h('td', class_='center_cell')[no], info, stat, popup_td
         ],
-        range(1, len(match_pairs) + 1), range_infos, match_stats, popup_ids, match_pairs
+        range(1, len(match_pairs) + 1), range_info_tds, match_stat_tds, popup_tds
     )
-
-    '''
-    try:
-        rows[-2] = h('tr')[
-            h('td', class_='center_cell')['69 ~ 72'],
-            h('td', class_='center_cell')['11 ~ 13'],
-            h('td')[104],
-            h('td')[0.63],
-            h('td')[26],
-            h('td')[2],
-            h('td')[
-                popup_btn('op1', 'go'),
-                popup_window('op1', 'ppap')
-            ]
-        ]
-    except:
-        pass
-
-    rows[-1] = h('tr')[
-        h('td', class_='center_cell')['69 ~ 72'],
-        h('td', class_='center_cell')['11 ~ 13'],
-        h('td')[104],
-        h('td')[0.63],
-        h('td')[26],
-        h('td')[2],
-        h('td')[
-            popup_btn(match_id, 'go'),
-            popup_window(match_id, '{match}')
-        ]
-    ]
-    '''
 
     return [
         h('p',style='text-align: center; margin:3px;')[ 
@@ -129,7 +141,7 @@ def comp_table(match_pair_dic, match_stat_dic, matchA,matchB, gdat):
         h('table', class_='comp_table', children=[header] + rows),
     ]
 
-def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table):
+def gen_comp_html(nameA,nameB, srcA,srcB, table):
     ''' combine srcA, srcB into one html string '''
     return hu.document_str(
     [
@@ -143,19 +155,14 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table):
     [
         div(class_='all')[
             div(class_='header_row')[
-                div(class_='column')[ Ainfo ],
-                div(class_='column')[ Binfo ],
-                div(class_='column')[ table_info ],
+                div(class_='column')[ h('h2')['A: ' + nameA] ],
+                div(class_='column')[ h('h2')['B: ' + nameB] ],
+                div(class_='column')[ h('h2')['Result Table']],
             ],
             div(class_='row')[
-                div(class_='column')[
-                    div('{source1}'),
-                ],
-                div(class_='column')[
-                    div('{source2}'),
-                ],
-                div(class_='column')[
-                    table,
+                div(class_='column')[ div('{source1}'), ],
+                div(class_='column')[ div('{source2}'), ],
+                div(class_='column')[ table,
                     h('script', src='../js/sort_table.js')[' '],
                 ],
             ]
@@ -165,9 +172,7 @@ def gen_comp_html(Ainfo, Binfo, table_info, srcA, srcB, table):
     .replace('{','{{').replace('}','}}') \
     .replace('{{source1}}','{source1}') \
     .replace('{{source2}}','{source2}') \
-    .format_map(dict(
-        source1=srcA, source2=srcB
-    ))
+    .format_map(dict( source1=srcA, source2=srcB ))
     # If str has just single curly braces(typical c codes), 
     # then format_map raises `ValueError: unexpected '{' in field name`
 #--------------------------------------------------------------------------------------
@@ -192,6 +197,7 @@ def sync_toknotes(tnsA, tnsB): # NOTE: return B. Don't get confused!
     tnsB:   |src-matched|NNNNNNN|
      ret: |g|src-matched|NNN|  
 
+    N is None, g is gap.
     Pad gaps and drop to sync tnsA and tnsB toknotes.
     Return modified tnsB. (no side-effect)
     '''
@@ -248,6 +254,8 @@ def synced_toknotesAB(mA, mB):
         tokA,noteA = tnA
         tokB,noteB = tnB
         synced_tokA, synced_tokB = sync_tok(tokA, tokB)
+        if noteA == consts.GAP or noteB == consts.GAP:
+            noteA = noteB = consts.GAP
         return ((synced_tokA,noteA), (synced_tokB,noteB))
 
     return fp.unzip(
@@ -261,7 +269,7 @@ def split_nls(toknote, padnote=consts.NOT_MATCH):
     no_nl_tn = (''.join(not_nls), note)
     return [no_nl_tn] + fp.lmap(lambda c: (c,padnote), nls)
 
-def match_view(toknotesA, toknotesB):
+def compare_view(toknotesA, toknotesB):
     ''' Generate html tags from synced matching informations (toknotesA,toknotesB) '''
     def toknote2span(tn):
         token,note = tn
@@ -295,17 +303,11 @@ def page(gdat, comp_data):
     for (eA,eB),(mA,mB) in tqdm(zip(emphasized_AB,unique_match_pairs), 
                                 total=len(unique_match_pairs),
                                 desc='   generate htmls'):
-        rA = code_dic[mA.proj, mA.fidx].raw
-        rB = code_dic[mB.proj, mB.fidx].raw
-
-        Ainfo = h('h2')[ 'A: ' + Path(A_srcpaths[mA.fidx]).name ]
-        Binfo = h('h2')[ 'B: ' + Path(B_srcpaths[mB.fidx]).name ]
-
-        table_info = h('h2')[ 'Result Table' ]
-
+        nameA = Path(A_srcpaths[mA.fidx]).name
+        nameB = Path(B_srcpaths[mB.fidx]).name
         comp_htmls.append(gen_comp_html(
-            Ainfo,Binfo,table_info, eA,eB, 
-            comp_table(match_pair_dic, match_stat_dic, mA,mB, gdat)
+            nameA,nameB, eA,eB, 
+            comp_table(match_pair_dic, match_stat_dic, nameA,nameB, mA,mB, gdat)
         )) 
 
     return comp_htmls

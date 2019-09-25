@@ -29,3 +29,22 @@
   border-top: 2px solid #bbb;
   border-bottom: 2px solid #bbb;
 }
+
+.inner_table {
+  margin-bottom: 1.4em;
+  border-collapse: collapse;
+}
+
+.inner_table td {
+  padding: 2px;
+  text-align: right;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+/*.bold_txt { font-weight: bold; }*/
+.num_match    { font-weight: 600; color: rgba(  0, 200,   0) }
+.num_gap      { font-weight: 600; color: rgba(127, 127, 127) }
+.num_mismatch { font-weight: 600; color: rgba(235,   0,   0) }
