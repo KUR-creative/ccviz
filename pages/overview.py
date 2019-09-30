@@ -21,9 +21,9 @@ def table_header():
         *[h('th',class_='center_cell')[ '보기' ]],
     ])
 
-Row = namedtuple('Row', 'a_name b_name n_match sum_score mean_score')
+Row = namedtuple('Row', 'a_name b_name n_match sum_score mean_score href')
 @F.autocurry
-def row(match_pair_dic, name_pair, mAmB):
+def row(match_pair_dic, name_pair, mAmB, html_path):
     a,b = mAmB
     match_pairs = match_pair_dic[a.fidx, b.fidx]
     num_matches = len(match_pairs)
@@ -31,9 +31,10 @@ def row(match_pair_dic, name_pair, mAmB):
     a_name,b_name = name_pair
     return Row(
         a_name, b_name, 
-        num_matches, sum_score, '{:.1f}'.format(sum_score / num_matches) 
+        num_matches, sum_score, '{:.1f}'.format(sum_score / num_matches),
+        html_path
     )
-def row_html(no, row, href):
+def row_html(no, row):
     return h('tr')[ 
         h('td',class_='center_cell')[no], 
         h('td',class_='center_cell')[row.a_name], 
@@ -42,7 +43,7 @@ def row_html(no, row, href):
         h('td')[row.sum_score],
         h('td')[row.mean_score],
         h('td',class_='center_cell')[
-            link_tag(href, 'go', class_='btn')
+            link_tag(row.href, 'go', class_='btn')
         ]
     ]
 
@@ -61,11 +62,11 @@ def page(car_path, comp_data):
     ])
 
     rows = sorted(
-        fp.lmap(row(match_pair_dic), name_pairs, unique_match_pairs),
+        fp.lmap(row(match_pair_dic), name_pairs, unique_match_pairs, html_paths),
         key=lambda row: (1 / row.sum_score, row.a_name, row.b_name))
     table_body = fp.lmap(
         row_html, 
-        range(1, len(name_pairs) + 1), rows, html_paths)
+        range(1, len(name_pairs) + 1), rows)
     return hu.document_str(
         [
             link(rel="stylesheet", href="css/overview.css"),
