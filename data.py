@@ -8,6 +8,7 @@ import funcy as F
 import pygments #import highlight
 from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
+from hyperpython import h
 
 import fp
 import consts
@@ -27,6 +28,29 @@ def highlight(src, linenos='table'):
     return pygments.highlight(
         src, CppLexer(), HtmlFormatter(linenos=linenos)
     )
+def tabled(src):
+    ''' make line-tabled src along to result of pygments.highlight '''
+    lines = src.splitlines()
+    return str(
+        h('div')[h('table',class_='highlighttable')[
+        h('tbody')[h('tr')[
+            h('td',class_='linenos')[h('div',class_='linenodiv')[
+                h('pre')[
+                    fp.go(
+                        range(1, len(lines)+1),
+                        fp.map(str),
+                        lambda ss: '\n'.join(ss)
+                    )
+                ]
+            ]],
+            h('td',class_='code')[h('div',class_='highlight')[
+                h('pre')[
+                    src
+                ]
+            ]]
+        ]]]]
+    )
+
 def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
@@ -42,10 +66,11 @@ def xmap_path(dirpath):
 def code(proj, fidx, fpath):
     raw =  fu.read_text(fpath)
     xmap = fu.read_text(xmap_path(fpath))
-    print('->>', fpath)
+    highlighted = highlight(raw)
+    print('{:10d}'.format(len(highlighted)), Path(fpath).name)
     return Code(
         proj, fidx, fpath, 
-        highlight(raw), 
+        highlighted if len(highlighted) < 500000 else tabled(raw), 
         raw, xmap
     )
 
