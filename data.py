@@ -63,14 +63,14 @@ def xmap_path(dirpath):
     return fu.replace1(old, new, dirpath) + 'map'
 
 @F.autocurry
-def code(proj, fidx, fpath):
+def code(gdat, proj, fidx, fpath):
     raw =  fu.read_text(fpath)
     xmap = fu.read_text(xmap_path(fpath))
     highlighted = highlight(raw)
     print('{:10d}'.format(len(highlighted)), Path(fpath).name)
     return Code(
         proj, fidx, fpath, 
-        highlighted if len(highlighted) < consts.NO_HL_THRESHOLD else tabled(raw), 
+        highlighted if len(highlighted) < gdat.NO_HL_THRESHOLD else tabled(raw), 
         raw, xmap
     )
 
@@ -266,8 +266,8 @@ def comp_data(gdat, car_dict):
     B_srcpaths = fp.lmap(raw2real(root_dir), car_dict['DST_FILE_LIST'])
 
     # use codes only here!
-    codes = ( fp.lstarmap(code('A'), enumerate(A_srcpaths))
-            + fp.lstarmap(code('B'), enumerate(B_srcpaths)))
+    codes = ( fp.lstarmap(code(gdat,'A'), enumerate(A_srcpaths))
+            + fp.lstarmap(code(gdat,'B'), enumerate(B_srcpaths)))
     code_dic = F.zipdict(fp.map(x_id, codes), codes)
 
     if fp.is_empty(car_dict['CLONE_LIST']):
