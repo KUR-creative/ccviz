@@ -31,8 +31,7 @@ def highlight(src, linenos='table'):
 def tabled(src):
     ''' make line-tabled src along to result of pygments.highlight '''
     lines = src.splitlines()
-    return str(
-        h('div')[h('table',class_='highlighttable')[
+    return str(h('table',class_='highlighttable')[
         h('tbody')[h('tr')[
             h('td',class_='linenos')[h('div',class_='linenodiv')[
                 h('pre')[
@@ -48,8 +47,8 @@ def tabled(src):
                     src
                 ]
             ]]
-        ]]]]
-    )
+        ]]
+    ])
 
 def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
