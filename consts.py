@@ -21,8 +21,10 @@ color_class = {
 LINE_A = 'line_a'
 LINE_B = 'line_b'
 
+# this values are CHANGED after `consts` called
 ABS_DEFAULT = 10
 REL_DEFAULT = 0.1
+NO_HL_DEFAULT = 500000
 
 def args():
     parser = argparse.ArgumentParser(description='CloneCop Visalization program')
@@ -38,6 +40,10 @@ def args():
         help=("Only matches with relative score higher than threshold are visualized. "
              +"default threshold = {}".format(REL_DEFAULT)),
         type=float, default=REL_DEFAULT)
+    parser.add_argument('-nh', '--no-highlight-threshold',
+        help=("If length of souce code is longer than this threshold, CCViz never "
+             +"highlights the code.default threshold = {}".format(NO_HL_DEFAULT)),
+        type=int, default=NO_HL_DEFAULT)
     return parser.parse_args()
 
 def consts(args):
@@ -70,8 +76,10 @@ def consts(args):
         # list of tuples -> dictionary
         fp.unzip, fp.tup(F.zipdict)
     )
+
     ABS_THRESHOLD = args.absolute_score_threshold
     REL_THRESHOLD = args.relative_score_threshold
+    NO_HL_THRESHOLD = args.no_highlight_threshold
 
     cdic = dict(
         TARGET_ZIP = TARGET_ZIP,
@@ -82,6 +90,7 @@ def consts(args):
         CONFIG = CONFIG,
         ABS_THRESHOLD = ABS_THRESHOLD,
         REL_THRESHOLD = REL_THRESHOLD,
+        NO_HL_THRESHOLD = NO_HL_THRESHOLD,
     )
 
     return namedtuple('Consts', cdic.keys())(**cdic)

@@ -8,6 +8,7 @@ import funcy as F
 import pygments #import highlight
 from pygments.lexers import CppLexer
 from pygments.formatters import HtmlFormatter
+from hyperpython import h
 
 import fp
 import consts
@@ -27,6 +28,28 @@ def highlight(src, linenos='table'):
     return pygments.highlight(
         src, CppLexer(), HtmlFormatter(linenos=linenos)
     )
+def tabled(src):
+    ''' make line-tabled src along to result of pygments.highlight '''
+    lines = src.splitlines()
+    return str(h('table',class_='highlighttable')[
+        h('tbody')[h('tr')[
+            h('td',class_='linenos')[h('div',class_='linenodiv')[
+                h('pre')[
+                    fp.go(
+                        range(1, len(lines)+1),
+                        fp.map(str),
+                        lambda ss: '\n'.join(ss)
+                    )
+                ]
+            ]],
+            h('td',class_='code')[h('div',class_='highlight')[
+                h('pre')[
+                    src
+                ]
+            ]]
+        ]]
+    ])
+
 def highlight_css(style_def='.highlight'):
     return HtmlFormatter().get_style_defs(style_def)
 
@@ -39,13 +62,14 @@ def xmap_path(dirpath):
     return fu.replace1(old, new, dirpath) + 'map'
 
 @F.autocurry
-def code(proj, fidx, fpath):
+def code(gdat, proj, fidx, fpath):
     raw =  fu.read_text(fpath)
     xmap = fu.read_text(xmap_path(fpath))
-    print('->>', fpath)
+    highlighted = highlight(raw)
+    print('{:10d}'.format(len(highlighted)), Path(fpath).name)
     return Code(
         proj, fidx, fpath, 
-        highlight(raw), 
+        highlighted if len(highlighted) < gdat.NO_HL_THRESHOLD else tabled(raw), 
         raw, xmap
     )
 
@@ -241,14 +265,12 @@ def comp_data(gdat, car_dict):
     B_srcpaths = fp.lmap(raw2real(root_dir), car_dict['DST_FILE_LIST'])
 
     # use codes only here!
-    codes = ( fp.lstarmap(code('A'), enumerate(A_srcpaths))
-            + fp.lstarmap(code('B'), enumerate(B_srcpaths)))
+    codes = ( fp.lstarmap(code(gdat,'A'), enumerate(A_srcpaths))
+            + fp.lstarmap(code(gdat,'B'), enumerate(B_srcpaths)))
     code_dic = F.zipdict(fp.map(x_id, codes), codes)
 
     if fp.is_empty(car_dict['CLONE_LIST']):
         return None
-    match_stats = fp.lstarmap(
-        MatchStat, F.last(fp.unzip(car_dict['CLONE_LIST'])))
 
     match_stats = fp.go(
         car_dict['CLONE_LIST'],
