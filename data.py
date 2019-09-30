@@ -271,8 +271,6 @@ def comp_data(gdat, car_dict):
 
     if fp.is_empty(car_dict['CLONE_LIST']):
         return None
-    match_stats = fp.lstarmap(
-        MatchStat, F.last(fp.unzip(car_dict['CLONE_LIST'])))
 
     match_stats = fp.go(
         car_dict['CLONE_LIST'],
