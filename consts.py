@@ -23,6 +23,7 @@ LINE_B = 'line_b'
 
 ABS_DEFAULT = 10
 REL_DEFAULT = 0.1
+NO_HL_THRESHOLD = 500000
 
 def args():
     parser = argparse.ArgumentParser(description='CloneCop Visalization program')

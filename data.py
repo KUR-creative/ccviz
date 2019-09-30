@@ -70,7 +70,7 @@ def code(proj, fidx, fpath):
     print('{:10d}'.format(len(highlighted)), Path(fpath).name)
     return Code(
         proj, fidx, fpath, 
-        highlighted if len(highlighted) < 500000 else tabled(raw), 
+        highlighted if len(highlighted) < consts.NO_HL_THRESHOLD else tabled(raw), 
         raw, xmap
     )
 
