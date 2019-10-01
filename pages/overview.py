@@ -75,18 +75,20 @@ def page(car_path, comp_data):
             link(rel="stylesheet", href='css/popup.css'),
         ], 
         [
-            h('h1','클론 탐지 결과', 
-              style='text-align: center; font-size: 3em; margin-bottom:0.5em'),
-            h('h4','토큰화 단계: {} / 분석 레벨: {}'.format(target,depth), 
-              style='text-align: center;'),
-            #h('h4','토큰화 단계: {}'.format(target), style='text-align: center;'),
-            #h('h4','분석 레벨: {}'.format(depth), style='text-align: center;'),
-            div(class_='row')[
-                div(class_='over_div')[
-                    p('테이블의 헤더를 클릭하여 정렬할 수 있습니다.',
-                      class_='center_text'),
-                    h('table',class_='overview_table')[ table_header, table_body ],
-                    p(' '),
+            div(class_='fixed_title')[
+                h('h1','클론 탐지 결과', 
+                  style='text-align: center; font-size: 3em; margin-bottom:0.5em'),
+                h('h4','토큰화 단계: {} / 분석 레벨: {}'.format(target,depth), 
+                  style='text-align: center;'),
+            ],
+            div(class_='scroll_content')[
+                div(class_='row')[
+                    div(class_='over_div')[
+                        p('테이블의 헤더를 클릭하여 정렬할 수 있습니다.',
+                          class_='center_text'),
+                        h('table',class_='overview_table')[ table_header, table_body ],
+                        p(' '),
+                    ],
                 ],
             ],
             h('script', src='js/sort_table.js')[' '],

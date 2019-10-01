@@ -19,3 +19,17 @@
   display: table;
   clear: both;
 }
+
+.fixed_title {
+  position: fixed;
+  top: -1em;
+  width: 100%;
+  z-index: 2;
+  background: white;
+}
+
+.scroll_content {
+  position: relative;
+  width: 100%;
+  top: 8em;
+}
