@@ -33,7 +33,9 @@
 .inner_table {
   margin-bottom: 1.4em;
   border-collapse: collapse;
-  width: 100%;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .inner_table td {
