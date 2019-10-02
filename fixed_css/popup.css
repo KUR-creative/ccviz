@@ -108,6 +108,5 @@
 .modal_code_view {
   overflow: auto; 
   height:inherit; 
-  position:relative; 
-  top: -2%;
+  background-color: #f1f1f1;
 }
