@@ -116,7 +116,9 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
                 [
                     h('h2', inner_title(rArB)),
                     summary_table(stat),
-                    code_view(rArB, compare_view( *synced_toknotesAB(*mAmB) ))
+                    div(class_='modal_code_view')[
+                        code_view(rArB, compare_view( *synced_toknotesAB(*mAmB) ))
+                    ],
                 ]
             )
         ],
