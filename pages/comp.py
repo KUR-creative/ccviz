@@ -162,12 +162,11 @@ def gen_comp_html(nameA,nameB, srcA,srcB, table):
                 div(class_='column')[ h('h2')['Result Table']],
             ],
             div(class_='row')[
-                div(class_='column')[ div('{source1}'), ],
-                div(class_='column')[ div('{source2}'), ],
-                div(class_='column')[ table,
-                    h('script', src='../js/sort_table.js')[' '],
-                ],
-            ]
+                div(class_='column')[ div('{source1}') ],
+                div(class_='column')[ div('{source2}') ],
+                div(class_='column')[ table ],
+            ],
+            h('script', src='../js/sort_table.js')[' '],
         ]
     ]
     ) \
