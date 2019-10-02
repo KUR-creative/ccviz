@@ -39,11 +39,12 @@
   left: 0;
   width: 75%;
   margin: auto;
-  overflow: auto;
   background: #fff;
   /*border-radius: 5px;*/
   padding: 1em 2em;
   height: 75%; /*50%;*/
+
+  overflow: hidden;
 }
 
 .modal_close {
@@ -103,4 +104,10 @@
 
 .inner_code {
   background-color: #f1f1f1;
+}
+.modal_code_view {
+  overflow: auto; 
+  height:inherit; 
+  position:relative; 
+  top: -2%;
 }
