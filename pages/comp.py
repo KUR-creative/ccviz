@@ -167,6 +167,7 @@ def gen_comp_html(nameA,nameB, srcA,srcB, table):
                 div(class_='column')[ table ],
             ],
             h('script', src='../js/sort_table.js')[' '],
+            h('script', src='../js/scroll_match.js')[' '],
         ]
     ]
     ) \
