@@ -78,17 +78,18 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
     def summary_table(stat):
         abs_score, rel_score, n_match, n_gap, n_mismatch = stat
         return h('table', class_='inner_table')[
-            h('tr')[h('td', 'Absolute Score',       class_='center_cell'), 
-                    h('td', abs_score) ],
-            h('tr')[h('td', 'Relative Score',       class_='center_cell'), 
-                    h('td', rel_score) ],
-            h('tr')[h('td', 'Number of Matches',    class_='center_cell'),
-                    h('td', n_match,                class_='num_match')],
-            h('tr')[h('td', 'Number of Gaps',       class_='center_cell'), 
-                    h('td', n_gap,                  class_='num_gap') ],
-            h('tr')[h('td', 'Number of Mismatches', class_='center_cell'), 
-                    h('td', n_mismatch,             class_='num_mismatch')],
-        ]
+            h('tr')[
+                h('td', 'Absolute Score',       class_='center_cell'),
+                h('td', 'Relative Score',       class_='center_cell'), 
+                h('td', 'Number of Matches',    class_='center_cell'),
+                h('td', 'Number of Gaps',       class_='center_cell'), 
+                h('td', 'Number of Mismatches', class_='center_cell'),],
+            h('tr')[
+                h('td', abs_score,  class_='center_cell'),
+                h('td', rel_score,  class_='center_cell'),
+                h('td', n_match,    class_='num_match center_cell'),
+                h('td', n_gap,      class_='num_gap center_cell'),
+                h('td', n_mismatch, class_='num_mismatch center_cell'),]]
     inner_title = fp.tup(
         lambda range_strA,range_strB:
         '[ {} : {} ] x [ {} : {} ]'.format(
@@ -114,7 +115,7 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
             popup_window(
                 id, 
                 [
-                    h('h2', inner_title(rArB)),
+                    h('h2', inner_title(rArB), style='text-align:center;'),
                     summary_table(stat),
                     div(class_='modal_code_view')[
                         code_view(rArB, compare_view( *synced_toknotesAB(*mAmB) ))
