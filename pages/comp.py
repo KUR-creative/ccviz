@@ -127,7 +127,7 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
 
     rows = fp.lmap(
         lambda no, info, stat, popup_td: 
-        h('tr', class_='center_cell')[
+        h('tr', class_='comp_table_row')[
             h('td', class_='center_cell')[no], info, stat, popup_td
         ],
         range(1, len(match_pairs) + 1), range_info_tds, match_stat_tds, popup_tds
@@ -162,12 +162,12 @@ def gen_comp_html(nameA,nameB, srcA,srcB, table):
                 div(class_='column')[ h('h2')['Result Table']],
             ],
             div(class_='row')[
-                div(class_='column')[ div('{source1}'), ],
-                div(class_='column')[ div('{source2}'), ],
-                div(class_='column')[ table,
-                    h('script', src='../js/sort_table.js')[' '],
-                ],
-            ]
+                div(class_='column')[ div('{source1}') ],
+                div(class_='column')[ div('{source2}') ],
+                div(class_='column')[ table ],
+            ],
+            h('script', src='../js/sort_table.js')[' '],
+            h('script', src='../js/scroll_match.js')[' '],
         ]
     ]
     ) \
