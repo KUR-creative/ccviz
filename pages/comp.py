@@ -87,9 +87,9 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
             h('tr')[
                 h('td', abs_score,  class_='center_cell'),
                 h('td', rel_score,  class_='center_cell'),
-                h('td', n_match,    class_='num_match center_cell'),
-                h('td', n_gap,      class_='num_gap center_cell'),
-                h('td', n_mismatch, class_='num_mismatch center_cell'),]]
+                h('td', n_match,    class_='center_cell num_match'),
+                h('td', n_gap,      class_='center_cell num_gap'),
+                h('td', n_mismatch, class_='center_cell num_mismatch'),]]
     inner_title = fp.tup(
         lambda range_strA,range_strB:
         '[ {} : {} ] x [ {} : {} ]'.format(
