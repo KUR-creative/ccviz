@@ -78,17 +78,18 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
     def summary_table(stat):
         abs_score, rel_score, n_match, n_gap, n_mismatch = stat
         return h('table', class_='inner_table')[
-            h('tr')[h('td', 'Absolute Score',       class_='center_cell'), 
-                    h('td', abs_score) ],
-            h('tr')[h('td', 'Relative Score',       class_='center_cell'), 
-                    h('td', rel_score) ],
-            h('tr')[h('td', 'Number of Matches',    class_='center_cell'),
-                    h('td', n_match,                class_='num_match')],
-            h('tr')[h('td', 'Number of Gaps',       class_='center_cell'), 
-                    h('td', n_gap,                  class_='num_gap') ],
-            h('tr')[h('td', 'Number of Mismatches', class_='center_cell'), 
-                    h('td', n_mismatch,             class_='num_mismatch')],
-        ]
+            h('tr')[
+                h('td', 'Absolute Score',       class_='center_cell'),
+                h('td', 'Relative Score',       class_='center_cell'), 
+                h('td', 'Number of Matches',    class_='center_cell'),
+                h('td', 'Number of Gaps',       class_='center_cell'), 
+                h('td', 'Number of Mismatches', class_='center_cell'),],
+            h('tr')[
+                h('td', abs_score,  class_='center_cell'),
+                h('td', rel_score,  class_='center_cell'),
+                h('td', n_match,    class_='center_cell num_match'),
+                h('td', n_gap,      class_='center_cell num_gap'),
+                h('td', n_mismatch, class_='center_cell num_mismatch'),]]
     inner_title = fp.tup(
         lambda range_strA,range_strB:
         '[ {} : {} ] x [ {} : {} ]'.format(
@@ -97,7 +98,6 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
         begA,endA = fp.map(int, rArB[0].split('~'))
         begB,endB = fp.map(int, rArB[1].split('~'))
         linesA = fp.lmap(lambda l: pre(class_='line_a')[l], range(begA,endA+1))
-        #linesB = fp.lmap(lambda l: pre(class_='line_b')[l], range(begB,endB+1))
         linesB = fp.lmap(lambda x: pre(class_='line_b')[' - '], linesA)
         return h('table')[ h('tbody')[ h('tr')[
             h('td',style='text-align:left; border-bottom:0px;')[ 
@@ -114,7 +114,7 @@ def comp_table(match_pair_dic, match_stat_dic, nameA,nameB, matchA,matchB, gdat)
             popup_window(
                 id, 
                 [
-                    h('h2', inner_title(rArB)),
+                    h('h2', inner_title(rArB), style='text-align:center;'),
                     summary_table(stat),
                     div(class_='modal_code_view')[
                         code_view(rArB, compare_view( *synced_toknotesAB(*mAmB) ))
@@ -149,7 +149,7 @@ def gen_comp_html(nameA,nameB, srcA,srcB, table):
     [
         meta(name="viewport", content="width=device-width, initial-scale=1"),
         meta(charset='utf-8'),
-        link(rel="stylesheet", href='../css/viz1.css'), # comps/x.html
+        link(rel="stylesheet", href='../css/viz1.css'), 
         link(rel="stylesheet", href='../css/table.css'),
         link(rel="stylesheet", href='../css/popup.css'),
         link(rel="stylesheet", href='../css/highlight.css')
@@ -232,8 +232,6 @@ def sync_tok(a, b):
         sA,nlsA = fp.map(''.join, F.lsplit_by(lambda s: s != '\n',a))
         sB,nlsB = fp.map(''.join, F.lsplit_by(lambda s: s != '\n',b))
         a,b = sync_tok_no_nl(sA,sB)
-        #print(*fp.lmap(repr,[sA,nlsA, sB,nlsB]))
-        #print(repr(a),repr(b))
         return a + nlsA, b + nlsA
     else:
         return sync_tok_no_nl(a, b)
