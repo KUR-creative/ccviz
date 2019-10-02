@@ -15,7 +15,7 @@ function scroll(div, lineno, max,min) {
         const [a_mid, b_mid] =
             [...tr.children]
             .map(x => x.textContent)
-            .slice(0,2)
+            .slice(1,3) // idx 0 is no, 1,2 are A,B. dict would be better..
             .map(pipe(
                 s => s.split(' ~ '),
                 arr => arr.map(Number), 
