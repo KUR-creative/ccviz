@@ -35,7 +35,7 @@ def row(match_pair_dic, name_pair, mAmB, html_path):
         html_path
     )
 def row_html(no, row):
-    return h('tr')[ 
+    return h('tr', class_='sort_row')[ 
         h('td',class_='center_cell')[no], 
         h('td',class_='center_cell')[row.a_name], 
         h('td',class_='center_cell')[row.b_name], 
