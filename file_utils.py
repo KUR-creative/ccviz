@@ -42,6 +42,7 @@ def write_text(path, text, mode=0o777, exist_ok=True):
     path.write_text(text)
 
 def read_text(path, encoding=None, errors=None):
+    '''
     try:
         return Path(path).read_text(encoding='UTF8', errors=errors)
     except:
@@ -51,9 +52,8 @@ def read_text(path, encoding=None, errors=None):
     with open(path, 'rb') as f:
         rawdata = f.read()
         encoding = chardet.detect(rawdata)['encoding']
-        print('wtf',path)
+        #print('path->',path)
         return Path(path).read_text(encoding=encoding, errors=errors)
-    '''
 
 if __name__ == '__main__':
     for x in Path('.').iterdir():
