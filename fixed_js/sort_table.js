@@ -31,7 +31,7 @@ document.querySelectorAll('th:not(.center_th)')
     const col_cells = column(table, 0);
     const txts = column(table, 0).map(c => c.innerText);
 
-    Array.from(table.querySelectorAll('.comp_table_row:nth-child(n+2)'))
+    Array.from(table.querySelectorAll('.sort_row:nth-child(n+2)'))
         .sort(comparer(
             Array.from(th.parentNode.children).indexOf(th), 
             this.asc = !this.asc))
