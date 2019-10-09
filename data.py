@@ -279,7 +279,6 @@ def comp_data(gdat, car_dict):
 
     matched_fidxsA = matched_fidxs(car_dict, 'A')
     matched_fidxsB = matched_fidxs(car_dict, 'B')
-    print(matched_fidxsA, matched_fidxsB)
     codes = ( fp.lstarmap(code(gdat,matched_fidxsA,'A'), enumerate(A_srcpaths))
             + fp.lstarmap(code(gdat,matched_fidxsB,'B'), enumerate(B_srcpaths)))
     code_dic = F.zipdict(fp.map(x_id, codes), codes)
