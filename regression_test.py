@@ -56,5 +56,6 @@ assert txt_lines_list('./fixture/answers/complex/') \
     == txt_lines_list('./test_out/complex'), 'complex failed!'
 assert txt_lines_list('./fixture/answers/arm/') \
     == txt_lines_list('./test_out/arm'), 'arm failed!'
-print('test passed!')
+print()
+print(' test passed!')
 

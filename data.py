@@ -62,7 +62,9 @@ def xmap_path(dirpath):
     return fu.replace1(old, new, dirpath) + 'map'
 
 @F.autocurry
-def code(gdat, proj, fidx, fpath):
+def code(gdat, matched_fidxs, proj, fidx, fpath):
+    if fidx not in matched_fidxs:
+        return Code(proj, fidx, fpath, None, None, None)
     raw =  fu.read_text(fpath)
     xmap = fu.read_text(xmap_path(fpath))
     highlighted = highlight(raw)
@@ -265,8 +267,21 @@ def comp_data(gdat, car_dict):
     B_srcpaths = fp.lmap(raw2real(root_dir), car_dict['DST_FILE_LIST'])
 
     # use codes only here!
-    codes = ( fp.lstarmap(code(gdat,'A'), enumerate(A_srcpaths))
-            + fp.lstarmap(code(gdat,'B'), enumerate(B_srcpaths)))
+    def matched_fidxs(car_dict, proj): 
+        return fp.go(
+            car_dict['CLONE_LIST'],
+            fp.unzip, 
+            F.first if proj == 'A' else F.second,
+            fp.map(F.first),
+            fp.map(fp.dec), # NOTE: not raw idxs!
+            set,
+        )
+
+    matched_fidxsA = matched_fidxs(car_dict, 'A')
+    matched_fidxsB = matched_fidxs(car_dict, 'B')
+    print(matched_fidxsA, matched_fidxsB)
+    codes = ( fp.lstarmap(code(gdat,matched_fidxsA,'A'), enumerate(A_srcpaths))
+            + fp.lstarmap(code(gdat,matched_fidxsB,'B'), enumerate(B_srcpaths)))
     code_dic = F.zipdict(fp.map(x_id, codes), codes)
 
     if fp.is_empty(car_dict['CLONE_LIST']):
