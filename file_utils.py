@@ -46,6 +46,14 @@ def read_text(path, encoding=None, errors=None):
         return Path(path).read_text(encoding='UTF8', errors=errors)
     except:
         return Path(path).read_text(encoding='cp949', errors=errors)
+    '''
+    import chardet
+    with open(path, 'rb') as f:
+        rawdata = f.read()
+        encoding = chardet.detect(rawdata)['encoding']
+        print('wtf',path)
+        return Path(path).read_text(encoding=encoding, errors=errors)
+    '''
 
 if __name__ == '__main__':
     for x in Path('.').iterdir():
