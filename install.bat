@@ -6,3 +6,4 @@ pip install tqdm funcy pygments networkx
 pip install markupsafe toolz 
 pip install sidekick
 pip install hyperpython
+pip install chardet
