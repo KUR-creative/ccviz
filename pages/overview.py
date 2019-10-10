@@ -39,9 +39,9 @@ def row_html(no, row):
         h('td',class_='center_cell')[no], 
         h('td',class_='center_cell')[row.a_name], 
         h('td',class_='center_cell')[row.b_name], 
-        h('td')[row.n_match],
-        h('td')[row.sum_score],
-        h('td')[row.mean_score],
+        h('td',class_='blue_text')[row.n_match],
+        h('td',class_='blue_text')[row.sum_score],
+        h('td',class_='blue_text')[row.mean_score],
         h('td',class_='center_cell')[
             link_tag(row.href, 'go', class_='btn')
         ]
