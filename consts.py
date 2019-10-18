@@ -25,6 +25,7 @@ LINE_B = 'line_b'
 ABS_DEFAULT = 10
 REL_DEFAULT = 0.1
 NO_HL_DEFAULT = 500000
+NAO_DEFAULT = 2
 
 def args():
     parser = argparse.ArgumentParser(description='CloneCop Visalization program')
@@ -44,6 +45,12 @@ def args():
         help=("If length of souce code is longer than this threshold, CCViz never "
              +"highlights the code.default threshold = {}".format(NO_HL_DEFAULT)),
         type=int, default=NO_HL_DEFAULT)
+    parser.add_argument('-nao', '--number-of-ancestor-directories-in-overview',
+        help=("Number of ancestor directories displayed in overview table."
+             +" (example) target path: 'root/a/bb/ccc/name.c'."
+             +" If nao = 2, then overview"
+             +" table display: 'bb/ccc/name.c'. default  = {}".format(NAO_DEFAULT)),
+        type=int, default=NAO_DEFAULT)
     return parser.parse_args()
 
 def consts(args):
@@ -80,6 +87,7 @@ def consts(args):
     ABS_THRESHOLD = args.absolute_score_threshold
     REL_THRESHOLD = args.relative_score_threshold
     NO_HL_THRESHOLD = args.no_highlight_threshold
+    NUM_ANCESTORS  = args.number_of_ancestor_directories_in_overview
 
     cdic = dict(
         TARGET_ZIP = TARGET_ZIP,
@@ -91,6 +99,7 @@ def consts(args):
         ABS_THRESHOLD = ABS_THRESHOLD,
         REL_THRESHOLD = REL_THRESHOLD,
         NO_HL_THRESHOLD = NO_HL_THRESHOLD,
+        NUM_ANCESTORS = NUM_ANCESTORS,
     )
 
     return namedtuple('Consts', cdic.keys())(**cdic)

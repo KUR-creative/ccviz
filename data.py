@@ -329,12 +329,13 @@ def comp_data(gdat, car_dict):
     html_paths = fp.lstarmap(
         lambda a,b: 'comps/{}_{}.html'.format(a.fidx, b.fidx),
         unique_match_pairs)
-    def overview_fname(path, n_parts):
-        return str(Path( *Path(path).parts[-n_parts:] ))
+    def overview_fname(path, num_ancestors):
+        num_parts = num_ancestors + 1
+        return str(Path( *Path(path).parts[-num_parts:] ))
     match_name_pairs = fp.lstarmap(
         lambda a,b: (
-            overview_fname(code_dic[a.proj,a.fidx].fpath, 3), 
-            overview_fname(code_dic[b.proj,b.fidx].fpath, 3)),
+            overview_fname(code_dic[a.proj,a.fidx].fpath, gdat.NUM_ANCESTORS), 
+            overview_fname(code_dic[b.proj,b.fidx].fpath, gdat.NUM_ANCESTORS)),
         unique_match_pairs)
 
     emphasized_AB = fp.starmap(
