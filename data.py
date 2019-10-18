@@ -140,12 +140,14 @@ def tokens(code_str, xmap_str):
         fp.lremove(fp.is_empty)
     )
 
+    '''
     if len(F.lflatten(lines)) != len(slice_idxs):
         print('------->', len(lines), len(slice_idxs))
         pprint(lines)
         pprint(slice_idxs)
         for line, idxs in zip(lines, slice_idxs):
             print(idxs, line)
+    '''
 
     #from itertools import tee
     #slice_idxs,chk = tee(slice_idxs)
