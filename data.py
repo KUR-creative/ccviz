@@ -77,6 +77,7 @@ def code(gdat, matched_fidxs, proj, fidx, fpath):
 
 #--------------------------------------------------------------------------------------
 def tokens(code_str, xmap_str):
+    # lines from code_str. remove \n and attach
     lines = fp.go(
         code_str,
         F.curry(F.partition_by)(lambda s: s == '\n'), 
@@ -89,6 +90,7 @@ def tokens(code_str, xmap_str):
     )
     #pprint(lines)
 
+    # slice_idxs from xmap_str. indexes for each lines.
     slice_idxs = fp.go( #TODO: change to map and pipe
         xmap_str.splitlines(),
         fp.map(fp.pipe(
@@ -99,8 +101,16 @@ def tokens(code_str, xmap_str):
             # Make tokens from the beginning of the line
             lambda xs: [0] + xs[1:] if xs else xs,
         )),
-        fp.remove(fp.is_empty)
+        #fp.remove(fp.is_empty)
+        fp.lremove(fp.is_empty)
     )
+
+    if len(F.lflatten(lines)) != len(slice_idxs):
+        print('------->', len(lines), len(slice_idxs))
+        pprint(lines)
+        pprint(slice_idxs)
+        for line, idxs in zip(lines, slice_idxs):
+            print(idxs, line)
 
     #from itertools import tee
     #slice_idxs,chk = tee(slice_idxs)
@@ -155,8 +165,27 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
 
     #print('tidx',len(tok_idxs), tok_idxs)
     #print('pti ', len(padded_tok_idxs), padded_tok_idxs)
-    #print([*range(beg_idx)], tok_idxs, [*range(end_idx + 1, num_toks)])
     #assert is_consecutive(fp.lremove(lambda x: x == -1, padded_tok_idxs))
+
+    chk_idxs = fp.lfilter(lambda idx: idx >= 0, padded_tok_idxs)
+    #print('beg_idx', beg_idx, 'end_idx', end_idx)
+    if len(code_tokens) < len(chk_idxs):
+        pprint(code_tokens)
+        print(len(code_tokens))
+        print(padded_tok_idxs)
+        print(len(chk_idxs))
+        print('=========================================================')
+        print('*.car and *.xmap file token numbers are different!')
+        print('code_tokens:', len(code_tokens), '!=', len(chk_idxs), ':chk_idxs')
+        print('project:', proj, 'file_idx:', fidx)
+        print('problematic file:', code.fpath)
+        print('beg end line number(raw)', beg+1, end+1)
+        print(tuple(raw_match))
+        print('beg_idx', beg_idx, 'end_idx', end_idx)
+        print('len tok_idxs =', len(raw_tok_idxs))
+        print('padded_tok_idxs\n',
+              [*range(beg_idx)], tok_idxs, [*range(end_idx + 1, num_toks)])
+        print('=========================================================')
 
     toks = fp.tmap(
         lambda idx: code_tokens[idx] if idx >= 0 else '', # '' for consts.GAP
