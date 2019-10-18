@@ -2,6 +2,7 @@ from pprint import pprint
 from collections import namedtuple
 from pathlib import Path
 import json
+import os
 
 from tqdm import tqdm
 import funcy as F
@@ -61,18 +62,52 @@ def xmap_path(dirpath):
     )
     return fu.replace1(old, new, dirpath) + 'map'
 
+def tox_path(dirpath):
+    old,new = (
+        ('Formatted_A','Token_A') if 'Formatted_A' in dirpath else 
+        ('Formatted_B','Token_B') if 'Formatted_B' in dirpath else 
+        (None,None) # to crash program!
+    )
+    path = Path(fu.replace1(old, new, dirpath))
+    name_with_parents = os.path.splitext(str(path))[0]
+    extension = '.to' + path.suffix[1:]
+    return name_with_parents + extension
+
+def preprocess(code, tox): # tox is string from .toc or .toh file
+    lines = code.splitlines()
+    tox = tox.splitlines()
+    return fp.go(
+        zip( lines,tox ),
+        fp.map(fp.tup( 
+            lambda l,t: 
+            ' ' if (l == '' and t.strip() == '#CCMT') else l 
+        )),
+        '\n'.join
+    )
+
 @F.autocurry
 def code(gdat, matched_fidxs, proj, fidx, fpath):
     if fidx not in matched_fidxs:
         return Code(proj, fidx, fpath, None, None, None)
-    raw =  fu.read_text(fpath)
-    xmap = fu.read_text(xmap_path(fpath))
-    highlighted = highlight(raw)
+    raw = fu.read_text(fpath)
+    xmap= fu.read_text(xmap_path(fpath))
+    tox = fu.read_text(tox_path(fpath))
+
+    code_str = preprocess(raw, tox)
+    #code_str = raw
+    #print(raw)
+    #print('------------------------------------------')
+    #print(code_str)
+    #assert len(code_str.splitlines()) == len(raw.splitlines()),\
+        #'{} != {}'.format(len(code_str.splitlines()), len(raw.splitlines()))
+    # NOTE: It would be problematic... why diff after split->join?
+
+    highlighted = highlight(code_str)
     print('{:10d}'.format(len(highlighted)), Path(fpath).name)
     return Code(
         proj, fidx, fpath, 
-        highlighted if len(highlighted) < gdat.NO_HL_THRESHOLD else tabled(raw), 
-        raw, xmap
+        highlighted if len(highlighted) < gdat.NO_HL_THRESHOLD else tabled(code_str), 
+        code_str, xmap
     )
 
 #--------------------------------------------------------------------------------------
