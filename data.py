@@ -341,6 +341,9 @@ def comp_data(gdat, car_dict):
             set,
         )
 
+    if fp.is_empty(car_dict['CLONE_LIST']):
+        return None
+
     matched_fidxsA = matched_fidxs(car_dict, 'A')
     matched_fidxsB = matched_fidxs(car_dict, 'B')
     codes = ( fp.lstarmap(code(gdat,matched_fidxsA,'A'), enumerate(A_srcpaths))
