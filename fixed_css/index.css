@@ -45,6 +45,7 @@ a:hover, a:visited, a:link, a:active {
 h1 { /* Big Title of this program */
   text-align: center; 
   font-size: 4.9em;
+  margin-top: auto;
 }
 
 div { /* has table and buttons */
