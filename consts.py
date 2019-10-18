@@ -43,13 +43,13 @@ def args():
         type=float, default=REL_DEFAULT)
     parser.add_argument('-nh', '--no-highlight-threshold',
         help=("If length of souce code is longer than this threshold, CCViz never "
-             +"highlights the code.default threshold = {}".format(NO_HL_DEFAULT)),
+             +"highlights the code. default threshold = {}".format(NO_HL_DEFAULT)),
         type=int, default=NO_HL_DEFAULT)
     parser.add_argument('-nao', '--number-of-ancestor-directories-in-overview',
-        help=("Number of ancestor directories displayed in overview table."
-             +" (example) target path: 'root/a/bb/ccc/name.c'."
-             +" If nao = 2, then overview"
-             +" table display: 'bb/ccc/name.c'. default  = {}".format(NAO_DEFAULT)),
+        help=("Number of ancestor directories displayed in overview table. "
+             +"(example) target path: 'root/a/bb/ccc/name.c'. "
+             +"If nao = 2, then overview "
+             +"table display: 'bb/ccc/name.c'. default  = {}".format(NAO_DEFAULT)),
         type=int, default=NAO_DEFAULT)
     return parser.parse_args()
 
@@ -84,9 +84,9 @@ def consts(args):
         fp.unzip, fp.tup(F.zipdict)
     )
 
-    ABS_THRESHOLD = args.absolute_score_threshold
-    REL_THRESHOLD = args.relative_score_threshold
-    NO_HL_THRESHOLD = args.no_highlight_threshold
+    ABS_THRESHOLD  = args.absolute_score_threshold
+    REL_THRESHOLD  = args.relative_score_threshold
+    NO_HL_THRESHOLD= args.no_highlight_threshold
     NUM_ANCESTORS  = args.number_of_ancestor_directories_in_overview
 
     cdic = dict(
