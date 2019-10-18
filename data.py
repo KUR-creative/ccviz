@@ -156,7 +156,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     #print('tidx',len(tok_idxs), tok_idxs)
     #print('pti ', len(padded_tok_idxs), padded_tok_idxs)
     #print([*range(beg_idx)], tok_idxs, [*range(end_idx + 1, num_toks)])
-    assert is_consecutive(fp.lremove(lambda x: x == -1, padded_tok_idxs))
+    #assert is_consecutive(fp.lremove(lambda x: x == -1, padded_tok_idxs))
 
     toks = fp.tmap(
         lambda idx: code_tokens[idx] if idx >= 0 else '', # '' for consts.GAP
