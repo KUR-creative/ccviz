@@ -224,6 +224,9 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
               [*range(beg_idx)], tok_idxs, [*range(end_idx + 1, num_toks)])
         print('=========================================================')
 
+        # Fix crash
+        padded_tok_idxs = padded_tok_idxs[:len(code_tokens)]
+
     toks = fp.tmap(
         lambda idx: code_tokens[idx] if idx >= 0 else '', # '' for consts.GAP
         padded_tok_idxs)
@@ -233,6 +236,10 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
                       else    consts.MISMATCH, 
                     tok_idxs)
           + (consts.NOT_MATCH,) * (num_toks - (end_idx + 1)))
+
+    if len(code_tokens) < len(chk_idxs):
+        # Fix crash
+        notes = notes[:len(code_tokens)]
 
     #print(code.fpath)
     #print('num_toks',num_toks,'end_idx',end_idx,'num_toks - end_idx',num_toks - end_idx)
