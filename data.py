@@ -103,7 +103,7 @@ def code(gdat, matched_fidxs, proj, fidx, fpath):
     # NOTE: It would be problematic... why diff after split->join?
 
     highlighted = highlight(code_str)
-    print('{:10d}'.format(len(highlighted)), Path(fpath).name)
+    #print('{:10d}'.format(len(highlighted)), Path(fpath).name)
     return Code(
         proj, fidx, fpath, 
         highlighted if len(highlighted) < gdat.NO_HL_THRESHOLD else tabled(code_str), 
@@ -346,10 +346,16 @@ def comp_data(gdat, car_dict):
     if fp.is_empty(car_dict['CLONE_LIST']):
         return None
 
-    matched_fidxsA = matched_fidxs(car_dict, 'A')
-    matched_fidxsB = matched_fidxs(car_dict, 'B')
-    codes = ( fp.lstarmap(code(gdat,matched_fidxsA,'A'), enumerate(A_srcpaths))
-            + fp.lstarmap(code(gdat,matched_fidxsB,'B'), enumerate(B_srcpaths)))
+    def load_codes(proj, srcpaths):
+        matched_file_idxes = matched_fidxs(car_dict, proj)
+        return fp.go(
+            srcpaths,
+            enumerate,
+            fp.starmap( code(gdat, matched_file_idxes, proj) ),
+            lambda cs: tqdm(cs, total=len(srcpaths), desc='load %s proj files' % proj),
+            list
+        )
+    codes = load_codes('A', A_srcpaths) + load_codes('B', B_srcpaths)
     code_dic = F.zipdict(fp.map(x_id, codes), codes)
 
     if fp.is_empty(car_dict['CLONE_LIST']):
