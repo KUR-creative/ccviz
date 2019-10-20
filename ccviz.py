@@ -73,11 +73,12 @@ def main(args=None):
 
     # Generate index.html
     matched_cars = fp.lremove(lambda x: x is None, matched_cars)
-    matched_gdat = gdat._replace(TARGET_CARS=matched_cars)
-    fu.write_text(
-        Path(gdat.OUTPUT_ROOT,'index.html'), 
-        pages.index.page(matched_gdat.TARGET_CARS, matched_gdat.CONFIG)
-    )
+    if matched_cars:
+        matched_gdat = gdat._replace(TARGET_CARS=matched_cars)
+        fu.write_text(
+            Path(gdat.OUTPUT_ROOT,'index.html'), 
+            pages.index.page(matched_gdat.TARGET_CARS, matched_gdat.CONFIG)
+        )
 
 
 if __name__ == '__main__':
