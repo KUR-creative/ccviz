@@ -49,6 +49,10 @@ def main(args=None):
         read_json = fp.pipe(fu.read_text, json.loads)
         car_dict = read_json(root_dir / 'Alignment' / TARGET_CAR)
         comp_data = data.comp_data(gdat, car_dict)
+        if comp_data is None:
+            print("Sorry. {} has NO MATCHINGS. We can't visualize it!".format(TARGET_CAR))
+            matched_cars.append(None)
+            continue
 
         # Generate overview.html
         if comp_data:
@@ -68,6 +72,7 @@ def main(args=None):
             matched_cars.append(TARGET_CAR)
 
     # Generate index.html
+    matched_cars = fp.lremove(lambda x: x is None, matched_cars)
     matched_gdat = gdat._replace(TARGET_CARS=matched_cars)
     fu.write_text(
         Path(gdat.OUTPUT_ROOT,'index.html'), 

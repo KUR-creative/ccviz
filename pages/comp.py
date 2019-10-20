@@ -1,3 +1,4 @@
+# map <F5> :wa<CR>:!rm -rf ./UNZIPPED CRASH/OUT/err; python ccviz.py CRASH/err/164.125.34.86_2019-10-18-15-25-13.zip -o CRASH/OUT/err<CR>
 # map <F6> :wa<CR>:!rm -rf tmp-result/tmp-matching-window/complex; python ccviz.py fixture/tmp-matching-window/complex/164.125.34.92_2019-09-06-11-55-17.zip -r 0.1 -a 10 -o tmp-result/tmp-matching-window/complex<CR>
 # map <F7> :wa<CR>:!rm -rf tmp-result/tmp-matching-window/arm9_11; python ccviz.py fixture/tmp-matching-window/arm9_11/strong_link/164.125.34.91_2019-09-06-08-44-26.zip -a 10 -r 0.1 -o tmp-result/tmp-matching-window/arm9_11/strong_link<CR>
 # map <F8> :wa<CR>:!rm -rf tmp-result/tmp-matching-window/ms;python ccviz.py fixture/tmp-matching-window/ms/164.125.34.91_2019-08-30-12-40-03.zip -o tmp-result/tmp-matching-window/ms<CR>
