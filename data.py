@@ -90,6 +90,10 @@ def code(gdat, matched_fidxs, proj, fidx, fpath):
     if fidx not in matched_fidxs:
         return Code(proj, fidx, fpath, None, None, None)
     raw = fu.read_text(fpath)
+    nl_chars = ['\x0b','\x0c','\x1c','\x1d','\x1e','\x85','\u2028','\u2029']
+    trans_table = raw.maketrans(F.zipdict( nl_chars, ['']*len(nl_chars) ))
+    raw = raw.translate(trans_table)
+
     xmap= fu.read_text(xmap_path(fpath))
     tox = fu.read_text(tox_path(fpath))
 
@@ -123,7 +127,6 @@ def tokens(code_str, xmap_str):
         F.curry(F.chunks)(2), 
         fp.lmap(''.join),
     )
-    #pprint(lines)
 
     # slice_idxs from xmap_str. indexes for each lines.
     slice_idxs = fp.go( #TODO: change to map and pipe
@@ -140,13 +143,14 @@ def tokens(code_str, xmap_str):
         fp.lremove(fp.is_empty)
     )
 
-    '''
-    if len(F.lflatten(lines)) != len(slice_idxs):
+    if len(F.lflatten(lines)) == 26 and len(slice_idxs) == 30:
+    #if len(F.lflatten(lines)) != len(slice_idxs):
         print('------->', len(lines), len(slice_idxs))
         pprint(lines)
         pprint(slice_idxs)
         for line, idxs in zip(lines, slice_idxs):
             print(idxs, line)
+    '''
     '''
 
     #from itertools import tee
@@ -158,6 +162,31 @@ def tokens(code_str, xmap_str):
     )
 
 def slice_nl(s, beg, end):
+    '''
+    if 'malloc_update_mallinfo' in s:
+        print('         len s =', len(s.splitlines()))
+
+        print('[[[[[[[[[',beg,end,']]]]]]]')
+        print('full len:', len(s.split('\n')))
+        print('part len:', len(s.split('\n')[beg:end]))
+        print('=====================================')
+
+        lines = list(enumerate(s.splitlines(), start=1))
+        print(*lines,sep='\n')
+
+        print('-----------------------------------------------what the fuck???')
+
+        lines = lines[beg:end]
+        print(*lines,sep='\n')
+        #print(s.split('\n')[beg:end])
+        #pprint(s.split('\n')[beg:end])
+
+        print('-----------------------------------------------what the fuck???')
+        #print( '\n'.join( s.split('\n')[beg:end] ) )
+        print( '\n'.join( s.splitlines()[beg:end] ) )
+        print('---- end ----')
+    '''
+
     return '\n'.join( s.split('\n')[beg:end] )
 
 def is_consecutive(li):
@@ -207,22 +236,26 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     chk_idxs = fp.lfilter(lambda idx: idx >= 0, padded_tok_idxs)
     #print('beg_idx', beg_idx, 'end_idx', end_idx)
     if len(code_tokens) < len(chk_idxs):
+        print('=========================================================')
         pprint(code_tokens)
+        '''
         print(len(code_tokens))
         print(padded_tok_idxs)
         print(len(chk_idxs))
-        print('=========================================================')
-        print('*.car and *.xmap file token numbers are different!')
-        print('code_tokens:', len(code_tokens), '!=', len(chk_idxs), ':chk_idxs')
+        '''
+        #print('*.car and *.xmap file token numbers are different!')
+        print('code_tokens:', len(code_tokens), '<', len(chk_idxs), ':chk_idxs')
         print('project:', proj, 'file_idx:', fidx)
         print('problematic file:', code.fpath)
         print('beg end line number(raw)', beg+1, end+1)
         print(tuple(raw_match))
         print('beg_idx', beg_idx, 'end_idx', end_idx)
+        '''
         print('len tok_idxs =', len(raw_tok_idxs))
         print('padded_tok_idxs\n',
               [*range(beg_idx)], tok_idxs, [*range(end_idx + 1, num_toks)])
         print('=========================================================')
+        '''
 
         # Fix crash
         padded_tok_idxs = padded_tok_idxs[:len(code_tokens)]
@@ -240,6 +273,7 @@ def match(code_dic, proj, raw_match, abs_score, rel_score, raw_tok_idxs):
     if len(code_tokens) < len(chk_idxs):
         # Fix crash
         notes = notes[:len(code_tokens)]
+        pass
 
     #print(code.fpath)
     #print('num_toks',num_toks,'end_idx',end_idx,'num_toks - end_idx',num_toks - end_idx)
